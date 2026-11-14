@@ -166,8 +166,14 @@
       </button>
     </nav>
 
-    <!-- Header Controls: Sound, Theme, Search, Backup -->
+    <!-- Header Controls: Onboarding, Sound, Theme, Search, Backup -->
     <div class="flex items-center gap-1.5 sm:gap-2">
+      <!-- Onboarding Tour Replay Trigger -->
+      <button onclick="openOnboarding()" title="Product Tour & Guide" class="spring-press px-2 py-1.5 rounded-lg bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] dark:hover:text-white transition text-xs flex items-center gap-1 shadow-xs font-bold">
+        <span>?</span>
+        <span class="hidden sm:inline text-[11px] font-medium">Tour</span>
+      </button>
+
       <!-- Web Audio Haptic Toggle -->
       <button onclick="toggleAudio()" id="soundToggleBtn" title="Web Audio Micro-Haptics" class="spring-press p-1.5 rounded-lg bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] transition text-xs flex items-center gap-1 shadow-xs">
         <i data-lucide="volume-2" class="w-3.5 h-3.5 text-[#3e6843] dark:text-[#8fc496]"></i>
@@ -202,34 +208,59 @@
     <!-- ------------------------------------------------------------ -->
     <div id="pillar-cockpit" class="pillar-view space-y-6 animate-in fade-in duration-150">
       
-      <!-- Editorial Page Heading & Live Momentum Banner -->
-      <div class="border-b border-[#e9e9e7] dark:border-[#2e2e2e] pb-4">
-        <div class="flex items-baseline justify-between flex-wrap gap-2">
-          <div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#37352f] dark:text-[#e3e2e0]">Today's Focus</h1>
-            <p id="cockpitDateSubtitle" class="text-xs text-[#787774] dark:text-[#9b9a97] mt-0.5">Saturday, Nov 14, 2026</p>
-          </div>
-          <!-- Sovereign Life Momentum Pill -->
-          <div class="flex items-center gap-2">
-            <span class="text-xs px-3 py-1 rounded-full bg-[#fbf3db] dark:bg-[#362e1c] text-[#89632a] dark:text-[#d3a85b] font-bold flex items-center gap-1.5 border border-[#89632a]/20">
-              <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-              <span>1.2x Momentum Active</span>
-            </span>
-          </div>
+      <!-- Editorial Page Heading & Live Concentric Momentum Rings -->
+      <div class="flex items-center justify-between flex-wrap gap-2 pb-1">
+        <div>
+          <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-[#37352f] dark:text-[#e3e2e0]">Today's Focus</h1>
+          <p id="cockpitDateSubtitle" class="text-[11px] text-[#787774] dark:text-[#9b9a97]">Saturday, Nov 14, 2026</p>
         </div>
+        
+        <!-- Momentum Pill + Concentric Triple Apple Rings Widget -->
+        <div class="flex items-center gap-2.5">
+          <!-- Concentric Triple Momentum Rings (SVG) -->
+          <div onclick="toastRingsStatus()" title="Sovereign Activity Rings (Big 3 • Habits • Energy)" class="spring-press flex items-center gap-2 bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] px-2.5 py-1 rounded-xl shadow-xs cursor-pointer hover:border-[#10b981] transition">
+            <svg class="w-7 h-7 -rotate-90" viewBox="0 0 44 44">
+              <!-- Outer Ring: Big 3 (Emerald #10b981) -->
+              <circle cx="22" cy="22" r="18" fill="none" stroke="currentColor" stroke-width="3" class="text-emerald-500/15" />
+              <circle id="ringBig3" cx="22" cy="22" r="18" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="113.1" class="transition-all duration-500 ease-out" />
+              <!-- Middle Ring: Habits (Amber #f59e0b) -->
+              <circle cx="22" cy="22" r="13" fill="none" stroke="currentColor" stroke-width="3" class="text-amber-500/15" />
+              <circle id="ringHabits" cx="22" cy="22" r="13" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" stroke-dasharray="81.7" stroke-dashoffset="81.7" class="transition-all duration-500 ease-out" />
+              <!-- Inner Ring: Energy / Nutrition (Indigo #6366f1) -->
+              <circle cx="22" cy="22" r="8" fill="none" stroke="currentColor" stroke-width="2.5" class="text-indigo-500/15" />
+              <circle id="ringEnergy" cx="22" cy="22" r="8" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="50.3" stroke-dashoffset="50.3" class="transition-all duration-500 ease-out" />
+            </svg>
+            <div class="text-[10px] font-mono leading-tight hidden xs:block">
+              <span id="ringsLabel" class="font-extrabold text-[#37352f] dark:text-white block">0/3</span>
+              <span class="text-[9px] text-[#787774]">Rings</span>
+            </div>
+          </div>
 
-        <!-- The "Day Cleared" Sacred Completion Banner (Golden Hour) -->
-        <div id="dayClearedBanner" class="hidden mt-4 p-4 rounded-2xl bg-gradient-to-r from-[#fbf3db] via-[#fff9e8] to-[#fbf3db] dark:from-[#2e2718] dark:to-[#221c10] border border-amber-300/80 dark:border-amber-600/40 shadow-sm space-y-2">
-          <div class="flex items-center gap-2 text-amber-900 dark:text-amber-300 font-extrabold text-xs uppercase tracking-wider">
-            <span>👑</span> DAY CLEARED • 100% LEVERAGE ACHIEVED
+          <!-- Sovereign Life Momentum Pill -->
+          <span class="text-xs px-2.5 py-1 rounded-xl bg-[#fbf3db] dark:bg-[#362e1c] text-[#89632a] dark:text-[#d3a85b] font-bold flex items-center gap-1.5 border border-[#89632a]/20">
+            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+            <span>1.2x Momentum</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- The "Day Cleared" Sacred Completion Medal Card (High Contrast Deep Obsidian & Gold) -->
+      <div id="dayClearedBanner" class="hidden my-2.5 p-4 rounded-2xl bg-[#1c1917] dark:bg-[#121110] border border-amber-500/50 shadow-xl shadow-amber-950/25 text-white space-y-2 relative overflow-hidden transition-all duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 text-[#fbbf24] font-extrabold text-xs uppercase tracking-wider">
+            <span class="text-base animate-bounce">👑</span>
+            <span>DAY CLEARED • 100% LEVERAGE ACHIEVED</span>
           </div>
-          <p class="text-xs text-[#785b5b] dark:text-[#c4a9a9] leading-relaxed">
-            All essential priorities executed. Step away from your desk, rest deeply, and preserve tomorrow's creative focus.
-          </p>
-          <div class="flex items-center justify-between pt-1 text-[11px] text-amber-800 dark:text-amber-400 font-mono font-bold">
-            <span>+350 Life XP Banked</span>
-            <span>Tactical Rest Shield Intact</span>
-          </div>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-[#fde68a] border border-amber-500/30 font-bold">
+            +350 Life XP
+          </span>
+        </div>
+        <p class="text-xs text-[#e7e5e4] leading-relaxed">
+          All essential outcomes executed. Step away from your desk, rest deeply, and preserve tomorrow's creative focus.
+        </p>
+        <div class="flex items-center justify-between pt-1.5 border-t border-white/10 text-[11px] text-[#a8a29e] font-mono">
+          <span class="text-[#fbbf24] font-semibold flex items-center gap-1"><span>🛡️</span> Tactical Rest Shield Active</span>
+          <span>Recovery Mode • 8h Target</span>
         </div>
       </div>
 
@@ -602,7 +633,85 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- 6. BACKUP & OWNERSHIP MODAL                                    -->
+  <!-- 6. HIGH-TICKET 3-SLIDE INTERACTIVE ONBOARDING WALKTHROUGH      -->
+  <!-- ============================================================== -->
+  <div id="onboardingModal" class="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-5 animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Slide Indicator Dots -->
+      <div class="flex items-center justify-between">
+        <span class="text-[10px] font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">Sovereign Walkthrough</span>
+        <div class="flex items-center gap-1.5" id="onbDots">
+          <div class="w-6 h-1.5 rounded-full bg-[#37352f] dark:bg-white transition-all duration-300" id="onbDot0"></div>
+          <div class="w-2 h-1.5 rounded-full bg-[#e9e9e7] dark:bg-[#333] transition-all duration-300" id="onbDot1"></div>
+          <div class="w-2 h-1.5 rounded-full bg-[#e9e9e7] dark:bg-[#333] transition-all duration-300" id="onbDot2"></div>
+        </div>
+        <button onclick="closeOnboarding(true)" class="text-xs text-[#787774] hover:text-[#37352f] dark:hover:text-white font-semibold">Skip</button>
+      </div>
+
+      <!-- Slide 0: The Anti-Notion 10ms Cold Boot -->
+      <div id="onbSlide0" class="onb-slide space-y-3">
+        <div class="w-14 h-14 rounded-2xl bg-[#edf3ec] dark:bg-[#233326] flex items-center justify-center text-2xl shadow-xs mx-auto">
+          ⚡
+        </div>
+        <div class="text-center space-y-1">
+          <h2 class="text-base sm:text-lg font-extrabold text-[#37352f] dark:text-[#e3e2e0]">10ms Cold Boot &amp; Pure Focus</h2>
+          <p class="text-xs text-[#787774] dark:text-[#9b9a97] leading-relaxed">
+            Ditch the 10-page slow Notion databases. Rewrite OS opens instantaneously in your browser with zero loading spinners and 100% private local storage.
+          </p>
+        </div>
+      </div>
+
+      <!-- Slide 1: The Sovereign Rule: The Big 3 -->
+      <div id="onbSlide1" class="onb-slide space-y-3 hidden">
+        <div class="w-14 h-14 rounded-2xl bg-[#fbf3db] dark:bg-[#362e1c] flex items-center justify-center text-2xl shadow-xs mx-auto">
+          🎯
+        </div>
+        <div class="text-center space-y-1">
+          <h2 class="text-base sm:text-lg font-extrabold text-[#37352f] dark:text-[#e3e2e0]">The Big 3 Philosophy</h2>
+          <p class="text-xs text-[#787774] dark:text-[#9b9a97] leading-relaxed">
+            High performers don't manage 50 items a day. Pin your 3 highest-leverage outcomes, execute them with deep focus, and close your daily activity rings.
+          </p>
+        </div>
+      </div>
+
+      <!-- Slide 2: Interactive Tactile Demo -->
+      <div id="onbSlide2" class="onb-slide space-y-3 hidden">
+        <div class="w-14 h-14 rounded-2xl bg-[#faece3] dark:bg-[#382b22] flex items-center justify-center text-2xl shadow-xs mx-auto">
+          ✨
+        </div>
+        <div class="text-center space-y-1">
+          <h2 class="text-base sm:text-lg font-extrabold text-[#37352f] dark:text-[#e3e2e0]">Tactile Physicality</h2>
+          <p class="text-xs text-[#787774] dark:text-[#9b9a97] leading-relaxed">
+            Every interaction is built with authentic iOS spring physics, Things 3 mechanical audio, and particle physics. Try it below:
+          </p>
+        </div>
+        <!-- Interactive Demo Checkbox -->
+        <div onclick="testOnboardingCheck(event)" id="demoTaskCard" class="spring-press flex items-center justify-between p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] cursor-pointer hover:border-[#10b981] transition">
+          <div class="flex items-center gap-3">
+            <div id="demoCheckRing" class="w-5 h-5 rounded-full border border-[#9b9a97] flex items-center justify-center text-xs font-bold transition"></div>
+            <span id="demoTaskText" class="text-xs font-semibold text-[#37352f] dark:text-[#e3e2e0]">Tap me to test the click &amp; particle burst!</span>
+          </div>
+          <span class="text-[10px] font-bold text-[#10b981] bg-emerald-500/10 px-2 py-0.5 rounded-full">Interactive</span>
+        </div>
+      </div>
+
+      <!-- Navigation Controls -->
+      <div class="pt-2 flex items-center gap-3">
+        <button id="onbBackBtn" onclick="prevOnboardingSlide()" class="spring-press px-4 py-2.5 rounded-xl bg-[#f1f1ef] dark:bg-[#2a2a2a] text-[#787774] text-xs font-bold hidden">
+          Back
+        </button>
+        <button id="onbNextBtn" onclick="nextOnboardingSlide()" class="spring-press flex-1 py-2.5 rounded-xl bg-[#37352f] dark:bg-white text-white dark:text-[#191919] text-xs font-bold shadow-xs flex items-center justify-center gap-1.5">
+          <span>Continue</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 7. BACKUP & OWNERSHIP MODAL                                    -->
   <!-- ============================================================== -->
   <div id="backupModal" class="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl max-w-sm w-full p-6 shadow-2xl">
@@ -826,13 +935,16 @@
     }
 
     // Task Toggles with Spring & Day Cleared Ritual
-    function toggleTask(id) {
+    function toggleTask(id, event) {
       playAudio('tick');
       const t = appState.tasks.find(task => task.id === id);
       if (t) {
         t.completed = !t.completed;
         if (t.completed) {
-          confetti({ particleCount: 25, spread: 45, origin: { y: 0.6 }, colors: ['#3e6843', '#975b36', '#285d77'] });
+          const origin = (event && event.clientX) 
+            ? { x: event.clientX / window.innerWidth, y: event.clientY / window.innerHeight }
+            : { y: 0.6 };
+          confetti({ particleCount: 22, spread: 50, startVelocity: 18, origin, colors: ['#10b981', '#f59e0b', '#fbbf24'] });
         }
         if (t.projectId) {
           const pTasks = appState.tasks.filter(tk => tk.projectId === t.projectId);
@@ -847,23 +959,135 @@
         const big3Done = big3.filter(tk => tk.completed).length;
         if (big3Done === big3.length && big3.length > 0) {
           playAudio('chord');
-          confetti({ particleCount: 60, spread: 75, origin: { y: 0.5 }, colors: ['#f59e0b', '#10b981', '#3b82f6'] });
+          confetti({ particleCount: 80, spread: 90, origin: { y: 0.35 }, colors: ['#f59e0b', '#10b981', '#fbbf24', '#ffffff'] });
         }
       }
     }
 
     // Habit Toggles with Micro-confetti
-    function toggleHabit(id) {
+    function toggleHabit(id, event) {
       playAudio('tick');
       const h = appState.habits.find(hab => hab.id === id);
       if (h) {
         h.history[6] = h.history[6] === 1 ? 0 : 1;
         h.streak = h.history[6] === 1 ? h.streak + 1 : Math.max(0, h.streak - 1);
         if (h.history[6] === 1) {
-          confetti({ particleCount: 15, spread: 30, origin: { y: 0.7 }, colors: ['#3e6843'] });
+          const origin = (event && event.clientX) 
+            ? { x: event.clientX / window.innerWidth, y: event.clientY / window.innerHeight }
+            : { y: 0.7 };
+          confetti({ particleCount: 16, spread: 35, startVelocity: 15, origin, colors: ['#10b981', '#34d399'] });
         }
         saveState();
       }
+    }
+
+    // Concentric Activity Rings Telemetry (Apple Watch style)
+    function updateActivityRings() {
+      // 1. Big 3 Ring (Emerald, r=18, C=113.1)
+      const big3 = appState.tasks.filter(t => t.isBig3);
+      const big3Done = big3.filter(t => t.completed).length;
+      const big3Ratio = big3.length ? (big3Done / big3.length) : 0;
+      const ringBig3 = document.getElementById('ringBig3');
+      if (ringBig3) ringBig3.style.strokeDashoffset = (113.1 * (1 - big3Ratio)).toFixed(1);
+
+      // 2. Habits Ring (Amber, r=13, C=81.7)
+      const habitsDone = appState.habits.filter(h => h.history[6] === 1).length;
+      const habitsRatio = appState.habits.length ? (habitsDone / appState.habits.length) : 0;
+      const ringHabits = document.getElementById('ringHabits');
+      if (ringHabits) ringHabits.style.strokeDashoffset = (81.7 * (1 - habitsRatio)).toFixed(1);
+
+      // 3. Energy / Nutrition Ring (Indigo, r=8, C=50.3)
+      const protRatio = Math.min(1, appState.fitness.macros.proteinCurrent / appState.fitness.macros.proteinTarget);
+      const waterRatio = Math.min(1, appState.fitness.macros.waterCurrent / appState.fitness.macros.waterTarget);
+      const energyRatio = (protRatio + waterRatio) / 2;
+      const ringEnergy = document.getElementById('ringEnergy');
+      if (ringEnergy) ringEnergy.style.strokeDashoffset = (50.3 * (1 - energyRatio)).toFixed(1);
+
+      // Overall Rings Label
+      const totalRingsDone = (big3Ratio >= 1 ? 1 : 0) + (habitsRatio >= 1 ? 1 : 0) + (energyRatio >= 1 ? 1 : 0);
+      const label = document.getElementById('ringsLabel');
+      if (label) label.textContent = `${totalRingsDone}/3`;
+    }
+
+    function toastRingsStatus() {
+      const big3 = appState.tasks.filter(t => t.isBig3);
+      const big3Done = big3.filter(t => t.completed).length;
+      const habitsDone = appState.habits.filter(h => h.history[6] === 1).length;
+      alert(`◎ Sovereign Activity Rings:\n• Big 3: ${big3Done}/${big3.length} Done\n• Habits: ${habitsDone}/${appState.habits.length} Done\n• Energy/Hydration: Active`);
+    }
+
+    // High-Ticket Onboarding Walkthrough
+    let currentOnboardingSlide = 0;
+    function openOnboarding() {
+      currentOnboardingSlide = 0;
+      showOnboardingSlide(0);
+      document.getElementById('onboardingModal').classList.remove('hidden');
+      playAudio('chord');
+    }
+    function closeOnboarding(saveSeen = true) {
+      document.getElementById('onboardingModal').classList.add('hidden');
+      if (saveSeen) {
+        localStorage.setItem('REWRITE_ONBOARDING_SEEN', 'true');
+      }
+    }
+    function showOnboardingSlide(idx) {
+      currentOnboardingSlide = idx;
+      for (let i = 0; i < 3; i++) {
+        const slide = document.getElementById(`onbSlide${i}`);
+        const dot = document.getElementById(`onbDot${i}`);
+        if (slide) slide.classList.toggle('hidden', i !== idx);
+        if (dot) {
+          if (i === idx) {
+            dot.className = "w-6 h-1.5 rounded-full bg-[#37352f] dark:bg-white transition-all duration-300";
+          } else {
+            dot.className = "w-2 h-1.5 rounded-full bg-[#e9e9e7] dark:bg-[#333] transition-all duration-300";
+          }
+        }
+      }
+      document.getElementById('onbBackBtn').classList.toggle('hidden', idx === 0);
+      const nextBtn = document.getElementById('onbNextBtn');
+      if (idx === 2) {
+        nextBtn.innerHTML = `<span>Enter Rewrite OS →</span>`;
+      } else {
+        nextBtn.innerHTML = `<span>Continue</span><i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>`;
+      }
+      lucide.createIcons();
+    }
+    function nextOnboardingSlide() {
+      playAudio('tick');
+      if (currentOnboardingSlide < 2) {
+        showOnboardingSlide(currentOnboardingSlide + 1);
+      } else {
+        closeOnboarding(true);
+        playAudio('chord');
+      }
+    }
+    function prevOnboardingSlide() {
+      playAudio('tick');
+      if (currentOnboardingSlide > 0) {
+        showOnboardingSlide(currentOnboardingSlide - 1);
+      }
+    }
+    let demoChecked = false;
+    function testOnboardingCheck(event) {
+      playAudio('tick');
+      demoChecked = !demoChecked;
+      const ring = document.getElementById('demoCheckRing');
+      const text = document.getElementById('demoTaskText');
+      if (demoChecked) {
+        ring.className = "w-5 h-5 rounded-full bg-[#10b981] text-white flex items-center justify-center text-xs font-bold transition";
+        ring.innerHTML = '✓';
+        text.className = "text-xs font-semibold line-through text-[#9b9a97]";
+        const origin = (event && event.clientX) 
+          ? { x: event.clientX / window.innerWidth, y: event.clientY / window.innerHeight }
+          : { y: 0.5 };
+        confetti({ particleCount: 30, spread: 60, startVelocity: 20, origin, colors: ['#10b981', '#f59e0b', '#ffffff'] });
+      } else {
+        ring.className = "w-5 h-5 rounded-full border border-[#9b9a97] flex items-center justify-center text-xs font-bold transition";
+        ring.innerHTML = '';
+        text.className = "text-xs font-semibold text-[#37352f] dark:text-[#e3e2e0]";
+      }
+    }
     }
 
     // Fast 1-Tap Macros
@@ -1093,17 +1317,17 @@
       document.getElementById('cockpitBig3List').innerHTML = big3.map(t => {
         const proj = appState.projects.find(p => p.id === t.projectId);
         return `
-          <div class="spring-press flex items-center justify-between p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] cursor-pointer" onclick="toggleTask('${t.id}')">
-            <div class="flex items-center gap-3">
-              <div class="w-5 h-5 rounded-full border ${t.completed ? 'bg-[#37352f] dark:bg-white text-white dark:text-[#191919] border-transparent' : 'border-[#9b9a97]'} flex items-center justify-center text-xs font-bold transition">
+          <div class="spring-press flex items-center justify-between px-3 py-2.5 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] cursor-pointer hover:border-[#10b981]/50 transition group" onclick="toggleTask('${t.id}', event)">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-5 h-5 rounded-full border ${t.completed ? 'bg-[#10b981] text-white border-transparent' : 'border-[#9b9a97] group-hover:border-[#10b981]'} flex items-center justify-center text-xs font-bold transition flex-shrink-0">
                 ${t.completed ? '✓' : ''}
               </div>
-              <div>
-                <p class="text-xs font-semibold ${t.completed ? 'line-through text-[#9b9a97]' : 'text-[#37352f] dark:text-[#e3e2e0]'}">${t.title}</p>
-                <span class="text-[10px] text-[#787774]">${proj ? proj.name : 'General Area'}</span>
+              <div class="min-w-0">
+                <p class="text-xs font-medium truncate ${t.completed ? 'line-through text-[#9b9a97]' : 'text-[#37352f] dark:text-[#e3e2e0]'}">${t.title}</p>
+                <span class="text-[9px] text-[#787774] block truncate">${proj ? proj.name : 'General Area'}</span>
               </div>
             </div>
-            <span class="text-[10px] font-bold text-[#89632a] bg-[#fbf3db] dark:bg-[#362e1c] px-2 py-0.5 rounded-full">★ Essential</span>
+            <span class="text-[9px] font-bold text-[#89632a] bg-[#fbf3db] dark:bg-[#362e1c] px-2 py-0.5 rounded-full flex-shrink-0 ml-2">★ Essential</span>
           </div>
         `;
       }).join('');
@@ -1111,9 +1335,9 @@
       // 2. Cockpit Next Actions
       const nextActions = appState.tasks.filter(t => !t.isBig3);
       document.getElementById('cockpitNextActionsList').innerHTML = nextActions.map(t => `
-        <div class="spring-press flex items-center justify-between p-2.5 rounded-xl hover:bg-[#f7f6f3] dark:hover:bg-[#262626] border border-transparent transition cursor-pointer" onclick="toggleTask('${t.id}')">
+        <div class="spring-press flex items-center justify-between px-2.5 py-2 rounded-xl hover:bg-[#f7f6f3] dark:hover:bg-[#262626] border border-transparent transition cursor-pointer group" onclick="toggleTask('${t.id}', event)">
           <div class="flex items-center gap-2.5">
-            <div class="w-4 h-4 rounded border ${t.completed ? 'bg-[#37352f] dark:bg-white text-white dark:text-[#191919] border-transparent' : 'border-[#9b9a97]'} flex items-center justify-center text-[10px] font-bold">
+            <div class="w-4 h-4 rounded border ${t.completed ? 'bg-[#37352f] dark:bg-white text-white dark:text-[#191919] border-transparent' : 'border-[#9b9a97] group-hover:border-[#37352f]'} flex items-center justify-center text-[10px] font-bold">
               ${t.completed ? '✓' : ''}
             </div>
             <span class="text-xs ${t.completed ? 'line-through text-[#9b9a97]' : 'text-[#37352f] dark:text-[#e3e2e0]'}">${t.title}</span>
@@ -1122,21 +1346,21 @@
       `).join('');
 
       // 3. Cockpit Habits
-      const days = ['M', 'T', 'W', 'T', 'F', 'S', 'T'];
+      const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
       document.getElementById('cockpitHabitsList').innerHTML = appState.habits.map(h => `
-        <div class="p-2.5 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] flex items-center justify-between">
-          <div>
-            <span class="text-xs font-semibold text-[#37352f] dark:text-[#e3e2e0] block">${h.title}</span>
-            <span class="text-[10px] text-[#787774] font-medium">🔥 ${h.streak} day streak</span>
+        <div class="px-3 py-2 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <span class="text-xs font-semibold text-[#37352f] dark:text-[#e3e2e0] block truncate">${h.title}</span>
+            <span class="text-[9px] text-[#787774] font-medium">🔥 ${h.streak}d streak</span>
           </div>
-          <div class="flex items-center gap-1.5">
+          <div class="flex items-center gap-1 flex-shrink-0">
             ${h.history.map((val, idx) => {
               const isToday = idx === 6;
               return `
                 <button 
-                  ${isToday ? `onclick="toggleHabit('${h.id}')"` : ''}
+                  ${isToday ? `onclick="toggleHabit('${h.id}', event)"` : ''}
                   title="${days[idx]}"
-                  class="spring-press w-5 h-5 rounded-md text-[10px] flex items-center justify-center transition font-bold ${val === 1 ? 'bg-[#3e6843] dark:bg-[#8fc496] text-white dark:text-[#191919] shadow-xs' : 'bg-[#e9e9e7] dark:bg-[#333] text-transparent'} ${isToday ? 'ring-2 ring-[#3e6843]/30 cursor-pointer' : 'cursor-default'}"
+                  class="spring-press w-5 h-5 rounded-md text-[9px] flex items-center justify-center transition font-bold ${val === 1 ? 'bg-[#10b981] text-white shadow-xs' : 'bg-[#e9e9e7] dark:bg-[#333] text-transparent'} ${isToday ? 'ring-2 ring-[#10b981]/40 cursor-pointer' : 'cursor-default'}"
                 >
                   ${val === 1 ? '✓' : ''}
                 </button>
@@ -1253,11 +1477,15 @@
         </div>
       `).join('');
 
+      updateActivityRings();
       lucide.createIcons();
     }
 
     window.addEventListener('DOMContentLoaded', () => {
       render();
+      if (!localStorage.getItem('REWRITE_ONBOARDING_SEEN')) {
+        setTimeout(openOnboarding, 500);
+      }
     });
   </script>
 </body>
