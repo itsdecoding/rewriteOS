@@ -1163,15 +1163,28 @@
       <button class="drawer-item" onclick="triggerImportJSON()"><i class="fa-solid fa-cloud-arrow-up"></i><span>Restore Backup</span></button>
     </aside>
 
+    <div class="ecosystem-global-bar" style="background:#141414; border-bottom:1px solid rgba(255,255,255,0.08); padding:8px 16px; display:flex; align-items:center; justify-content:space-between; font-size:11px; z-index:900; position:relative;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-weight:900; letter-spacing:0.5px; color:#fff;">⚡ REWRITE OS SUITE</span>
+        <span style="font-size:9px; background:rgba(62,104,67,0.4); color:#8fc496; padding:2px 8px; border-radius:999px; font-weight:700;">Life OS Active</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <a href="index.html#dashboard" style="display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border-radius:8px; background:rgba(255,255,255,0.12); color:#fff; text-decoration:none; font-weight:700; border:1px solid rgba(255,255,255,0.15);"><i class="fa-solid fa-gauge-high"></i> Unified Dashboard</a>
+        <a href="index.html#para" style="display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:8px; background:rgba(255,255,255,0.05); color:#aaa; text-decoration:none; font-weight:600;"><i class="fa-solid fa-brain"></i> Second Brain</a>
+        <a href="index.html#finance" style="display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:8px; background:rgba(255,255,255,0.05); color:#aaa; text-decoration:none; font-weight:600;"><i class="fa-solid fa-wallet"></i> Finance</a>
+        <a href="index.html#fitness" style="display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:8px; background:rgba(255,255,255,0.05); color:#aaa; text-decoration:none; font-weight:600;"><i class="fa-solid fa-heart-pulse"></i> Fitness</a>
+      </div>
+    </div>
+
     <div class="topbar">
       <button class="icon-btn hot" onclick="openDrawer()"><i class="fa-solid fa-bars"></i></button>
       <div style="flex:1; min-width:0;">
         <div class="title" id="topTitle">Rewrite Life OS</div>
         <div class="subtitle" id="topSubtitle">The Mind &amp; Life Operating System • Local Vault</div>
       </div>
-      <a href="index.html" class="suite-switch-btn" title="Return to Second Brain OS">
-        <i class="fa-solid fa-brain"></i>
-        <span>Second Brain OS</span>
+      <a href="index.html#dashboard" class="suite-switch-btn" title="Return to Command Center">
+        <i class="fa-solid fa-gauge-high"></i>
+        <span>Command Center</span>
       </a>
       <button class="icon-btn" onclick="openSheet('task')"><i class="fa-solid fa-plus"></i></button>
       <div class="sync-pill" title="Local Vault Status" onclick="toast('🔒 Rewrite OS Local Vault: 100% offline-first. Your habits, reflections, and goals are stored privately on your device.')" style="cursor:pointer">

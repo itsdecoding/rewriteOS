@@ -154,20 +154,26 @@
 
     <!-- Center Desktop Navigation Tabs (Hidden on mobile; mobile uses Floating Glass Thumb Dock) -->
     <nav class="hidden md:flex items-center gap-1 bg-[#f7f6f3] dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] p-1 rounded-xl">
-      <button onclick="switchPillar('cockpit')" id="nav-cockpit" class="spring-press nav-tab px-3.5 py-1 rounded-lg text-xs font-semibold transition bg-white dark:bg-[#2a2a2a] text-[#37352f] dark:text-white shadow-xs">
-        Today
+      <button onclick="switchPillar('dashboard')" id="nav-dashboard" class="spring-press nav-tab px-3.5 py-1 rounded-lg text-xs font-semibold transition bg-white dark:bg-[#2a2a2a] text-[#37352f] dark:text-white shadow-xs">
+        ⚡ Command Center
       </button>
+      <a href="life-os.html" class="spring-press nav-tab px-3 py-1 rounded-lg text-xs font-semibold transition text-[#3e6843] dark:text-[#8fc496] bg-[#edf3ec]/60 dark:bg-[#233326]/60 hover:bg-[#edf3ec] flex items-center gap-1">
+        🌿 Life OS ↗
+      </a>
       <button onclick="switchPillar('para')" id="nav-para" class="spring-press nav-tab px-3.5 py-1 rounded-lg text-xs font-semibold transition text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] dark:hover:text-white">
-        P.A.R.A Hub
+        🧠 Second Brain
       </button>
       <button onclick="switchPillar('finance')" id="nav-finance" class="spring-press nav-tab px-3.5 py-1 rounded-lg text-xs font-semibold transition text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] dark:hover:text-white">
-        Finance OS
+        💵 Finance OS
       </button>
       <button onclick="switchPillar('fitness')" id="nav-fitness" class="spring-press nav-tab px-3.5 py-1 rounded-lg text-xs font-semibold transition text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] dark:hover:text-white">
-        Fitness & Wellness
+        🏃 Fitness OS
+      </button>
+      <button onclick="switchPillar('cockpit')" id="nav-cockpit" class="spring-press nav-tab px-3.5 py-1 rounded-lg text-xs font-semibold transition text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] dark:hover:text-white">
+        ☀️ Today Focus
       </button>
       <button onclick="switchPillar('knowledge')" id="nav-knowledge" class="spring-press nav-tab px-3.5 py-1 rounded-lg text-xs font-semibold transition text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] dark:hover:text-white">
-        Knowledge
+        📚 Knowledge
       </button>
     </nav>
 
@@ -202,11 +208,298 @@
   <!-- ============================================================== -->
   <main class="flex-1 max-w-[1300px] w-full mx-auto px-4 sm:px-8 py-6 mb-28 md:mb-10 space-y-6">
 
+    <!-- ============================================================ -->
+    <!-- PILLAR 0: UNIFIED COMMAND CENTER (INTERCONNECTED DASHBOARD)   -->
+    <!-- ============================================================ -->
+    <div id="pillar-dashboard" class="pillar-view space-y-8 animate-in fade-in duration-150">
+      
+      <!-- 1. Executive Banner -->
+      <div class="border-b border-[#e9e9e7] dark:border-[#2e2e2e] pb-5">
+        <div class="flex items-baseline justify-between flex-wrap gap-3">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#edf3ec] dark:bg-[#233326] text-[#3e6843] dark:text-[#8fc496] font-bold uppercase tracking-wider">
+                ● 4 Systems Interconnected
+              </span>
+              <span class="text-xs text-[#787774] dark:text-[#9b9a97]">Local Vault Active</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#37352f] dark:text-[#e3e2e0]">
+              Unified Command Center
+            </h1>
+            <p class="text-xs text-[#787774] dark:text-[#9b9a97] mt-1 max-w-xl leading-relaxed">
+              One interconnected operating system unifying your daily habits, active projects, business cashflow, and physical energy.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <a href="life-os.html" class="spring-press flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl bg-[#37352f] dark:bg-white text-white dark:text-[#191919] shadow-xs">
+              <span>🌿 Open Life OS</span>
+              <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Sovereign Pulse: 4 Cross-System Health Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Pulse 1: Life OS -->
+        <div onclick="window.location.href='life-os.html'" class="spring-press p-4 rounded-2xl bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] hover:border-[#3e6843] cursor-pointer shadow-xs transition group">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-[#3e6843] dark:text-[#8fc496] flex items-center gap-1">
+              <span>🌿</span> Life OS
+            </span>
+            <span class="text-[10px] text-[#787774] group-hover:text-[#37352f] dark:group-hover:text-white transition font-semibold">Open Studio ↗</span>
+          </div>
+          <div class="text-2xl font-extrabold text-[#37352f] dark:text-white font-mono" id="dashHabitsStreak">14 Days</div>
+          <p class="text-[11px] text-[#787774] dark:text-[#9b9a97] mt-1" id="dashHabitsSummary">3 of 4 Habits Done Today</p>
+          <div class="mt-3 pt-2 border-t border-[#e9e9e7] dark:border-[#2e2e2e] flex items-center justify-between text-[10px] text-[#787774]">
+            <span id="dashMoodBadge">Mood: 🔥 Driven</span>
+            <span>Focus: 125m</span>
+          </div>
+        </div>
+
+        <!-- Pulse 2: Second Brain (PARA) -->
+        <div onclick="switchPillar('para')" class="spring-press p-4 rounded-2xl bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] hover:border-[#975b36] cursor-pointer shadow-xs transition group">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-[#975b36] dark:text-[#e4a77e] flex items-center gap-1">
+              <span>🧠</span> Second Brain
+            </span>
+            <span class="text-[10px] text-[#787774] group-hover:text-[#37352f] dark:group-hover:text-white transition font-semibold">Launch Hub →</span>
+          </div>
+          <div class="text-2xl font-extrabold text-[#37352f] dark:text-white font-mono" id="dashProjectsCount">2 Active</div>
+          <p class="text-[11px] text-[#787774] dark:text-[#9b9a97] mt-1">Threads Launch (75%) • UI (95%)</p>
+          <div class="mt-3 pt-2 border-t border-[#e9e9e7] dark:border-[#2e2e2e] flex items-center justify-between text-[10px] text-[#787774]">
+            <span id="dashBig3Badge">1 Big 3 Remaining</span>
+            <span>PARA V1.0</span>
+          </div>
+        </div>
+
+        <!-- Pulse 3: Finance OS -->
+        <div onclick="switchPillar('finance')" class="spring-press p-4 rounded-2xl bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] hover:border-[#285d77] cursor-pointer shadow-xs transition group">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-[#285d77] dark:text-[#89bcd6] flex items-center gap-1">
+              <span>💵</span> Finance OS
+            </span>
+            <span class="text-[10px] text-[#787774] group-hover:text-[#37352f] dark:group-hover:text-white transition font-semibold">View Ledger →</span>
+          </div>
+          <div class="text-2xl font-extrabold text-[#37352f] dark:text-white font-mono" id="dashNetWorth">$48,250</div>
+          <p class="text-[11px] text-[#3e6843] dark:text-[#8fc496] font-semibold mt-1">+$3,450 Monthly Surplus</p>
+          <div class="mt-3 pt-2 border-t border-[#e9e9e7] dark:border-[#2e2e2e] flex items-center justify-between text-[10px] text-[#787774]">
+            <span>Savings: 59%</span>
+            <span>3 Subs: -$74/mo</span>
+          </div>
+        </div>
+
+        <!-- Pulse 4: Fitness & Wellness -->
+        <div onclick="switchPillar('fitness')" class="spring-press p-4 rounded-2xl bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] hover:border-[#89632a] cursor-pointer shadow-xs transition group">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-[#89632a] dark:text-[#d3a85b] flex items-center gap-1">
+              <span>🏃</span> Fitness OS
+            </span>
+            <span class="text-[10px] text-[#787774] group-hover:text-[#37352f] dark:group-hover:text-white transition font-semibold">Open Split →</span>
+          </div>
+          <div class="text-2xl font-extrabold text-[#37352f] dark:text-white font-mono" id="dashWorkoutStatus">Push Day ✓</div>
+          <p class="text-[11px] text-[#787774] dark:text-[#9b9a97] mt-1" id="dashMacrosSummary">145g / 180g Protein • 2.0L Hydration</p>
+          <div class="mt-3 pt-2 border-t border-[#e9e9e7] dark:border-[#2e2e2e] flex items-center justify-between text-[10px] text-[#787774]">
+            <span>Auto-Sync: Active</span>
+            <span>Rings: 80%</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 3. The 4 System Launchers (Big Interactive Cards) -->
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-base font-extrabold text-[#37352f] dark:text-[#e3e2e0]">System Launchers</h2>
+            <p class="text-xs text-[#787774] dark:text-[#9b9a97]">Enter any subsystem with 1-click or inspect live telemetry.</p>
+          </div>
+          <span class="text-xs text-[#787774] font-medium hidden sm:inline">Tap card button to launch</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          
+          <!-- Launcher Card 1: Rewrite Life OS -->
+          <div class="p-5 rounded-2xl bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] shadow-xs flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-9 h-9 rounded-xl bg-[#edf3ec] dark:bg-[#233326] flex items-center justify-center text-base">
+                    🌿
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-extrabold text-[#37352f] dark:text-[#e3e2e0]">Rewrite Life OS</h3>
+                    <p class="text-[11px] text-[#787774]">Habit streaks, mindset reflections & Pomodoro sprints</p>
+                  </div>
+                </div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#edf3ec] dark:bg-[#233326] text-[#3e6843] dark:text-[#8fc496]">Digital Product</span>
+              </div>
+
+              <!-- Mini Habit Preview inside card -->
+              <div class="p-3.5 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] space-y-2 mt-3">
+                <div class="flex justify-between text-[11px] font-bold text-[#787774]">
+                  <span>Today's Habit Checklist</span>
+                  <span id="dashMiniHabitCount" class="text-[#3e6843] dark:text-[#8fc496]">3 of 4 Done</span>
+                </div>
+                <div id="dashMiniHabitsList" class="space-y-1.5">
+                  <!-- Rendered via JS -->
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2 flex items-center gap-2">
+              <a href="life-os.html" class="spring-press flex-1 py-2.5 rounded-xl bg-[#37352f] dark:bg-white text-white dark:text-[#191919] font-bold text-xs text-center shadow-xs flex items-center justify-center gap-1.5">
+                <span>Open Full Life OS Studio</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+              </a>
+              <button onclick="switchPillar('cockpit')" class="spring-press px-4 py-2.5 rounded-xl bg-[#f1f1ef] dark:bg-[#2a2a2a] text-[#37352f] dark:text-white font-bold text-xs">
+                Focus Station
+              </button>
+            </div>
+          </div>
+
+          <!-- Launcher Card 2: Second Brain (P.A.R.A Hub) -->
+          <div class="p-5 rounded-2xl bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] shadow-xs flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-9 h-9 rounded-xl bg-[#faece3] dark:bg-[#382b22] flex items-center justify-center text-base">
+                    🧠
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-extrabold text-[#37352f] dark:text-[#e3e2e0]">Second Brain (P.A.R.A Hub)</h3>
+                    <p class="text-[11px] text-[#787774]">Projects, areas of life, GTD next actions & archives</p>
+                  </div>
+                </div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#faece3] dark:bg-[#382b22] text-[#975b36] dark:text-[#e4a77e]">Core Engine</span>
+              </div>
+
+              <!-- Mini Projects Preview inside card -->
+              <div class="p-3.5 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] space-y-2 mt-3">
+                <div class="flex justify-between text-[11px] font-bold text-[#787774]">
+                  <span>Active Projects In Flight</span>
+                  <span>Progress</span>
+                </div>
+                <div id="dashMiniProjectsList" class="space-y-2">
+                  <!-- Rendered via JS -->
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2 flex items-center gap-2">
+              <button onclick="switchPillar('para')" class="spring-press flex-1 py-2.5 rounded-xl bg-[#37352f] dark:bg-white text-white dark:text-[#191919] font-bold text-xs shadow-xs flex items-center justify-center gap-1.5">
+                <span>Launch Second Brain OS</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+              <button onclick="openActionSheet('project')" class="spring-press px-4 py-2.5 rounded-xl bg-[#f1f1ef] dark:bg-[#2a2a2a] text-[#37352f] dark:text-white font-bold text-xs">
+                + New Project
+              </button>
+            </div>
+          </div>
+
+          <!-- Launcher Card 3: Finance OS -->
+          <div class="p-5 rounded-2xl bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] shadow-xs flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-9 h-9 rounded-xl bg-[#e7f3f8] dark:bg-[#20323c] flex items-center justify-center text-base">
+                    💵
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-extrabold text-[#37352f] dark:text-[#e3e2e0]">Finance OS</h3>
+                    <p class="text-[11px] text-[#787774]">Project-attributed cashflow, burn rate & subscriptions</p>
+                  </div>
+                </div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#e7f3f8] dark:bg-[#20323c] text-[#285d77] dark:text-[#89bcd6]">Capital</span>
+              </div>
+
+              <!-- Mini Finance Preview inside card -->
+              <div class="p-3.5 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] space-y-2 mt-3">
+                <div class="flex justify-between text-[11px] font-bold text-[#787774]">
+                  <span>Recent Attributed Ledger</span>
+                  <span>Amount</span>
+                </div>
+                <div id="dashMiniFinanceList" class="space-y-1.5">
+                  <!-- Rendered via JS -->
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2 flex items-center gap-2">
+              <button onclick="switchPillar('finance')" class="spring-press flex-1 py-2.5 rounded-xl bg-[#37352f] dark:bg-white text-white dark:text-[#191919] font-bold text-xs shadow-xs flex items-center justify-center gap-1.5">
+                <span>Launch Finance OS</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+              <button onclick="openActionSheet('spend')" class="spring-press px-4 py-2.5 rounded-xl bg-[#f1f1ef] dark:bg-[#2a2a2a] text-[#37352f] dark:text-white font-bold text-xs">
+                + Log Spend
+              </button>
+            </div>
+          </div>
+
+          <!-- Launcher Card 4: Fitness & Wellness OS -->
+          <div class="p-5 rounded-2xl bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] shadow-xs flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-9 h-9 rounded-xl bg-[#fbf3db] dark:bg-[#362e1c] flex items-center justify-center text-base">
+                    🏃
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-extrabold text-[#37352f] dark:text-[#e3e2e0]">Fitness & Wellness OS</h3>
+                    <p class="text-[11px] text-[#787774]">Workout routines, macro nutrition & habit auto-sync</p>
+                  </div>
+                </div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#fbf3db] dark:bg-[#362e1c] text-[#89632a] dark:text-[#d3a85b]">Vitality</span>
+              </div>
+
+              <!-- Mini Fitness Preview inside card -->
+              <div class="p-3.5 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] space-y-2 mt-3">
+                <div class="flex justify-between text-[11px] font-bold text-[#787774]">
+                  <span>Daily Fuel Targets</span>
+                  <span id="dashMiniMacroPercent" class="text-[#3e6843] dark:text-[#8fc496]">80% Complete</span>
+                </div>
+                <div class="space-y-1.5 text-xs">
+                  <div>
+                    <div class="flex justify-between text-[10px] text-[#787774] mb-1">
+                      <span>Protein (Target: 180g)</span>
+                      <span id="dashProteinText" class="font-bold font-mono">145g / 180g</span>
+                    </div>
+                    <div class="h-1.5 w-full bg-[#e9e9e7] dark:bg-[#333] rounded-full overflow-hidden">
+                      <div id="dashProteinBar" class="h-full bg-[#975b36] rounded-full" style="width: 80%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2 flex items-center gap-2">
+              <button onclick="switchPillar('fitness')" class="spring-press flex-1 py-2.5 rounded-xl bg-[#37352f] dark:bg-white text-white dark:text-[#191919] font-bold text-xs shadow-xs flex items-center justify-center gap-1.5">
+                <span>Launch Fitness OS</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+              <button onclick="logWorkout('Push Hypertrophy')" class="spring-press px-4 py-2.5 rounded-xl bg-[#edf3ec] dark:bg-[#233326] text-[#3e6843] dark:text-[#8fc496] font-bold text-xs">
+                ✓ Log Workout
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
     <!-- ------------------------------------------------------------ -->
     <!-- PILLAR 1: TODAY (COCKPIT)                                    -->
     <!-- ------------------------------------------------------------ -->
-    <div id="pillar-cockpit" class="pillar-view space-y-6 animate-in fade-in duration-150">
+    <div id="pillar-cockpit" class="pillar-view hidden space-y-6 animate-in fade-in duration-150">
       
+      <!-- Back to Command Center Breadcrumb -->
+      <button onclick="switchPillar('dashboard')" class="spring-press inline-flex items-center gap-1.5 text-xs font-semibold text-[#787774] hover:text-[#37352f] dark:hover:text-white transition">
+        ← Back to Command Center
+      </button>
+
       <!-- Editorial Page Heading & Live Momentum Banner -->
       <div class="border-b border-[#e9e9e7] dark:border-[#2e2e2e] pb-4">
         <div class="flex items-baseline justify-between flex-wrap gap-2">
@@ -420,6 +713,9 @@
     <!-- PILLAR 2: P.A.R.A HUB                                        -->
     <!-- ------------------------------------------------------------ -->
     <div id="pillar-para" class="pillar-view hidden space-y-6 animate-in fade-in duration-150">
+      <button onclick="switchPillar('dashboard')" class="spring-press inline-flex items-center gap-1.5 text-xs font-semibold text-[#787774] hover:text-[#37352f] dark:hover:text-white transition">
+        ← Back to Command Center
+      </button>
       
       <!-- Heading -->
       <div class="border-b border-[#e9e9e7] dark:border-[#2e2e2e] pb-4 flex items-center justify-between">
@@ -468,6 +764,9 @@
     <!-- PILLAR 3: FINANCE OS PRO                                     -->
     <!-- ------------------------------------------------------------ -->
     <div id="pillar-finance" class="pillar-view hidden space-y-6 animate-in fade-in duration-150">
+      <button onclick="switchPillar('dashboard')" class="spring-press inline-flex items-center gap-1.5 text-xs font-semibold text-[#787774] hover:text-[#37352f] dark:hover:text-white transition">
+        ← Back to Command Center
+      </button>
       
       <!-- Heading -->
       <div class="border-b border-[#e9e9e7] dark:border-[#2e2e2e] pb-4 flex items-center justify-between">
@@ -537,6 +836,9 @@
     <!-- PILLAR 4: FITNESS & WELLNESS                                 -->
     <!-- ------------------------------------------------------------ -->
     <div id="pillar-fitness" class="pillar-view hidden space-y-6 animate-in fade-in duration-150">
+      <button onclick="switchPillar('dashboard')" class="spring-press inline-flex items-center gap-1.5 text-xs font-semibold text-[#787774] hover:text-[#37352f] dark:hover:text-white transition">
+        ← Back to Command Center
+      </button>
       
       <!-- Heading -->
       <div class="border-b border-[#e9e9e7] dark:border-[#2e2e2e] pb-4 flex items-center justify-between">
@@ -563,6 +865,9 @@
     <!-- PILLAR 5: KNOWLEDGE HUB                                      -->
     <!-- ------------------------------------------------------------ -->
     <div id="pillar-knowledge" class="pillar-view hidden space-y-6 animate-in fade-in duration-150">
+      <button onclick="switchPillar('dashboard')" class="spring-press inline-flex items-center gap-1.5 text-xs font-semibold text-[#787774] hover:text-[#37352f] dark:hover:text-white transition">
+        ← Back to Command Center
+      </button>
       
       <!-- Heading -->
       <div class="border-b border-[#e9e9e7] dark:border-[#2e2e2e] pb-4 flex items-center justify-between">
@@ -598,28 +903,28 @@
   <!-- ============================================================== -->
   <!-- 3. MOBILE FLOATING GLASS THUMB DOCK (iOS / Android)            -->
   <!-- ============================================================== -->
-  <div class="md:hidden fixed bottom-5 left-4 right-4 z-40 flex items-center justify-between px-5 py-2.5 glass-dock">
-    <!-- Tab: Today -->
-    <button onclick="switchPillar('cockpit')" id="m-nav-cockpit" class="spring-press flex flex-col items-center gap-0.5 text-[#37352f] dark:text-white">
-      <i data-lucide="sun" class="w-4 h-4"></i>
-      <span class="text-[9px] font-bold">Today</span>
+  <div class="md:hidden fixed bottom-5 left-4 right-4 z-40 flex items-center justify-between px-4 py-2.5 glass-dock">
+    <!-- Tab: Command Center (Suite) -->
+    <button onclick="switchPillar('dashboard')" id="m-nav-dashboard" class="spring-press flex flex-col items-center gap-0.5 text-[#37352f] dark:text-white">
+      <i data-lucide="layout-grid" class="w-4 h-4"></i>
+      <span class="text-[9px] font-bold">Suite</span>
     </button>
 
-    <!-- Tab: PARA -->
-    <button onclick="switchPillar('para')" id="m-nav-para" class="spring-press flex flex-col items-center gap-0.5 text-[#787774] dark:text-[#9b9a97]">
-      <i data-lucide="layers" class="w-4 h-4"></i>
-      <span class="text-[9px] font-medium">PARA</span>
-    </button>
+    <!-- Tab: Life OS -->
+    <a href="life-os.html" class="spring-press flex flex-col items-center gap-0.5 text-[#3e6843] dark:text-[#8fc496]">
+      <i data-lucide="sparkles" class="w-4 h-4"></i>
+      <span class="text-[9px] font-semibold">Life OS</span>
+    </a>
 
     <!-- Center Elevated Action Button (Floating Pill) -->
     <button onclick="openActionSheet('quick')" class="spring-press w-11 h-11 rounded-full bg-[#37352f] dark:bg-white text-white dark:text-[#191919] flex items-center justify-center shadow-lg -mt-5 ring-4 ring-[#fbfbfa] dark:ring-[#191919]">
       <i data-lucide="plus" class="w-5 h-5"></i>
     </button>
 
-    <!-- Tab: Fitness -->
-    <button onclick="switchPillar('fitness')" id="m-nav-fitness" class="spring-press flex flex-col items-center gap-0.5 text-[#787774] dark:text-[#9b9a97]">
-      <i data-lucide="activity" class="w-4 h-4"></i>
-      <span class="text-[9px] font-medium">Fitness</span>
+    <!-- Tab: PARA -->
+    <button onclick="switchPillar('para')" id="m-nav-para" class="spring-press flex flex-col items-center gap-0.5 text-[#787774] dark:text-[#9b9a97]">
+      <i data-lucide="layers" class="w-4 h-4"></i>
+      <span class="text-[9px] font-medium">PARA</span>
     </button>
 
     <!-- Tab: Finance -->
@@ -884,7 +1189,7 @@
     // Pillar Navigation (Desktop & Mobile Synchronized)
     function switchPillar(id) {
       playAudio('tick');
-      ['cockpit', 'para', 'finance', 'fitness', 'knowledge'].forEach(p => {
+      ['dashboard', 'cockpit', 'para', 'finance', 'fitness', 'knowledge'].forEach(p => {
         const el = document.getElementById(`pillar-${p}`);
         if (el) el.classList.add('hidden');
 
@@ -900,7 +1205,8 @@
         if (mBtn) {
           mBtn.classList.remove('text-[#37352f]', 'dark:text-white');
           mBtn.classList.add('text-[#787774]', 'dark:text-[#9b9a97]');
-          mBtn.querySelector('span').classList.replace('font-bold', 'font-medium');
+          const span = mBtn.querySelector('span');
+          if (span) span.classList.replace('font-bold', 'font-medium');
         }
       });
 
@@ -917,7 +1223,8 @@
       if (activeMBtn) {
         activeMBtn.classList.remove('text-[#787774]', 'dark:text-[#9b9a97]');
         activeMBtn.classList.add('text-[#37352f]', 'dark:text-white');
-        activeMBtn.querySelector('span').classList.replace('font-medium', 'font-bold');
+        const span = activeMBtn.querySelector('span');
+        if (span) span.classList.replace('font-medium', 'font-bold');
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1635,7 +1942,6 @@
       // 8. Focus Station Controls & Project Attribution
       const select = document.getElementById('timerProjectSelect');
       if (select) {
-        const activeProjects = appState.projects.filter(p => p.status === 'active');
         select.innerHTML = activeProjects.map(p => `
           <option value="${p.id}" ${p.id === (appState.focus ? appState.focus.selectedProjectId : 'proj-1') ? 'selected' : ''} class="bg-white dark:bg-[#202020] text-[#37352f] dark:text-white">
             ${p.name}
@@ -1646,13 +1952,78 @@
       highlightActiveMood();
       renderHeatmap();
 
+      // 9. Master Command Center Dashboard Pulse
+      const dashHabitsSummary = document.getElementById('dashHabitsSummary');
+      if (dashHabitsSummary) {
+        const doneHabits = appState.habits.filter(h => h.history[6] === 1).length;
+        dashHabitsSummary.textContent = `${doneHabits} of ${appState.habits.length} Habits Done Today`;
+        const miniHabitCount = document.getElementById('dashMiniHabitCount');
+        if (miniHabitCount) miniHabitCount.textContent = `${doneHabits} of ${appState.habits.length} Done`;
+        const moodBadge = document.getElementById('dashMoodBadge');
+        if (moodBadge) moodBadge.textContent = `Mood: ${appState.mood || '🔥 Driven'}`;
+        const big3Pending = appState.tasks.filter(t => t.isBig3 && !t.completed).length;
+        const big3Badge = document.getElementById('dashBig3Badge');
+        if (big3Badge) big3Badge.textContent = `${big3Pending} Big 3 Remaining`;
+        
+        // Mini habits in launcher card
+        const miniHabitsList = document.getElementById('dashMiniHabitsList');
+        if (miniHabitsList) {
+          miniHabitsList.innerHTML = appState.habits.slice(0, 3).map(h => `
+            <div class="flex items-center justify-between text-xs cursor-pointer py-0.5" onclick="toggleHabit('${h.id}')">
+              <span class="${h.history[6] === 1 ? 'line-through text-[#9b9a97]' : 'text-[#37352f] dark:text-[#e3e2e0] font-medium'}">${h.title}</span>
+              <span class="w-4 h-4 rounded border ${h.history[6] === 1 ? 'bg-[#3e6843] text-white border-transparent' : 'border-[#9b9a97]'} flex items-center justify-center text-[10px] font-bold">
+                ${h.history[6] === 1 ? '✓' : ''}
+              </span>
+            </div>
+          `).join('');
+        }
+
+        // Mini projects in launcher card
+        const miniProjectsList = document.getElementById('dashMiniProjectsList');
+        if (miniProjectsList) {
+          miniProjectsList.innerHTML = activeProjects.map(p => `
+            <div>
+              <div class="flex justify-between text-[10px] text-[#787774] mb-1 font-medium">
+                <span class="text-[#37352f] dark:text-[#e3e2e0] font-bold">${p.name}</span>
+                <span>${p.milestoneProgress}%</span>
+              </div>
+              <div class="h-1.5 w-full bg-[#e9e9e7] dark:bg-[#333] rounded-full overflow-hidden">
+                <div class="h-full bg-[#975b36] rounded-full" style="width: ${p.milestoneProgress}%"></div>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // Mini finance in launcher card
+        const miniFinanceList = document.getElementById('dashMiniFinanceList');
+        if (miniFinanceList) {
+          miniFinanceList.innerHTML = appState.finance.transactions.slice(0, 2).map(t => `
+            <div class="flex justify-between text-xs py-0.5">
+              <span class="text-[#37352f] dark:text-[#e3e2e0] font-medium">${t.title}</span>
+              <span class="font-mono font-bold ${t.amount > 0 ? 'text-[#3e6843]' : 'text-[#787774]'}">${t.amount > 0 ? '+' : ''}$${Math.abs(t.amount).toFixed(2)}</span>
+            </div>
+          `).join('');
+        }
+
+        // Mini macros
+        const protPercent = Math.min(100, Math.round((appState.fitness.macros.proteinCurrent / appState.fitness.macros.proteinTarget) * 100));
+        const macroPercentEl = document.getElementById('dashMiniMacroPercent');
+        if (macroPercentEl) macroPercentEl.textContent = `${protPercent}% Complete`;
+        const protTextEl = document.getElementById('dashProteinText');
+        if (protTextEl) protTextEl.textContent = `${appState.fitness.macros.proteinCurrent}g / ${appState.fitness.macros.proteinTarget}g`;
+        const protBarEl = document.getElementById('dashProteinBar');
+        if (protBarEl) protBarEl.style.width = `${protPercent}%`;
+      }
+
       lucide.createIcons();
     }
 
     function handleRouteHash() {
-      const hash = window.location.hash.replace('#', '');
-      if (['cockpit', 'para', 'finance', 'fitness', 'knowledge'].includes(hash)) {
+      const hash = window.location.hash.replace('#', '') || 'dashboard';
+      if (['dashboard', 'cockpit', 'para', 'finance', 'fitness', 'knowledge'].includes(hash)) {
         switchPillar(hash);
+      } else {
+        switchPillar('dashboard');
       }
     }
 
