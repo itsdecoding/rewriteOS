@@ -165,12 +165,12 @@
       </button>
     </nav>
 
-    <!-- Header Controls: Onboarding, Sound, Theme, Search, Backup -->
+    <!-- Header Controls: Specs Guide, Sound, Theme, Search, Backup -->
     <div class="flex items-center gap-1.5 sm:gap-2">
-      <!-- Onboarding Tour Replay Trigger -->
-      <button onclick="openOnboarding()" title="Product Tour & Guide" class="spring-press px-2 py-1.5 rounded-lg bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] dark:hover:text-white transition text-xs flex items-center gap-1 shadow-xs font-bold">
-        <span>?</span>
-        <span class="hidden sm:inline text-[11px] font-medium">Tour</span>
+      <!-- System Specs & Shortcuts Guide (Pro) -->
+      <button onclick="toggleSpecsModal(true)" title="Keyboard Shortcuts & Architecture (⌘/)" class="spring-press px-2 py-1.5 rounded-lg bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] dark:hover:text-white transition text-xs flex items-center gap-1.5 shadow-xs font-medium">
+        <i data-lucide="command" class="w-3.5 h-3.5"></i>
+        <span class="hidden sm:inline text-[11px]">Guide</span>
       </button>
 
       <!-- Web Audio Haptic Toggle -->
@@ -215,9 +215,9 @@
         </div>
         
         <!-- Momentum Pill + Concentric Triple Apple Rings Widget -->
-        <div class="flex items-center gap-2.5">
+        <div class="flex items-center gap-2.5 relative">
           <!-- Concentric Triple Momentum Rings (SVG) -->
-          <div onclick="toastRingsStatus()" title="Sovereign Activity Rings (Big 3 • Habits • Energy)" class="spring-press flex items-center gap-2 bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] px-2.5 py-1 rounded-xl shadow-xs cursor-pointer hover:border-[#10b981] transition">
+          <button onclick="toggleRingsPopover()" id="ringsWidgetBtn" title="Daily Kinetic Rings (Big 3 • Habits • Energy)" class="spring-press flex items-center gap-2 bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] px-2.5 py-1 rounded-xl shadow-xs cursor-pointer hover:border-[#10b981] transition text-left">
             <svg class="w-7 h-7 -rotate-90" viewBox="0 0 44 44">
               <!-- Outer Ring: Big 3 (Emerald #10b981) -->
               <circle cx="22" cy="22" r="18" fill="none" stroke="currentColor" stroke-width="3" class="text-emerald-500/15" />
@@ -232,6 +232,44 @@
             <div class="text-[10px] font-mono leading-tight hidden xs:block">
               <span id="ringsLabel" class="font-extrabold text-[#37352f] dark:text-white block">0/3</span>
               <span class="text-[9px] text-[#787774]">Rings</span>
+            </div>
+          </button>
+
+          <!-- Floating Glass Popover for Rings Breakdown -->
+          <div id="ringsPopover" class="hidden absolute top-11 right-0 z-40 w-64 bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-4 shadow-2xl space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-[#e9e9e7] dark:border-[#2e2e2e]">
+              <span class="text-xs font-bold text-[#37352f] dark:text-white">Daily Kinetic Rings</span>
+              <span class="text-[10px] font-mono text-[#10b981] font-bold" id="popoverTotalPercent">0%</span>
+            </div>
+            <!-- Ring 1 Breakdown -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-[11px]">
+                <span class="text-[#10b981] font-semibold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> The Big 3</span>
+                <span class="font-mono text-[#787774] dark:text-[#9b9a97]" id="popoverBig3Stat">0/3</span>
+              </div>
+              <div class="w-full bg-[#f1f1ef] dark:bg-[#2a2a2a] h-1.5 rounded-full overflow-hidden">
+                <div id="popoverBig3Bar" class="bg-[#10b981] h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+            </div>
+            <!-- Ring 2 Breakdown -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-[11px]">
+                <span class="text-[#f59e0b] font-semibold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span> Daily Habits</span>
+                <span class="font-mono text-[#787774] dark:text-[#9b9a97]" id="popoverHabitsStat">0/4</span>
+              </div>
+              <div class="w-full bg-[#f1f1ef] dark:bg-[#2a2a2a] h-1.5 rounded-full overflow-hidden">
+                <div id="popoverHabitsBar" class="bg-[#f59e0b] h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+            </div>
+            <!-- Ring 3 Breakdown -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-[11px]">
+                <span class="text-[#6366f1] font-semibold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#6366f1]"></span> Energy &amp; Hydration</span>
+                <span class="font-mono text-[#787774] dark:text-[#9b9a97]" id="popoverEnergyStat">67%</span>
+              </div>
+              <div class="w-full bg-[#f1f1ef] dark:bg-[#2a2a2a] h-1.5 rounded-full overflow-hidden">
+                <div id="popoverEnergyBar" class="bg-[#6366f1] h-full rounded-full transition-all duration-300" style="width: 67%"></div>
+              </div>
             </div>
           </div>
 
@@ -266,7 +304,7 @@
       <!-- Core Cockpit Split: The Big 3 Priorities (Left) + Habit Momentum (Right) -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- Left 7 Cols: The Big 3 & GTD Next Actions -->
+        <!-- Left 7 Cols: The Big 3, GTD Next Actions & Evening Takeaway -->
         <div class="lg:col-span-7 space-y-6">
           
           <!-- The Big 3 Priority Tasks with Spring Checkboxes -->
@@ -275,7 +313,7 @@
               <div class="flex items-center gap-2">
                 <span class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">The Big 3 (Critical Outcomes)</span>
               </div>
-              <span id="big3DoneBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-[#faece3] dark:bg-[#382b22] text-[#975b36] dark:text-[#e4a77e] font-bold">1 of 3 Done</span>
+              <span id="big3DoneBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-[#faece3] dark:bg-[#382b22] text-[#975b36] dark:text-[#e4a77e] font-bold">0 of 3 Done</span>
             </div>
 
             <div id="cockpitBig3List" class="space-y-2.5">
@@ -297,9 +335,24 @@
             </div>
           </div>
 
+          <!-- Daily Reflection / Strategic Takeaway (Balances Left Column) -->
+          <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">Evening Takeaway</span>
+              <span class="text-[10px] text-[#787774] dark:text-[#9b9a97] font-medium">Local-first auto-save</span>
+            </div>
+            <textarea 
+              id="cockpitDailyTakeaway"
+              oninput="saveDailyTakeaway(this.value)"
+              rows="3"
+              placeholder="Record the single highest-leverage realization today..."
+              class="w-full bg-[#f7f6f3] dark:bg-[#262626] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-xl p-3 text-xs text-[#37352f] dark:text-[#e3e2e0] placeholder-[#9b9a97] focus:outline-none focus:border-[#787774] transition resize-none leading-relaxed"
+            ></textarea>
+          </div>
+
         </div>
 
-        <!-- Right 5 Cols: 7-Day Habit Matrix & 1-Tap Fast Ingestion -->
+        <!-- Right 5 Cols: 7-Day Habit Matrix, 1-Tap Fast Ingestion & System Telemetry -->
         <div class="lg:col-span-5 space-y-6">
           
           <!-- Compound Habit Matrix with Tactile 7-Day Dots -->
@@ -349,19 +402,30 @@
             </div>
           </div>
 
-          <!-- Daily Reflection / Scratchpad Note -->
-          <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">Evening Takeaway</span>
-              <span class="text-[10px] text-[#9b9a97]">Local-first auto-save</span>
+          <!-- Sovereign System Telemetry & Status -->
+          <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">System Telemetry</span>
+              <span class="text-[10px] font-mono text-[#10b981] font-bold flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Encrypted Local Vault</span>
+              </span>
             </div>
-            <textarea 
-              id="cockpitDailyTakeaway"
-              oninput="saveDailyTakeaway(this.value)"
-              rows="3"
-              placeholder="Record the single highest-leverage realization today..."
-              class="w-full bg-[#f7f6f3] dark:bg-[#262626] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-xl p-3 text-xs text-[#37352f] dark:text-[#e3e2e0] placeholder-[#9b9a97] focus:outline-none focus:border-[#787774] transition resize-none leading-relaxed"
-            ></textarea>
+            
+            <div class="space-y-2 text-xs">
+              <div class="flex items-center justify-between p-2.5 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e]">
+                <span class="text-[#787774] dark:text-[#9b9a97]">Cold Boot Latency</span>
+                <span class="font-mono font-bold text-[#37352f] dark:text-white">&lt; 10ms (Instant)</span>
+              </div>
+              <div class="flex items-center justify-between p-2.5 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e]">
+                <span class="text-[#787774] dark:text-[#9b9a97]">Data Sovereignty</span>
+                <span class="font-mono font-bold text-[#37352f] dark:text-white">100% Private Local Storage</span>
+              </div>
+              <div class="flex items-center justify-between p-2.5 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e]">
+                <span class="text-[#787774] dark:text-[#9b9a97]">Tactile Acoustics</span>
+                <span class="font-mono font-bold text-[#3e6843] dark:text-[#8fc496]">Web Audio Micro-Haptics</span>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -627,82 +691,103 @@
           <span>✓ Mark Workout Complete</span>
           <span class="text-[10px]">Fitness</span>
         </div>
+        <div onclick="toggleOmnibar(false); toggleSpecsModal(true);" class="p-2 rounded-xl hover:bg-[#f7f6f3] dark:hover:bg-[#262626] cursor-pointer flex justify-between text-[#37352f] dark:text-white font-medium">
+          <span class="flex items-center gap-1.5"><i data-lucide="command" class="w-3.5 h-3.5"></i> System Guide &amp; Keybindings</span>
+          <span class="text-[10px] font-mono">⌘/</span>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- ============================================================== -->
-  <!-- 6. HIGH-TICKET 3-SLIDE INTERACTIVE ONBOARDING WALKTHROUGH      -->
+  <!-- 6. HIGH-STATUS SYSTEM ARCHITECTURE & KEYBOARD SPEC (PRO)       -->
   <!-- ============================================================== -->
-  <div id="onboardingModal" class="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative space-y-5 animate-in fade-in zoom-in-95 duration-200">
+  <div id="specsModal" class="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-[#1c1c1c] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-6 sm:p-7 max-w-lg w-full shadow-2xl relative space-y-5 animate-in fade-in zoom-in-95 duration-150">
       
-      <!-- Slide Indicator Dots -->
-      <div class="flex items-center justify-between">
-        <span class="text-[10px] font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">Sovereign Walkthrough</span>
-        <div class="flex items-center gap-1.5" id="onbDots">
-          <div class="w-6 h-1.5 rounded-full bg-[#37352f] dark:bg-white transition-all duration-300" id="onbDot0"></div>
-          <div class="w-2 h-1.5 rounded-full bg-[#e9e9e7] dark:bg-[#333] transition-all duration-300" id="onbDot1"></div>
-          <div class="w-2 h-1.5 rounded-full bg-[#e9e9e7] dark:bg-[#333] transition-all duration-300" id="onbDot2"></div>
-        </div>
-        <button onclick="closeOnboarding(true)" class="text-xs text-[#787774] hover:text-[#37352f] dark:hover:text-white font-semibold">Skip</button>
-      </div>
-
-      <!-- Slide 0: The Anti-Notion 10ms Cold Boot -->
-      <div id="onbSlide0" class="onb-slide space-y-3">
-        <div class="w-14 h-14 rounded-2xl bg-[#edf3ec] dark:bg-[#233326] flex items-center justify-center text-2xl shadow-xs mx-auto">
-          ⚡
-        </div>
-        <div class="text-center space-y-1">
-          <h2 class="text-base sm:text-lg font-extrabold text-[#37352f] dark:text-[#e3e2e0]">10ms Cold Boot &amp; Pure Focus</h2>
-          <p class="text-xs text-[#787774] dark:text-[#9b9a97] leading-relaxed">
-            Ditch the 10-page slow Notion databases. Rewrite OS opens instantaneously in your browser with zero loading spinners and 100% private local storage.
-          </p>
-        </div>
-      </div>
-
-      <!-- Slide 1: The Sovereign Rule: The Big 3 -->
-      <div id="onbSlide1" class="onb-slide space-y-3 hidden">
-        <div class="w-14 h-14 rounded-2xl bg-[#fbf3db] dark:bg-[#362e1c] flex items-center justify-center text-2xl shadow-xs mx-auto">
-          🎯
-        </div>
-        <div class="text-center space-y-1">
-          <h2 class="text-base sm:text-lg font-extrabold text-[#37352f] dark:text-[#e3e2e0]">The Big 3 Philosophy</h2>
-          <p class="text-xs text-[#787774] dark:text-[#9b9a97] leading-relaxed">
-            High performers don't manage 50 items a day. Pin your 3 highest-leverage outcomes, execute them with deep focus, and close your daily activity rings.
-          </p>
-        </div>
-      </div>
-
-      <!-- Slide 2: Interactive Tactile Demo -->
-      <div id="onbSlide2" class="onb-slide space-y-3 hidden">
-        <div class="w-14 h-14 rounded-2xl bg-[#faece3] dark:bg-[#382b22] flex items-center justify-center text-2xl shadow-xs mx-auto">
-          ✨
-        </div>
-        <div class="text-center space-y-1">
-          <h2 class="text-base sm:text-lg font-extrabold text-[#37352f] dark:text-[#e3e2e0]">Tactile Physicality</h2>
-          <p class="text-xs text-[#787774] dark:text-[#9b9a97] leading-relaxed">
-            Every interaction is built with authentic iOS spring physics, Things 3 mechanical audio, and particle physics. Try it below:
-          </p>
-        </div>
-        <!-- Interactive Demo Checkbox -->
-        <div onclick="testOnboardingCheck(event)" id="demoTaskCard" class="spring-press flex items-center justify-between p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] cursor-pointer hover:border-[#10b981] transition">
-          <div class="flex items-center gap-3">
-            <div id="demoCheckRing" class="w-5 h-5 rounded-full border border-[#9b9a97] flex items-center justify-center text-xs font-bold transition"></div>
-            <span id="demoTaskText" class="text-xs font-semibold text-[#37352f] dark:text-[#e3e2e0]">Tap me to test the click &amp; particle burst!</span>
+      <!-- Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-[#e9e9e7] dark:border-[#2e2e2e]">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span class="text-[11px] font-mono uppercase tracking-wider text-[#787774] dark:text-[#9b9a97] font-bold">System Specification &amp; Shortcuts</span>
           </div>
-          <span class="text-[10px] font-bold text-[#10b981] bg-emerald-500/10 px-2 py-0.5 rounded-full">Interactive</span>
+          <h2 class="text-base font-bold text-[#202020] dark:text-white mt-0.5">Rewrite OS · Executive Architecture</h2>
+        </div>
+        <button onclick="toggleSpecsModal(false)" class="p-1.5 rounded-lg hover:bg-[#f1f1ef] dark:hover:bg-[#2a2a2a] text-[#787774] hover:text-[#37352f] dark:hover:text-white transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Section 1: Keyboard Shortcuts Grid -->
+      <div class="space-y-2">
+        <span class="text-[10px] font-mono uppercase tracking-wider text-[#787774] dark:text-[#9b9a97] font-bold">Tactile Keybindings</span>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div class="flex items-center justify-between p-2 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e]">
+            <span class="text-[#37352f] dark:text-[#e3e2e0] font-medium">Quick Capture</span>
+            <kbd class="font-mono text-[10px] bg-white dark:bg-[#191919] px-2 py-0.5 rounded border border-[#e9e9e7] dark:border-[#333] shadow-xs text-[#787774] dark:text-[#9b9a97]">⌘K</kbd>
+          </div>
+          <div class="flex items-center justify-between p-2 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e]">
+            <span class="text-[#37352f] dark:text-[#e3e2e0] font-medium">System Spec</span>
+            <kbd class="font-mono text-[10px] bg-white dark:bg-[#191919] px-2 py-0.5 rounded border border-[#e9e9e7] dark:border-[#333] shadow-xs text-[#787774] dark:text-[#9b9a97]">⌘/</kbd>
+          </div>
+          <div class="flex items-center justify-between p-2 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e]">
+            <span class="text-[#37352f] dark:text-[#e3e2e0] font-medium">Toggle Theme</span>
+            <kbd class="font-mono text-[10px] bg-white dark:bg-[#191919] px-2 py-0.5 rounded border border-[#e9e9e7] dark:border-[#333] shadow-xs text-[#787774] dark:text-[#9b9a97]">T</kbd>
+          </div>
+          <div class="flex items-center justify-between p-2 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e]">
+            <span class="text-[#37352f] dark:text-[#e3e2e0] font-medium">Toggle Audio</span>
+            <kbd class="font-mono text-[10px] bg-white dark:bg-[#191919] px-2 py-0.5 rounded border border-[#e9e9e7] dark:border-[#333] shadow-xs text-[#787774] dark:text-[#9b9a97]">S</kbd>
+          </div>
+          <div class="flex items-center justify-between p-2 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e]">
+            <span class="text-[#37352f] dark:text-[#e3e2e0] font-medium">Pillars 1–5</span>
+            <kbd class="font-mono text-[10px] bg-white dark:bg-[#191919] px-2 py-0.5 rounded border border-[#e9e9e7] dark:border-[#333] shadow-xs text-[#787774] dark:text-[#9b9a97]">1-5</kbd>
+          </div>
+          <div class="flex items-center justify-between p-2 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e]">
+            <span class="text-[#37352f] dark:text-[#e3e2e0] font-medium">Vault Backup</span>
+            <kbd class="font-mono text-[10px] bg-white dark:bg-[#191919] px-2 py-0.5 rounded border border-[#e9e9e7] dark:border-[#333] shadow-xs text-[#787774] dark:text-[#9b9a97]">B</kbd>
+          </div>
         </div>
       </div>
 
-      <!-- Navigation Controls -->
-      <div class="pt-2 flex items-center gap-3">
-        <button id="onbBackBtn" onclick="prevOnboardingSlide()" class="spring-press px-4 py-2.5 rounded-xl bg-[#f1f1ef] dark:bg-[#2a2a2a] text-[#787774] text-xs font-bold hidden">
-          Back
-        </button>
-        <button id="onbNextBtn" onclick="nextOnboardingSlide()" class="spring-press flex-1 py-2.5 rounded-xl bg-[#37352f] dark:bg-white text-white dark:text-[#191919] text-xs font-bold shadow-xs flex items-center justify-center gap-1.5">
-          <span>Continue</span>
-          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+      <!-- Section 2: Core Sovereign Principles -->
+      <div class="space-y-2">
+        <span class="text-[10px] font-mono uppercase tracking-wider text-[#787774] dark:text-[#9b9a97] font-bold">Operating Framework</span>
+        <div class="space-y-2 text-xs">
+          <div class="p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e]">
+            <div class="font-bold text-[#202020] dark:text-white flex items-center gap-2 mb-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+              <span>The Big 3 Protocol</span>
+            </div>
+            <p class="text-[11px] text-[#787774] dark:text-[#9b9a97] leading-relaxed">
+              Limit daily execution to 3 high-leverage outcomes. When complete, the Day Cleared obsidian medal triggers and your day's work is officially won.
+            </p>
+          </div>
+          <div class="p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e]">
+            <div class="font-bold text-[#202020] dark:text-white flex items-center gap-2 mb-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span>Concentric Kinetic Rings</span>
+            </div>
+            <p class="text-[11px] text-[#787774] dark:text-[#9b9a97] leading-relaxed">
+              Outer ring (Emerald) tracks Big 3 completion. Middle ring (Amber) tracks daily habit consistency. Inner ring (Indigo) tracks hydration and nutrition ingestion.
+            </p>
+          </div>
+          <div class="p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e]">
+            <div class="font-bold text-[#202020] dark:text-white flex items-center gap-2 mb-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+              <span>100% Local-First Sovereignty</span>
+            </div>
+            <p class="text-[11px] text-[#787774] dark:text-[#9b9a97] leading-relaxed">
+              Zero cloud sync latency. Instant 10ms cold boot. Complete data ownership stored directly in your browser's private vault with instant JSON export.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dismiss Button -->
+      <div class="pt-1">
+        <button onclick="toggleSpecsModal(false)" class="spring-press w-full py-2.5 rounded-xl bg-[#202020] dark:bg-white text-white dark:text-[#191919] text-xs font-bold shadow-xs">
+          Close Specification (ESC)
         </button>
       </div>
 
@@ -737,7 +822,7 @@
   <!-- 7. APPLICATION LOGIC & PROCEDURAL WEB AUDIO SYNTHESIZER        -->
   <!-- ============================================================== -->
   <script>
-    const SYSTEM_STORAGE_KEY = 'REWRITE_OS_UNIFIED_V1';
+    const SYSTEM_STORAGE_KEY = 'REWRITE_OS_PRO_VAULT_V2';
     let soundEnabled = true;
     let audioCtx = null;
 
@@ -828,10 +913,10 @@
         { id: 'proj-3', areaId: 'area-wealth', name: 'Newsletter Launch (Archive)', deadline: 'Oct 15', milestoneProgress: 100, budgetAllocated: 150, status: 'archived', notes: 'Preserved in cold archives.' }
       ],
       tasks: [
-        { id: 't-1', projectId: 'proj-1', title: 'Finalize Gumroad sales copy & launch pricing', isBig3: true, completed: false },
-        { id: 't-2', projectId: 'proj-2', title: 'Verify calm Notion warm-paper palette', isBig3: true, completed: true },
-        { id: 't-3', projectId: 'proj-1', title: 'Draft 5 viral Threads launch hooks (S.H.A.P.E.)', isBig3: true, completed: false },
-        { id: 't-4', projectId: 'proj-2', title: 'Connect tactile 7-day habit dot matrix', isBig3: false, completed: true },
+        { id: 't-1', projectId: 'proj-2', title: 'Tap circle to feel mechanical haptics & micro-confetti', isBig3: true, completed: false },
+        { id: 't-2', projectId: 'proj-1', title: 'Press ⌘K or tap Search to test Instant Omnibar Capture', isBig3: true, completed: false },
+        { id: 't-3', projectId: 'proj-2', title: 'Complete all 3 priorities to close Apple rings & bank Day Cleared', isBig3: true, completed: false },
+        { id: 't-4', projectId: 'proj-1', title: 'Finalize Gumroad launch copy & tier packaging', isBig3: false, completed: false },
         { id: 't-5', projectId: null, title: 'Hydrate 3.0L & evening mobility stretch', isBig3: false, completed: false }
       ],
       habits: [
@@ -1008,83 +1093,48 @@
       if (label) label.textContent = `${totalRingsDone}/3`;
     }
 
-    function toastRingsStatus() {
-      const big3 = appState.tasks.filter(t => t.isBig3);
-      const big3Done = big3.filter(t => t.completed).length;
-      const habitsDone = appState.habits.filter(h => h.history[6] === 1).length;
-      alert(`◎ Sovereign Activity Rings:\n• Big 3: ${big3Done}/${big3.length} Done\n• Habits: ${habitsDone}/${appState.habits.length} Done\n• Energy/Hydration: Active`);
+    // Concentric Activity Rings Popover Toggle
+    function toggleRingsPopover() {
+      playAudio('tick');
+      const popover = document.getElementById('ringsPopover');
+      if (!popover) return;
+      const isHidden = popover.classList.contains('hidden');
+      popover.classList.toggle('hidden', !isHidden);
+      if (isHidden) {
+        // Recalculate stats dynamically
+        const big3 = appState.tasks.filter(t => t.isBig3);
+        const big3Done = big3.filter(t => t.completed).length;
+        const habitsDone = appState.habits.filter(h => h.history[6] === 1).length;
+        const protRatio = Math.min(1, appState.fitness.macros.proteinCurrent / appState.fitness.macros.proteinTarget);
+        const waterRatio = Math.min(1, appState.fitness.macros.waterCurrent / appState.fitness.macros.waterTarget);
+        const energyPercent = Math.round(((protRatio + waterRatio) / 2) * 100);
+
+        const pBig3 = document.getElementById('popoverBig3Stat');
+        const pBig3Bar = document.getElementById('popoverBig3Bar');
+        const pHabits = document.getElementById('popoverHabitsStat');
+        const pHabitsBar = document.getElementById('popoverHabitsBar');
+        const pEnergy = document.getElementById('popoverEnergyStat');
+        const pEnergyBar = document.getElementById('popoverEnergyBar');
+        const pTotal = document.getElementById('popoverTotalPercent');
+
+        if (pBig3) pBig3.textContent = `${big3Done}/${big3.length}`;
+        if (pBig3Bar) pBig3Bar.style.width = `${big3.length ? (big3Done / big3.length * 100) : 0}%`;
+        if (pHabits) pHabits.textContent = `${habitsDone}/${appState.habits.length}`;
+        if (pHabitsBar) pHabitsBar.style.width = `${appState.habits.length ? (habitsDone / appState.habits.length * 100) : 0}%`;
+        if (pEnergy) pEnergy.textContent = `${energyPercent}%`;
+        if (pEnergyBar) pEnergyBar.style.width = `${energyPercent}%`;
+
+        const totalPct = Math.round((((big3.length ? (big3Done / big3.length) : 0) + (appState.habits.length ? (habitsDone / appState.habits.length) : 0) + (energyPercent / 100)) / 3) * 100);
+        if (pTotal) pTotal.textContent = `${totalPct}% Closed`;
+      }
     }
 
-    // High-Ticket Onboarding Walkthrough
-    let currentOnboardingSlide = 0;
-    function openOnboarding() {
-      currentOnboardingSlide = 0;
-      showOnboardingSlide(0);
-      document.getElementById('onboardingModal').classList.remove('hidden');
-      playAudio('chord');
-    }
-    function closeOnboarding(saveSeen = true) {
-      document.getElementById('onboardingModal').classList.add('hidden');
-      if (saveSeen) {
-        localStorage.setItem('REWRITE_ONBOARDING_SEEN', 'true');
-      }
-    }
-    function showOnboardingSlide(idx) {
-      currentOnboardingSlide = idx;
-      for (let i = 0; i < 3; i++) {
-        const slide = document.getElementById(`onbSlide${i}`);
-        const dot = document.getElementById(`onbDot${i}`);
-        if (slide) slide.classList.toggle('hidden', i !== idx);
-        if (dot) {
-          if (i === idx) {
-            dot.className = "w-6 h-1.5 rounded-full bg-[#37352f] dark:bg-white transition-all duration-300";
-          } else {
-            dot.className = "w-2 h-1.5 rounded-full bg-[#e9e9e7] dark:bg-[#333] transition-all duration-300";
-          }
-        }
-      }
-      document.getElementById('onbBackBtn').classList.toggle('hidden', idx === 0);
-      const nextBtn = document.getElementById('onbNextBtn');
-      if (idx === 2) {
-        nextBtn.innerHTML = `<span>Enter Rewrite OS →</span>`;
-      } else {
-        nextBtn.innerHTML = `<span>Continue</span><i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>`;
-      }
-      lucide.createIcons();
-    }
-    function nextOnboardingSlide() {
+    // High-Status System Architecture & Keyboard Shortcuts Specification Modal
+    function toggleSpecsModal(show) {
       playAudio('tick');
-      if (currentOnboardingSlide < 2) {
-        showOnboardingSlide(currentOnboardingSlide + 1);
-      } else {
-        closeOnboarding(true);
-        playAudio('chord');
-      }
-    }
-    function prevOnboardingSlide() {
-      playAudio('tick');
-      if (currentOnboardingSlide > 0) {
-        showOnboardingSlide(currentOnboardingSlide - 1);
-      }
-    }
-    let demoChecked = false;
-    function testOnboardingCheck(event) {
-      playAudio('tick');
-      demoChecked = !demoChecked;
-      const ring = document.getElementById('demoCheckRing');
-      const text = document.getElementById('demoTaskText');
-      if (demoChecked) {
-        ring.className = "w-5 h-5 rounded-full bg-[#10b981] text-white flex items-center justify-center text-xs font-bold transition";
-        ring.innerHTML = '✓';
-        text.className = "text-xs font-semibold line-through text-[#9b9a97]";
-        const origin = (event && event.clientX) 
-          ? { x: event.clientX / window.innerWidth, y: event.clientY / window.innerHeight }
-          : { y: 0.5 };
-        confetti({ particleCount: 30, spread: 60, startVelocity: 20, origin, colors: ['#10b981', '#f59e0b', '#ffffff'] });
-      } else {
-        ring.className = "w-5 h-5 rounded-full border border-[#9b9a97] flex items-center justify-center text-xs font-bold transition";
-        ring.innerHTML = '';
-        text.className = "text-xs font-semibold text-[#37352f] dark:text-[#e3e2e0]";
+      const modal = document.getElementById('specsModal');
+      if (modal) {
+        modal.classList.toggle('hidden', !show);
       }
     }
 
@@ -1225,8 +1275,39 @@
       if (show) document.getElementById('omnibarInput').focus();
     }
     window.addEventListener('keydown', (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); toggleOmnibar(true); }
-      if (e.key === 'Escape') { toggleOmnibar(false); closeActionSheet(); toggleBackupModal(false); }
+      // ⌘K or Ctrl+K -> Quick Capture Omnibar
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { 
+        e.preventDefault(); 
+        toggleOmnibar(true); 
+        return;
+      }
+      // ⌘/ or Ctrl+/ or ? -> System Specification & Shortcuts
+      if (((e.metaKey || e.ctrlKey) && e.key === '/') || (e.key === '?' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName))) {
+        e.preventDefault();
+        toggleSpecsModal(true);
+        return;
+      }
+      // Escape -> Close all modals and popovers
+      if (e.key === 'Escape') { 
+        toggleOmnibar(false); 
+        closeActionSheet(); 
+        toggleBackupModal(false); 
+        toggleSpecsModal(false);
+        const pop = document.getElementById('ringsPopover');
+        if (pop) pop.classList.add('hidden');
+        return;
+      }
+      // Single key accelerators when not typing in form controls
+      if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+        if (e.key.toLowerCase() === 't') { toggleTheme(); }
+        else if (e.key.toLowerCase() === 's') { toggleAudio(); }
+        else if (e.key.toLowerCase() === 'b') { toggleBackupModal(true); }
+        else if (e.key === '1') { switchPillar('cockpit'); }
+        else if (e.key === '2') { switchPillar('para'); }
+        else if (e.key === '3') { switchPillar('finance'); }
+        else if (e.key === '4') { switchPillar('fitness'); }
+        else if (e.key === '5') { switchPillar('knowledge'); }
+      }
     });
     function handleOmnibarKey(e) {
       if (e.key === 'Enter') {
@@ -1315,14 +1396,14 @@
       document.getElementById('cockpitBig3List').innerHTML = big3.map(t => {
         const proj = appState.projects.find(p => p.id === t.projectId);
         return `
-          <div class="spring-press flex items-center justify-between px-3 py-2.5 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] cursor-pointer hover:border-[#10b981]/50 transition group" onclick="toggleTask('${t.id}', event)">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <div class="w-5 h-5 rounded-full border ${t.completed ? 'bg-[#10b981] text-white border-transparent' : 'border-[#9b9a97] group-hover:border-[#10b981]'} flex items-center justify-center text-xs font-bold transition flex-shrink-0">
+          <div class="spring-press flex items-center justify-between px-3.5 py-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] cursor-pointer hover:border-[#10b981]/50 transition group" onclick="toggleTask('${t.id}', event)">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-5 h-5 rounded-full border ${t.completed ? 'bg-[#10b981] text-white border-transparent' : 'border-[#787774] dark:border-[#9b9a97] group-hover:border-[#10b981]'} flex items-center justify-center text-xs font-bold transition flex-shrink-0">
                 ${t.completed ? '✓' : ''}
               </div>
               <div class="min-w-0">
-                <p class="text-xs font-medium truncate ${t.completed ? 'line-through text-[#9b9a97]' : 'text-[#37352f] dark:text-[#e3e2e0]'}">${t.title}</p>
-                <span class="text-[9px] text-[#787774] block truncate">${proj ? proj.name : 'General Area'}</span>
+                <p class="text-xs truncate ${t.completed ? 'line-through text-[#787774] dark:text-[#888888]' : 'text-[#202020] dark:text-[#f3f3f2] font-semibold'}">${t.title}</p>
+                <span class="text-[10px] text-[#5a5854] dark:text-[#a8a7a4] block truncate">${proj ? proj.name : 'Executive Focus'}</span>
               </div>
             </div>
             <span class="text-[9px] font-bold text-[#89632a] bg-[#fbf3db] dark:bg-[#362e1c] px-2 py-0.5 rounded-full flex-shrink-0 ml-2">★ Essential</span>
@@ -1333,12 +1414,12 @@
       // 2. Cockpit Next Actions
       const nextActions = appState.tasks.filter(t => !t.isBig3);
       document.getElementById('cockpitNextActionsList').innerHTML = nextActions.map(t => `
-        <div class="spring-press flex items-center justify-between px-2.5 py-2 rounded-xl hover:bg-[#f7f6f3] dark:hover:bg-[#262626] border border-transparent transition cursor-pointer group" onclick="toggleTask('${t.id}', event)">
-          <div class="flex items-center gap-2.5">
-            <div class="w-4 h-4 rounded border ${t.completed ? 'bg-[#37352f] dark:bg-white text-white dark:text-[#191919] border-transparent' : 'border-[#9b9a97] group-hover:border-[#37352f]'} flex items-center justify-center text-[10px] font-bold">
+        <div class="spring-press flex items-center justify-between px-3 py-2.5 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] transition cursor-pointer group hover:border-[#787774]" onclick="toggleTask('${t.id}', event)">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-4 h-4 rounded border ${t.completed ? 'bg-[#37352f] dark:bg-white text-white dark:text-[#191919] border-transparent' : 'border-[#787774] dark:border-[#9b9a97] group-hover:border-[#37352f]'} flex items-center justify-center text-[10px] font-bold flex-shrink-0">
               ${t.completed ? '✓' : ''}
             </div>
-            <span class="text-xs ${t.completed ? 'line-through text-[#9b9a97]' : 'text-[#37352f] dark:text-[#e3e2e0]'}">${t.title}</span>
+            <span class="text-xs truncate ${t.completed ? 'line-through text-[#787774] dark:text-[#888888]' : 'text-[#202020] dark:text-[#f3f3f2] font-medium'}">${t.title}</span>
           </div>
         </div>
       `).join('');
@@ -1481,9 +1562,6 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       render();
-      if (!localStorage.getItem('REWRITE_ONBOARDING_SEEN')) {
-        setTimeout(openOnboarding, 500);
-      }
     });
   </script>
 </body>
