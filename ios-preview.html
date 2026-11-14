@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZenBrain OS — iPhone Native Experience Preview</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background-color: #0d0f14;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* iPhone Hardware Enclosure */
+    .iphone-chassis {
+      width: 390px;
+      height: 820px;
+      border-radius: 54px;
+      box-shadow: 
+        0 0 0 12px #22252c,
+        0 0 0 14px #121316,
+        0 30px 80px rgba(0, 0, 0, 0.8),
+        inset 0 0 6px rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+      background: #fbfbfa;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Dynamic Island */
+    .dynamic-island {
+      width: 120px;
+      height: 32px;
+      background: #000000;
+      border-radius: 20px;
+      position: absolute;
+      top: 11px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 60;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      cursor: pointer;
+    }
+    .dynamic-island.expanded {
+      width: 340px;
+      height: 64px;
+      border-radius: 28px;
+      padding: 10px 16px;
+    }
+
+    /* Spring Physics for Checkboxes & Buttons */
+    .spring-press {
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .spring-press:active {
+      transform: scale(0.91);
+    }
+
+    /* Floating Frosted Glass Bottom Dock */
+    .glass-dock {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      border-radius: 32px;
+    }
+    .dark-mode .glass-dock {
+      background: rgba(30, 30, 32, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Golden Hour Bloom */
+    @keyframes goldenGlow {
+      0% { opacity: 0; transform: scale(0.95); }
+      50% { opacity: 0.15; transform: scale(1.05); }
+      100% { opacity: 0.08; transform: scale(1); }
+    }
+    .golden-bloom {
+      animation: goldenGlow 1.5s ease-out forwards;
+    }
+
+    /* Custom scroll for phone inner screen */
+    .phone-screen::-webkit-scrollbar {
+      display: none;
+    }
+    .phone-screen {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 selection:bg-amber-100">
+
+  <!-- Desktop Presentation Frame -->
+  <div class="text-center mb-6">
+    <div class="flex items-center justify-center gap-2 mb-2">
+      <span class="text-xs uppercase font-extrabold tracking-widest px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+        Interactive iOS Hardware Prototype
+      </span>
+      <span class="text-xs text-gray-500">• Test with Sound Enabled</span>
+    </div>
+    <h1 class="text-2xl font-extrabold text-white tracking-tight">ZenBrain Mobile • Sensory & Navigation Lab</h1>
+    <p class="text-xs text-gray-400 max-w-md mx-auto mt-1">
+      Click inside the iPhone frame below to test the <strong>Floating Glass Dock</strong>, <strong>Dynamic Island</strong>, <strong>Web Audio clicks</strong>, and the <strong>"Day Cleared" ritual</strong>.
+    </p>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- THE IPHONE 16 PRO ENCLOSURE                                    -->
+  <!-- ============================================================== -->
+  <div class="iphone-chassis" id="phoneContainer">
+
+    <!-- 1. DYNAMIC ISLAND (Interactive Hardware Pill) -->
+    <div class="dynamic-island" id="dynamicIsland" onclick="toggleIsland()">
+      <div class="flex items-center gap-1.5" id="islandLeft">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-[9px] font-bold text-white tracking-wider" id="islandTextMini">1.2x FLOW</span>
+      </div>
+      <div class="flex items-center gap-1" id="islandRight">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
+      </div>
+
+      <!-- Expanded State Content (Reveals upon click) -->
+      <div id="islandExpanded" class="hidden w-full flex items-center justify-between text-white text-xs">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">
+            2/3
+          </div>
+          <div>
+            <div class="font-bold text-[11px] leading-tight">Focus Momentum Active</div>
+            <div class="text-[9px] text-gray-400">Next: Draft 5 viral Threads hooks</div>
+          </div>
+        </div>
+        <div class="text-right">
+          <span class="text-[10px] font-mono text-emerald-400 font-bold">+180 XP</span>
+          <div class="text-[8px] text-gray-400 uppercase">Sovereign Tier</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. IPHONE STATUS BAR (Time, Wifi, Battery) -->
+    <div class="absolute top-0 left-0 right-0 h-11 px-7 flex items-center justify-between text-xs font-semibold text-[#37352f] z-50 pointer-events-none" id="statusBar">
+      <span class="text-[12px] tracking-tight font-bold pl-1" id="clockTime">9:41</span>
+      <div class="flex items-center gap-1.5 text-[11px]">
+        <i data-lucide="signal" class="w-3 h-3"></i>
+        <i data-lucide="wifi" class="w-3 h-3"></i>
+        <i data-lucide="battery" class="w-3.5 h-3.5"></i>
+      </div>
+    </div>
+
+    <!-- 3. SCROLLABLE SCREEN WORKSPACE -->
+    <div class="phone-screen w-full h-full pt-14 pb-28 px-5 overflow-y-auto text-[#37352f]" id="phoneScreen">
+
+      <!-- ======================================================== -->
+      <!-- SCREEN 1: TODAY (COCKPIT)                                -->
+      <!-- ======================================================== -->
+      <div id="screen-today" class="space-y-5 animate-in fade-in duration-200">
+        
+        <!-- Header & Momentum Greeting -->
+        <div class="pt-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold text-[#787774] uppercase tracking-wider">Saturday, Nov 14</span>
+            <div class="flex items-center gap-1.5 bg-[#f1f1ef] px-2 py-0.5 rounded-full border border-[#e9e9e7]">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+              <span class="text-[10px] font-bold text-[#787774]">1.2x Momentum</span>
+            </div>
+          </div>
+          <h2 class="text-2xl font-extrabold tracking-tight text-[#37352f] mt-0.5">Today's Focus</h2>
+        </div>
+
+        <!-- The "Day Cleared" Golden Hour Banner (Revealed when 3/3 done) -->
+        <div id="dayClearedBanner" class="hidden p-4 rounded-2xl bg-gradient-to-tr from-[#fbf3db] via-[#fff9e8] to-[#fbf3db] border border-amber-300 shadow-sm space-y-2">
+          <div class="flex items-center gap-2 text-amber-900 font-bold text-xs uppercase tracking-wider">
+            <span>👑</span> DAY CLEARED • 100% LEVERAGE ACHIEVED
+          </div>
+          <p class="text-[11px] text-[#785b5b] leading-relaxed">
+            All essential priorities complete. Shut down your workstation, recharge, and step away guilt-free.
+          </p>
+          <div class="flex items-center justify-between pt-1 text-[10px] text-amber-800 font-mono font-semibold">
+            <span>+350 Life XP Banked</span>
+            <span>Shield Preserved</span>
+          </div>
+        </div>
+
+        <!-- The Big 3 Priorities with Spring Physics Checkboxes -->
+        <div class="bg-white rounded-2xl p-4 border border-[#e9e9e7] shadow-xs space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs font-bold text-[#37352f]">The Big 3</span>
+              <span class="text-[10px] text-[#787774]">(Essential Output)</span>
+            </div>
+            <span id="big3Pill" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#faece3] text-[#975b36]">1 of 3 Done</span>
+          </div>
+
+          <div class="space-y-2" id="iosBig3List">
+            <!-- Task 1 (Done) -->
+            <div class="spring-press flex items-center justify-between p-2.5 rounded-xl bg-[#f7f6f3] border border-[#e9e9e7] cursor-pointer" onclick="toggleTaskIOs(this, 'task1', 45)">
+              <div class="flex items-center gap-2.5">
+                <div class="task-check-circle w-5 h-5 rounded-full bg-[#37352f] text-white flex items-center justify-center text-xs font-bold transition-all">
+                  ✓
+                </div>
+                <div>
+                  <div class="task-text text-xs font-semibold line-through text-[#9b9a97]">Finalize sales copy & launch pricing</div>
+                  <span class="text-[9px] text-[#787774]">Launch Threads Product • 45m</span>
+                </div>
+              </div>
+              <span class="text-[10px] text-emerald-600 font-mono font-bold">+60 XP</span>
+            </div>
+
+            <!-- Task 2 (Pending) -->
+            <div class="spring-press flex items-center justify-between p-2.5 rounded-xl bg-[#ffffff] border border-[#e9e9e7] hover:border-[#37352f] cursor-pointer" onclick="toggleTaskIOs(this, 'task2', 60)">
+              <div class="flex items-center gap-2.5">
+                <div class="task-check-circle w-5 h-5 rounded-full border-2 border-[#9b9a97] flex items-center justify-center text-xs font-bold text-transparent transition-all">
+                  ✓
+                </div>
+                <div>
+                  <div class="task-text text-xs font-semibold text-[#37352f]">Draft 5 viral Threads launch hooks</div>
+                  <span class="text-[9px] text-[#787774]">Marketing & Audience • 60m</span>
+                </div>
+              </div>
+              <span class="text-[10px] text-[#787774] font-mono">+80 XP</span>
+            </div>
+
+            <!-- Task 3 (Pending - Completing this triggers DAY CLEARED!) -->
+            <div class="spring-press flex items-center justify-between p-2.5 rounded-xl bg-[#ffffff] border border-[#e9e9e7] hover:border-[#37352f] cursor-pointer" onclick="toggleTaskIOs(this, 'task3', 30)">
+              <div class="flex items-center gap-2.5">
+                <div class="task-check-circle w-5 h-5 rounded-full border-2 border-[#9b9a97] flex items-center justify-center text-xs font-bold text-transparent transition-all">
+                  ✓
+                </div>
+                <div>
+                  <div class="task-text text-xs font-semibold text-[#37352f]">Deploy 1-click cloud preview</div>
+                  <span class="text-[9px] text-[#787774]">Product & Craft • 30m</span>
+                </div>
+              </div>
+              <span class="text-[10px] text-[#787774] font-mono">+50 XP</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compound Habit Matrix with 7-Day Tactile Dot Rings -->
+        <div class="bg-white rounded-2xl p-4 border border-[#e9e9e7] shadow-xs space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#37352f]">Habit Momentum Matrix</span>
+            <span class="text-[10px] text-[#3e6843] bg-[#edf3ec] px-2 py-0.5 rounded-full font-bold">4 Active Streaks</span>
+          </div>
+
+          <div class="space-y-2">
+            <!-- Habit 1 -->
+            <div class="flex items-center justify-between p-2 rounded-xl bg-[#f7f6f3] border border-[#e9e9e7]">
+              <div>
+                <span class="text-xs font-semibold text-[#37352f] block">Morning Deep Work (90m)</span>
+                <span class="text-[9px] text-[#787774]">🔥 14-day streak</span>
+              </div>
+              <!-- Tactile 7-day pill dots -->
+              <div class="flex items-center gap-1">
+                <span class="w-3.5 h-3.5 rounded-full bg-[#3e6843] text-[8px] text-white flex items-center justify-center font-bold">✓</span>
+                <span class="w-3.5 h-3.5 rounded-full bg-[#3e6843] text-[8px] text-white flex items-center justify-center font-bold">✓</span>
+                <span class="w-3.5 h-3.5 rounded-full bg-[#3e6843] text-[8px] text-white flex items-center justify-center font-bold">✓</span>
+                <span class="w-3.5 h-3.5 rounded-full bg-[#3e6843] text-[8px] text-white flex items-center justify-center font-bold">✓</span>
+                <span class="w-3.5 h-3.5 rounded-full bg-[#3e6843] text-[8px] text-white flex items-center justify-center font-bold">✓</span>
+                <span class="w-3.5 h-3.5 rounded-full bg-[#3e6843] text-[8px] text-white flex items-center justify-center font-bold">✓</span>
+                <button onclick="toggleHabitDot(this)" class="spring-press w-4 h-4 rounded-full bg-[#3e6843] ring-2 ring-[#3e6843]/30 text-[9px] text-white flex items-center justify-center font-bold shadow-xs">✓</button>
+              </div>
+            </div>
+
+            <!-- Habit 2 -->
+            <div class="flex items-center justify-between p-2 rounded-xl bg-[#f7f6f3] border border-[#e9e9e7]">
+              <div>
+                <span class="text-xs font-semibold text-[#37352f] block">Physical Workout Executed</span>
+                <span class="text-[9px] text-[#787774]">🔥 6-day streak</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="w-3.5 h-3.5 rounded-full bg-[#3e6843] text-[8px] text-white flex items-center justify-center font-bold">✓</span>
+                <span class="w-3.5 h-3.5 rounded-full bg-[#3e6843] text-[8px] text-white flex items-center justify-center font-bold">✓</span>
+                <span class="w-3.5 h-3.5 rounded-full bg-[#3e6843] text-[8px] text-white flex items-center justify-center font-bold">✓</span>
+                <span class="w-3.5 h-3.5 rounded-full bg-[#e9e9e7]"></span>
+                <span class="w-3.5 h-3.5 rounded-full bg-[#3e6843] text-[8px] text-white flex items-center justify-center font-bold">✓</span>
+                <span class="w-3.5 h-3.5 rounded-full bg-[#3e6843] text-[8px] text-white flex items-center justify-center font-bold">✓</span>
+                <button onclick="toggleHabitDot(this)" class="spring-press w-4 h-4 rounded-full bg-[#3e6843] ring-2 ring-[#3e6843]/30 text-[9px] text-white flex items-center justify-center font-bold shadow-xs">✓</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1-Tap Quick Action Pills (No prompt dialogs!) -->
+        <div class="p-3 rounded-2xl bg-white border border-[#e9e9e7] space-y-2">
+          <span class="text-[10px] font-bold text-[#787774] uppercase tracking-wider block">Quick Ingestion (Zero-Friction)</span>
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="triggerMacroQuick(30)" class="spring-press py-2 rounded-xl bg-[#faece3] text-[#975b36] text-[11px] font-bold flex flex-col items-center">
+              <span>+30g Whey</span>
+              <span class="text-[9px] font-normal opacity-75">160 kcal</span>
+            </button>
+            <button onclick="triggerWaterQuick(500)" class="spring-press py-2 rounded-xl bg-[#e7f3f8] text-[#285d77] text-[11px] font-bold flex flex-col items-center">
+              <span>+500ml Water</span>
+              <span class="text-[9px] font-normal opacity-75">Hydrate</span>
+            </button>
+            <button onclick="triggerQuickSpend(25)" class="spring-press py-2 rounded-xl bg-[#edf3ec] text-[#3e6843] text-[11px] font-bold flex flex-col items-center">
+              <span>-$25 Spend</span>
+              <span class="text-[9px] font-normal opacity-75">Coffee/Lunch</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- SCREEN 2: P.A.R.A HUB (Projects & Areas)                 -->
+      <!-- ======================================================== -->
+      <div id="screen-para" class="hidden space-y-4 animate-in fade-in duration-200">
+        <div class="pt-2">
+          <span class="text-[11px] font-bold text-[#787774] uppercase tracking-wider">P.A.R.A Framework</span>
+          <h2 class="text-2xl font-extrabold tracking-tight text-[#37352f]">Projects & Areas</h2>
+        </div>
+
+        <!-- Active Projects Cards with Slide-Up Sheet Trigger -->
+        <div class="space-y-2.5">
+          <div class="spring-press p-3.5 rounded-2xl bg-white border border-[#e9e9e7] shadow-xs cursor-pointer" onclick="openIOSSheet('Launch Threads Product', 'Business & Wealth', '$49 / $500', '75%')">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-[#37352f]">Launch Threads Digital Product</span>
+              <span class="text-[10px] text-amber-700 font-bold bg-[#faece3] px-2 py-0.5 rounded-full">Due Nov 20</span>
+            </div>
+            <p class="text-[10px] text-[#787774]">Zero-bloat Notion alternative with high-ticket positioning.</p>
+            <div class="mt-3 pt-2 border-t border-[#e9e9e7] flex items-center justify-between text-[10px] text-[#787774]">
+              <span>Milestone: <strong>75%</strong></span>
+              <span class="font-mono">Spend: $49 / $500</span>
+            </div>
+          </div>
+
+          <div class="spring-press p-3.5 rounded-2xl bg-white border border-[#e9e9e7] shadow-xs cursor-pointer" onclick="openIOSSheet('ZenBrain UI Polish', 'Product & Craft', '$15 / $200', '95%')">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-[#37352f]">ZenBrain UI Design System V1</span>
+              <span class="text-[10px] text-[#3e6843] font-bold bg-[#edf3ec] px-2 py-0.5 rounded-full">Due Nov 18</span>
+            </div>
+            <p class="text-[10px] text-[#787774]">Tactile Things 3 physics, warm editorial paper canvas, zero AI slop.</p>
+            <div class="mt-3 pt-2 border-t border-[#e9e9e7] flex items-center justify-between text-[10px] text-[#787774]">
+              <span>Milestone: <strong>95%</strong></span>
+              <span class="font-mono">Spend: $15 / $200</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Root Areas -->
+        <div class="grid grid-cols-2 gap-2 pt-2">
+          <div class="p-3 rounded-xl bg-white border border-[#e9e9e7]">
+            <span class="text-[10px] font-bold text-[#3e6843] bg-[#edf3ec] px-1.5 py-0.5 rounded">Business & Wealth</span>
+            <div class="text-xs font-bold text-[#37352f] mt-1.5">$5k/mo Target</div>
+          </div>
+          <div class="p-3 rounded-xl bg-white border border-[#e9e9e7]">
+            <span class="text-[10px] font-bold text-[#285d77] bg-[#e7f3f8] px-1.5 py-0.5 rounded">Health & Energy</span>
+            <div class="text-xs font-bold text-[#37352f] mt-1.5">180g Pro • Workouts</div>
+          </div>
+          <div class="p-3 rounded-xl bg-white border border-[#e9e9e7]">
+            <span class="text-[10px] font-bold text-[#89632a] bg-[#fbf3db] px-1.5 py-0.5 rounded">Personal Growth</span>
+            <div class="text-xs font-bold text-[#37352f] mt-1.5">20 pgs Daily Reading</div>
+          </div>
+          <div class="p-3 rounded-xl bg-white border border-[#e9e9e7]">
+            <span class="text-[10px] font-bold text-[#975b36] bg-[#faece3] px-1.5 py-0.5 rounded">Product & Craft</span>
+            <div class="text-xs font-bold text-[#37352f] mt-1.5">Design & Code Polish</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- SCREEN 3: FITNESS PRO & MACROS                           -->
+      <!-- ======================================================== -->
+      <div id="screen-fitness" class="hidden space-y-4 animate-in fade-in duration-200">
+        <div class="pt-2">
+          <span class="text-[11px] font-bold text-[#787774] uppercase tracking-wider">Health & Vitality</span>
+          <h2 class="text-2xl font-extrabold tracking-tight text-[#37352f]">Fitness Pro</h2>
+        </div>
+
+        <!-- Triple Vitality Activity Ring Card -->
+        <div class="p-4 rounded-2xl bg-white border border-[#e9e9e7] shadow-xs flex items-center justify-between">
+          <div class="space-y-1">
+            <span class="text-xs font-bold text-[#37352f] block">Today's Vitality Rings</span>
+            <div class="text-[11px] text-[#3e6843] flex items-center gap-1 font-semibold">
+              <span>●</span> Workout Completed
+            </div>
+            <div class="text-[11px] text-amber-600 flex items-center gap-1 font-semibold" id="fitnessProteinLabel">
+              <span>●</span> Protein: 145g / 180g
+            </div>
+            <div class="text-[11px] text-cyan-600 flex items-center gap-1 font-semibold" id="fitnessWaterLabel">
+              <span>●</span> Water: 2.0L / 3.0L
+            </div>
+          </div>
+
+          <!-- Triple SVG Ring Mini -->
+          <div class="relative w-20 h-20 flex items-center justify-center">
+            <svg class="w-20 h-20 -rotate-90" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" stroke="#f1f1ef" stroke-width="8" fill="none"/>
+              <circle cx="50" cy="50" r="40" stroke="#3e6843" stroke-width="8" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="0" fill="none"/>
+              <circle cx="50" cy="50" r="28" stroke="#f1f1ef" stroke-width="7" fill="none"/>
+              <circle id="miniProteinRing" cx="50" cy="50" r="28" stroke="#d97706" stroke-width="7" stroke-linecap="round" stroke-dasharray="175.8" stroke-dashoffset="35" fill="none" class="transition-all duration-500"/>
+              <circle cx="50" cy="50" r="17" stroke="#f1f1ef" stroke-width="6" fill="none"/>
+              <circle id="miniWaterRing" cx="50" cy="50" r="17" stroke="#0284c7" stroke-width="6" stroke-linecap="round" stroke-dasharray="106.8" stroke-dashoffset="35" fill="none" class="transition-all duration-500"/>
+            </svg>
+            <span class="absolute text-[10px] font-bold text-[#37352f]">88%</span>
+          </div>
+        </div>
+
+        <!-- Workout Routine Execution -->
+        <div class="p-4 rounded-2xl bg-white border border-[#e9e9e7] shadow-xs space-y-2">
+          <span class="text-xs font-bold text-[#37352f] block">Routine Log</span>
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-[#f7f6f3] border border-[#e9e9e7]">
+            <div>
+              <span class="text-xs font-bold text-[#37352f] block">Push Hypertrophy</span>
+              <span class="text-[10px] text-[#787774]">Chest, Shoulders, Triceps • 55m</span>
+            </div>
+            <button onclick="logWorkoutIOS(this)" class="spring-press px-3 py-1 rounded-lg bg-[#37352f] text-white text-[10px] font-bold">
+              ✓ Logged
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- SCREEN 4: FINANCE OS                                     -->
+      <!-- ======================================================== -->
+      <div id="screen-finance" class="hidden space-y-4 animate-in fade-in duration-200">
+        <div class="pt-2">
+          <span class="text-[11px] font-bold text-[#787774] uppercase tracking-wider">Wealth & Capital</span>
+          <h2 class="text-2xl font-extrabold tracking-tight text-[#37352f]">Finance OS</h2>
+        </div>
+
+        <!-- Balance Card -->
+        <div class="p-4 rounded-2xl bg-white border border-[#e9e9e7] shadow-xs space-y-3">
+          <span class="text-[10px] font-bold text-[#787774] uppercase">Total Net Worth</span>
+          <div class="text-3xl font-extrabold text-[#37352f] font-mono" id="financeNetWorth">$48,250.00</div>
+          <div class="grid grid-cols-2 gap-2 pt-2 border-t border-[#e9e9e7] text-xs">
+            <div>
+              <span class="text-[10px] text-[#787774] block">Monthly Inflow</span>
+              <span class="font-bold text-[#3e6843] font-mono">+$5,850.00</span>
+            </div>
+            <div>
+              <span class="text-[10px] text-[#787774] block">Monthly Outflow</span>
+              <span class="font-bold text-[#787774] font-mono" id="financeOutflowText">-$2,400.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project Attributed Spend -->
+        <div class="p-4 rounded-2xl bg-white border border-[#e9e9e7] shadow-xs space-y-2">
+          <span class="text-xs font-bold text-[#37352f] block">Recent Project Spend</span>
+          <div class="space-y-1.5" id="financeSpendList">
+            <div class="p-2 rounded-lg bg-[#f7f6f3] flex items-center justify-between text-xs">
+              <div>
+                <span class="font-semibold text-[#37352f] block">Domain & Gumroad Pro</span>
+                <span class="text-[9px] text-[#787774]">Launch Threads Product</span>
+              </div>
+              <span class="font-mono font-bold text-[#787774]">-$49.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- 4. NATIVE SLIDE-UP BOTTOM SHEET (Replaces window.prompt)       -->
+    <!-- ============================================================== -->
+    <div id="iosBackdrop" onclick="closeIOSSheet()" class="absolute inset-0 bg-black/40 backdrop-blur-xs z-50 hidden transition-opacity"></div>
+    <div id="iosSheet" class="absolute left-0 right-0 bottom-0 bg-white border-t border-[#e9e9e7] rounded-t-[32px] p-6 z-50 transform translate-y-full transition-transform duration-300 shadow-2xl space-y-4">
+      <div class="w-10 h-1 bg-[#e9e9e7] rounded-full mx-auto -mt-1 mb-2"></div>
+      
+      <div class="flex items-center justify-between">
+        <div>
+          <span id="sheetAreaBadge" class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#faece3] text-[#975b36]">AREA</span>
+          <h3 id="sheetTitle" class="text-base font-bold text-[#37352f] mt-1">Project Details</h3>
+        </div>
+        <button onclick="closeIOSSheet()" class="p-1 rounded-full bg-[#f1f1ef] text-[#787774]">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="p-3 rounded-xl bg-[#f7f6f3] flex justify-between">
+          <span class="text-[#787774]">Milestone Velocity</span>
+          <span id="sheetMilestone" class="font-bold text-[#37352f]">75%</span>
+        </div>
+        <div class="p-3 rounded-xl bg-[#f7f6f3] flex justify-between">
+          <span class="text-[#787774]">Project Budget Spend</span>
+          <span id="sheetSpend" class="font-mono font-bold text-[#37352f]">$49 / $500</span>
+        </div>
+      </div>
+
+      <button onclick="closeIOSSheet()" class="spring-press w-full py-2.5 rounded-xl bg-[#37352f] text-white text-xs font-bold">
+        Close Sheet
+      </button>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- 5. FLOATING GLASS BOTTOM DOCK (The Thumb-Zone Navigation)      -->
+    <!-- ============================================================== -->
+    <div class="absolute bottom-6 left-4 right-4 z-40 flex items-center justify-between px-4 py-2.5 glass-dock">
+      <!-- Tab: Today -->
+      <button onclick="switchIOSTab('today')" id="tab-today-btn" class="spring-press flex flex-col items-center gap-0.5 text-[#37352f]">
+        <i data-lucide="sun" class="w-4 h-4"></i>
+        <span class="text-[9px] font-bold">Today</span>
+      </button>
+
+      <!-- Tab: PARA Hub -->
+      <button onclick="switchIOSTab('para')" id="tab-para-btn" class="spring-press flex flex-col items-center gap-0.5 text-[#9b9a97]">
+        <i data-lucide="layers" class="w-4 h-4"></i>
+        <span class="text-[9px] font-medium">PARA</span>
+      </button>
+
+      <!-- Center Action Button (Dynamic Floating Spring Pill) -->
+      <button onclick="triggerQuickCapture()" class="spring-press w-10 h-10 rounded-full bg-[#37352f] text-white flex items-center justify-center shadow-lg -mt-3 ring-4 ring-white">
+        <i data-lucide="plus" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Tab: Fitness -->
+      <button onclick="switchIOSTab('fitness')" id="tab-fitness-btn" class="spring-press flex flex-col items-center gap-0.5 text-[#9b9a97]">
+        <i data-lucide="activity" class="w-4 h-4"></i>
+        <span class="text-[9px] font-medium">Fitness</span>
+      </button>
+
+      <!-- Tab: Finance -->
+      <button onclick="switchIOSTab('finance')" id="tab-finance-btn" class="spring-press flex flex-col items-center gap-0.5 text-[#9b9a97]">
+        <i data-lucide="wallet" class="w-4 h-4"></i>
+        <span class="text-[9px] font-medium">Finance</span>
+      </button>
+    </div>
+
+    <!-- 6. HOME INDICATOR BAR (iOS Signature) -->
+    <div class="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-32 h-1 bg-[#37352f]/40 rounded-full pointer-events-none z-50"></div>
+
+  </div>
+
+  <!-- Audio Synthesizer Toggle Pill -->
+  <div class="mt-4 flex items-center gap-3 text-xs text-gray-400">
+    <div class="flex items-center gap-1.5 bg-gray-800/60 px-3 py-1.5 rounded-full border border-gray-700">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span class="text-[11px] font-medium text-gray-300">Web Audio Synthesizer Active (Zero MP3s)</span>
+    </div>
+    <button onclick="toggleAudioMute()" id="muteBtn" class="text-gray-400 hover:text-white transition flex items-center gap-1">
+      <i data-lucide="volume-2" class="w-3.5 h-3.5"></i> <span>Sound On</span>
+    </button>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- SENSORY ENGINE & TACTILE AUDIO JAVASCRIPT                      -->
+  <!-- ============================================================== -->
+  <script>
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    // Web Audio Synthesizer (Instant procedural acoustics without external audio files)
+    function playSensorySound(type) {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const now = audioCtx.currentTime;
+
+        if (type === 'tick') {
+          // Things 3 Style 14ms mechanical micro-click
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(1200, now);
+          osc.frequency.exponentialRampToValueAtTime(300, now + 0.02);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.025);
+        } else if (type === 'water') {
+          // Rounded liquid bubble drop
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600, now);
+          osc.frequency.exponentialRampToValueAtTime(1400, now + 0.06);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.09);
+        } else if (type === 'chord') {
+          // 528Hz Solfeggio 2-tone harmonic chord (Day Cleared celebration)
+          [528, 660, 792].forEach((freq, i) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + (i * 0.04));
+            gain.gain.setValueAtTime(0.12, now + (i * 0.04));
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + (i * 0.04));
+            osc.stop(now + 0.65);
+          });
+        }
+      } catch (e) {
+        console.warn('Audio synthesis issue:', e);
+      }
+    }
+
+    function toggleAudioMute() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('muteBtn').innerHTML = soundEnabled 
+        ? `<i data-lucide="volume-2" class="w-3.5 h-3.5"></i> <span>Sound On</span>`
+        : `<i data-lucide="volume-x" class="w-3.5 h-3.5 text-rose-400"></i> <span class="text-rose-400">Muted</span>`;
+      lucide.createIcons();
+    }
+
+    // Dynamic Island Toggle
+    function toggleIsland() {
+      const island = document.getElementById('dynamicIsland');
+      const left = document.getElementById('islandLeft');
+      const right = document.getElementById('islandRight');
+      const exp = document.getElementById('islandExpanded');
+      playSensorySound('tick');
+
+      island.classList.toggle('expanded');
+      left.classList.toggle('hidden');
+      right.classList.toggle('hidden');
+      exp.classList.toggle('hidden');
+    }
+
+    // Task Toggling with Day Cleared Logic
+    let completedCount = 1;
+
+    function toggleTaskIOs(el, id, minutes) {
+      const circle = el.querySelector('.task-check-circle');
+      const text = el.querySelector('.task-text');
+      const isDone = text.classList.contains('line-through');
+
+      playSensorySound('tick');
+
+      if (!isDone) {
+        // Mark as Done
+        circle.classList.remove('border-2', 'border-[#9b9a97]', 'text-transparent');
+        circle.classList.add('bg-[#37352f]', 'text-white');
+        text.classList.add('line-through', 'text-[#9b9a97]');
+        text.classList.remove('text-[#37352f]');
+        completedCount++;
+
+        // Confetti burst
+        confetti({ particleCount: 25, spread: 45, origin: { y: 0.6 }, colors: ['#3e6843', '#d97706', '#285d77'] });
+      } else {
+        // Unmark
+        circle.classList.add('border-2', 'border-[#9b9a97]', 'text-transparent');
+        circle.classList.remove('bg-[#37352f]', 'text-white');
+        text.classList.remove('line-through', 'text-[#9b9a97]');
+        text.classList.add('text-[#37352f]');
+        completedCount = Math.max(0, completedCount - 1);
+      }
+
+      document.getElementById('big3Pill').textContent = `${completedCount} of 3 Done`;
+
+      // Check if Day Cleared Ritual should trigger!
+      if (completedCount >= 3) {
+        document.getElementById('dayClearedBanner').classList.remove('hidden');
+        document.getElementById('dayClearedBanner').classList.add('golden-bloom');
+        playSensorySound('chord');
+        confetti({ particleCount: 70, spread: 80, origin: { y: 0.5 }, colors: ['#f59e0b', '#10b981', '#6366f1'] });
+      } else {
+        document.getElementById('dayClearedBanner').classList.add('hidden');
+      }
+    }
+
+    // Habit Dot Toggle
+    function toggleHabitDot(btn) {
+      playSensorySound('tick');
+      const isComplete = btn.textContent.includes('✓');
+      if (isComplete) {
+        btn.textContent = '';
+        btn.classList.remove('bg-[#3e6843]');
+        btn.classList.add('bg-[#e9e9e7]');
+      } else {
+        btn.textContent = '✓';
+        btn.classList.remove('bg-[#e9e9e7]');
+        btn.classList.add('bg-[#3e6843]');
+        confetti({ particleCount: 15, spread: 30, origin: { y: 0.7 }, colors: ['#3e6843'] });
+      }
+    }
+
+    // Quick Macro & Water Actions
+    function triggerMacroQuick(protein) {
+      playSensorySound('tick');
+      confetti({ particleCount: 12, spread: 30, origin: { y: 0.7 }, colors: ['#d97706'] });
+      const ring = document.getElementById('miniProteinRing');
+      ring.setAttribute('stroke-dashoffset', '0');
+      document.getElementById('fitnessProteinLabel').innerHTML = `<span>●</span> Protein: 175g / 180g (Hit!)`;
+    }
+
+    function triggerWaterQuick(ml) {
+      playSensorySound('water');
+      const ring = document.getElementById('miniWaterRing');
+      ring.setAttribute('stroke-dashoffset', '0');
+      document.getElementById('fitnessWaterLabel').innerHTML = `<span>●</span> Water: 2.5L / 3.0L`;
+    }
+
+    function triggerQuickSpend(amount) {
+      playSensorySound('tick');
+      const list = document.getElementById('financeSpendList');
+      const newRow = document.createElement('div');
+      newRow.className = 'p-2 rounded-lg bg-[#f7f6f3] flex items-center justify-between text-xs animate-in fade-in';
+      newRow.innerHTML = `
+        <div>
+          <span class="font-semibold text-[#37352f] block">Coffee & Client Lunch</span>
+          <span class="text-[9px] text-[#787774]">Just Now • Wealth Area</span>
+        </div>
+        <span class="font-mono font-bold text-[#787774]">-$${amount}.00</span>
+      `;
+      list.prepend(newRow);
+      document.getElementById('financeOutflowText').textContent = '-$2,425.00';
+    }
+
+    function logWorkoutIOS(btn) {
+      playSensorySound('tick');
+      btn.textContent = '✓ Completed';
+      btn.classList.replace('bg-[#37352f]', 'bg-[#3e6843]');
+      confetti({ particleCount: 30, spread: 60, origin: { y: 0.5 }, colors: ['#3e6843'] });
+    }
+
+    // Slide-Up Bottom Sheet
+    function openIOSSheet(title, area, spend, velocity) {
+      playSensorySound('tick');
+      document.getElementById('sheetTitle').textContent = title;
+      document.getElementById('sheetAreaBadge').textContent = area;
+      document.getElementById('sheetSpend').textContent = spend;
+      document.getElementById('sheetMilestone').textContent = velocity;
+      document.getElementById('iosBackdrop').classList.remove('hidden');
+      document.getElementById('iosSheet').classList.remove('translate-y-full');
+    }
+    function closeIOSSheet() {
+      playSensorySound('tick');
+      document.getElementById('iosBackdrop').classList.add('hidden');
+      document.getElementById('iosSheet').classList.add('translate-y-full');
+    }
+
+    // Navigation Tab Switching
+    function switchIOSTab(tab) {
+      playSensorySound('tick');
+      ['today', 'para', 'fitness', 'finance'].forEach(t => {
+        const screen = document.getElementById(`screen-${t}`);
+        if (screen) screen.classList.add('hidden');
+        const btn = document.getElementById(`tab-${t}-btn`);
+        if (btn) {
+          btn.classList.replace('text-[#37352f]', 'text-[#9b9a97]');
+          btn.querySelector('span').classList.replace('font-bold', 'font-medium');
+        }
+      });
+
+      const activeScreen = document.getElementById(`screen-${tab}`);
+      if (activeScreen) activeScreen.classList.remove('hidden');
+
+      const activeBtn = document.getElementById(`tab-${tab}-btn`);
+      if (activeBtn) {
+        activeBtn.classList.replace('text-[#9b9a97]', 'text-[#37352f]');
+        activeBtn.querySelector('span').classList.replace('font-medium', 'font-bold');
+      }
+      lucide.createIcons();
+    }
+
+    function triggerQuickCapture() {
+      playSensorySound('tick');
+      openIOSSheet('Quick Capture Inbox', 'General Area', '$0 Spend', 'Ready to File');
+    }
+
+    // Time ticker
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      let mins = now.getMinutes();
+      mins = mins < 10 ? '0' + mins : mins;
+      document.getElementById('clockTime').textContent = `${hours}:${mins}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

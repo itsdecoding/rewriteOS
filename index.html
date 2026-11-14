@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>ZenBrain OS — Minimal Life Operating System</title>
+  
+  <!-- Mobile Native PWA Meta Tags (iOS & Android) -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ZenBrain" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#191919" media="(prefers-color-scheme: dark)" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            paper: {
+              bg: '#fbfbfa',
+              card: '#ffffff',
+              sidebar: '#f7f6f3',
+              subtle: '#f1f1ef',
+              border: '#e9e9e7',
+              text: '#37352f',
+              muted: '#787774',
+              faint: '#9b9a97',
+            },
+            night: {
+              bg: '#191919',
+              card: '#202020',
+              sidebar: '#252525',
+              subtle: '#2a2a2a',
+              border: '#2e2e2e',
+              text: '#e3e2e0',
+              muted: '#9b9a97',
+              faint: '#5a5a57',
+            }
+          },
+          fontFamily: {
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', 'Roboto', 'sans-serif'],
+            mono: ['"SF Mono"', 'Menlo', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      background-color: #fbfbfa;
+      color: #37352f;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      overscroll-behavior-y: none;
+    }
+
+    .dark body {
+      background-color: #191919;
+      color: #e3e2e0;
+    }
+
+    /* Spring Physics */
+    .spring-press {
+      transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .spring-press:active {
+      transform: scale(0.93);
+    }
+
+    /* Floating Frosted Glass Thumb Dock */
+    .glass-dock {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.09);
+      border-radius: 36px;
+    }
+    .dark .glass-dock {
+      background: rgba(32, 32, 32, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Golden Hour Bloom */
+    @keyframes goldenGlow {
+      0% { opacity: 0; transform: scale(0.97); }
+      50% { opacity: 0.18; transform: scale(1.02); }
+      100% { opacity: 0.09; transform: scale(1); }
+    }
+    .golden-bloom {
+      animation: goldenGlow 1.2s ease-out forwards;
+    }
+
+    /* Subtle Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.12);
+      border-radius: 999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-[#cce2ff] dark:selection:bg-[#28456c]">
+
+  <!-- ============================================================== -->
+  <!-- 1. EDITORIAL HEADER & WORKSPACE NAVIGATION                     -->
+  <!-- ============================================================== -->
+  <header class="sticky top-0 z-40 bg-[#fbfbfa]/95 dark:bg-[#191919]/95 backdrop-blur-md border-b border-[#e9e9e7] dark:border-[#2e2e2e] px-4 sm:px-6 py-3 flex items-center justify-between">
+    <!-- Brand Title -->
+    <div class="flex items-center gap-3">
+      <div class="spring-press w-7 h-7 rounded-lg bg-[#f1f1ef] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] flex items-center justify-center text-sm shadow-xs cursor-pointer">
+        🌿
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="font-extrabold text-sm tracking-tight text-[#37352f] dark:text-[#e3e2e0]">ZenBrain</span>
+          <span class="text-[11px] text-[#787774] dark:text-[#9b9a97] hidden sm:inline">/ Life Workspace</span>
+          <span class="text-[9px] uppercase font-bold px-1.5 py-0.2 rounded-full bg-[#edf3ec] dark:bg-[#233326] text-[#3e6843] dark:text-[#8fc496]">PRO+</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Desktop Navigation Tabs (Hidden on mobile; mobile uses Floating Glass Thumb Dock) -->
+    <nav class="hidden md:flex items-center gap-1 bg-[#f7f6f3] dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] p-1 rounded-xl">
+      <button onclick="switchPillar('cockpit')" id="nav-cockpit" class="spring-press nav-tab px-3.5 py-1 rounded-lg text-xs font-semibold transition bg-white dark:bg-[#2a2a2a] text-[#37352f] dark:text-white shadow-xs">
+        Today
+      </button>
+      <button onclick="switchPillar('para')" id="nav-para" class="spring-press nav-tab px-3.5 py-1 rounded-lg text-xs font-semibold transition text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] dark:hover:text-white">
+        P.A.R.A Hub
+      </button>
+      <button onclick="switchPillar('finance')" id="nav-finance" class="spring-press nav-tab px-3.5 py-1 rounded-lg text-xs font-semibold transition text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] dark:hover:text-white">
+        Finance OS
+      </button>
+      <button onclick="switchPillar('fitness')" id="nav-fitness" class="spring-press nav-tab px-3.5 py-1 rounded-lg text-xs font-semibold transition text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] dark:hover:text-white">
+        Fitness & Wellness
+      </button>
+      <button onclick="switchPillar('knowledge')" id="nav-knowledge" class="spring-press nav-tab px-3.5 py-1 rounded-lg text-xs font-semibold transition text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] dark:hover:text-white">
+        Knowledge
+      </button>
+    </nav>
+
+    <!-- Header Controls: Sound, Theme, Search, Backup -->
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      <!-- Web Audio Haptic Toggle -->
+      <button onclick="toggleAudio()" id="soundToggleBtn" title="Web Audio Micro-Haptics" class="spring-press p-1.5 rounded-lg bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] transition text-xs flex items-center gap-1 shadow-xs">
+        <i data-lucide="volume-2" class="w-3.5 h-3.5 text-[#3e6843] dark:text-[#8fc496]"></i>
+      </button>
+
+      <!-- Light / Dark Mode Toggle -->
+      <button onclick="toggleTheme()" id="themeBtn" title="Toggle Light/Dark Theme" class="spring-press p-1.5 rounded-lg bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] dark:hover:text-white transition shadow-xs">
+        <i data-lucide="moon" class="w-3.5 h-3.5 block dark:hidden"></i>
+        <i data-lucide="sun" class="w-3.5 h-3.5 hidden dark:block"></i>
+      </button>
+
+      <!-- Omnibar Trigger -->
+      <button onclick="toggleOmnibar(true)" class="spring-press flex items-center gap-1.5 text-xs bg-white dark:bg-[#202020] text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] border border-[#e9e9e7] dark:border-[#2e2e2e] px-2.5 py-1.5 rounded-lg transition shadow-xs">
+        <i data-lucide="search" class="w-3.5 h-3.5"></i>
+        <kbd class="hidden sm:inline text-[10px] bg-[#f1f1ef] dark:bg-[#2a2a2a] px-1.5 py-0.2 rounded font-mono">⌘K</kbd>
+      </button>
+
+      <!-- Backup Modal Trigger -->
+      <button onclick="toggleBackupModal(true)" title="Data Ownership & Backup" class="spring-press p-1.5 rounded-lg bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] transition shadow-xs">
+        <i data-lucide="hard-drive-download" class="w-3.5 h-3.5"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============================================================== -->
+  <!-- 2. MAIN WORKSPACE CANVAS                                       -->
+  <!-- ============================================================== -->
+  <main class="flex-1 max-w-[1300px] w-full mx-auto px-4 sm:px-8 py-6 mb-28 md:mb-10 space-y-6">
+
+    <!-- ------------------------------------------------------------ -->
+    <!-- PILLAR 1: TODAY (COCKPIT)                                    -->
+    <!-- ------------------------------------------------------------ -->
+    <div id="pillar-cockpit" class="pillar-view space-y-6 animate-in fade-in duration-150">
+      
+      <!-- Editorial Page Heading & Live Momentum Banner -->
+      <div class="border-b border-[#e9e9e7] dark:border-[#2e2e2e] pb-4">
+        <div class="flex items-baseline justify-between flex-wrap gap-2">
+          <div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#37352f] dark:text-[#e3e2e0]">Today's Focus</h1>
+            <p id="cockpitDateSubtitle" class="text-xs text-[#787774] dark:text-[#9b9a97] mt-0.5">Saturday, Nov 14, 2026</p>
+          </div>
+          <!-- Sovereign Life Momentum Pill -->
+          <div class="flex items-center gap-2">
+            <span class="text-xs px-3 py-1 rounded-full bg-[#fbf3db] dark:bg-[#362e1c] text-[#89632a] dark:text-[#d3a85b] font-bold flex items-center gap-1.5 border border-[#89632a]/20">
+              <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+              <span>1.2x Momentum Active</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- The "Day Cleared" Sacred Completion Banner (Golden Hour) -->
+        <div id="dayClearedBanner" class="hidden mt-4 p-4 rounded-2xl bg-gradient-to-r from-[#fbf3db] via-[#fff9e8] to-[#fbf3db] dark:from-[#2e2718] dark:to-[#221c10] border border-amber-300/80 dark:border-amber-600/40 shadow-sm space-y-2">
+          <div class="flex items-center gap-2 text-amber-900 dark:text-amber-300 font-extrabold text-xs uppercase tracking-wider">
+            <span>👑</span> DAY CLEARED • 100% LEVERAGE ACHIEVED
+          </div>
+          <p class="text-xs text-[#785b5b] dark:text-[#c4a9a9] leading-relaxed">
+            All essential priorities executed. Step away from your desk, rest deeply, and preserve tomorrow's creative focus.
+          </p>
+          <div class="flex items-center justify-between pt-1 text-[11px] text-amber-800 dark:text-amber-400 font-mono font-bold">
+            <span>+350 Life XP Banked</span>
+            <span>Tactical Rest Shield Intact</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Core Cockpit Split: The Big 3 Priorities (Left) + Habit Momentum (Right) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left 7 Cols: The Big 3 & GTD Next Actions -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- The Big 3 Priority Tasks with Spring Checkboxes -->
+          <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">The Big 3 (Critical Outcomes)</span>
+              </div>
+              <span id="big3DoneBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-[#faece3] dark:bg-[#382b22] text-[#975b36] dark:text-[#e4a77e] font-bold">1 of 3 Done</span>
+            </div>
+
+            <div id="cockpitBig3List" class="space-y-2.5">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- GTD Next Actions (Things 3 style tactile rows) -->
+          <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">GTD Next Actions</span>
+              <button onclick="openActionSheet('task')" class="spring-press text-xs text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] dark:hover:text-white font-bold flex items-center gap-1">
+                + New Action
+              </button>
+            </div>
+
+            <div id="cockpitNextActionsList" class="space-y-2">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right 5 Cols: 7-Day Habit Matrix & 1-Tap Fast Ingestion -->
+        <div class="lg:col-span-5 space-y-6">
+          
+          <!-- Compound Habit Matrix with Tactile 7-Day Dots -->
+          <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">Habit Momentum Matrix</span>
+              <button onclick="openActionSheet('habit')" class="spring-press text-xs text-[#787774] dark:text-[#9b9a97] hover:text-[#37352f] font-bold">
+                + Habit
+              </button>
+            </div>
+
+            <div id="cockpitHabitsList" class="space-y-3">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- 1-Tap Fast Nutrition & Spend Ingestion (Zero-Friction Pills) -->
+          <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">1-Tap Fast Ingestion</span>
+              <button onclick="resetDailyMacros()" class="text-[10px] text-[#787774] hover:text-[#37352f]">Reset Day</button>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-2">
+              <button onclick="addQuickMacro(30, 160)" class="spring-press p-2.5 rounded-xl bg-[#faece3] dark:bg-[#382b22] text-[#975b36] dark:text-[#e4a77e] text-xs font-bold flex flex-col items-center">
+                <span>+30g Whey</span>
+                <span class="text-[9px] font-normal opacity-75">160 kcal</span>
+              </button>
+              <button onclick="addQuickMacro(0, 0, 500)" class="spring-press p-2.5 rounded-xl bg-[#e7f3f8] dark:bg-[#20323c] text-[#285d77] dark:text-[#89bcd6] text-xs font-bold flex flex-col items-center">
+                <span>+500ml Water</span>
+                <span class="text-[9px] font-normal opacity-75">Hydrate</span>
+              </button>
+              <button onclick="addQuickSpend(25)" class="spring-press p-2.5 rounded-xl bg-[#edf3ec] dark:bg-[#233326] text-[#3e6843] dark:text-[#8fc496] text-xs font-bold flex flex-col items-center">
+                <span>-$25 Spend</span>
+                <span class="text-[9px] font-normal opacity-75">Lunch/Coffee</span>
+              </button>
+            </div>
+
+            <div class="pt-2 border-t border-[#e9e9e7] dark:border-[#2e2e2e] space-y-1.5">
+              <div class="flex justify-between text-[11px] text-[#787774] dark:text-[#9b9a97]">
+                <span id="quickMacroText">Protein: 145g / 180g</span>
+                <span id="quickWaterText">Water: 2.0L / 3.0L</span>
+              </div>
+              <div class="w-full bg-[#f1f1ef] dark:bg-[#2a2a2a] h-1.5 rounded-full overflow-hidden">
+                <div id="quickCalorieBar" class="bg-[#3e6843] dark:bg-[#8fc496] h-full rounded-full transition-all duration-300" style="width: 80%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Daily Reflection / Scratchpad Note -->
+          <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">Evening Takeaway</span>
+              <span class="text-[10px] text-[#9b9a97]">Local-first auto-save</span>
+            </div>
+            <textarea 
+              id="cockpitDailyTakeaway"
+              oninput="saveDailyTakeaway(this.value)"
+              rows="3"
+              placeholder="Record the single highest-leverage realization today..."
+              class="w-full bg-[#f7f6f3] dark:bg-[#262626] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-xl p-3 text-xs text-[#37352f] dark:text-[#e3e2e0] placeholder-[#9b9a97] focus:outline-none focus:border-[#787774] transition resize-none leading-relaxed"
+            ></textarea>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ------------------------------------------------------------ -->
+    <!-- PILLAR 2: P.A.R.A HUB                                        -->
+    <!-- ------------------------------------------------------------ -->
+    <div id="pillar-para" class="pillar-view hidden space-y-6 animate-in fade-in duration-150">
+      
+      <!-- Heading -->
+      <div class="border-b border-[#e9e9e7] dark:border-[#2e2e2e] pb-4 flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-extrabold tracking-tight text-[#37352f] dark:text-[#e3e2e0]">P.A.R.A. Knowledge Hub</h1>
+          <p class="text-xs text-[#787774] dark:text-[#9b9a97] mt-0.5">Finite initiatives, ongoing standards, and cold archives.</p>
+        </div>
+        <button onclick="openActionSheet('project')" class="spring-press text-xs font-bold bg-[#37352f] dark:bg-[#e3e2e0] text-white dark:text-[#191919] px-3.5 py-2 rounded-xl transition shadow-xs">
+          + New Project
+        </button>
+      </div>
+
+      <!-- 4 Root Areas of Responsibility -->
+      <div>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97] mb-3">Root Areas of Life</h3>
+        <div id="paraAreasGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Active Projects Grid -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">Active Projects & Budget Burn</h3>
+          <span id="activeProjectsCountBadge" class="text-xs text-[#787774] dark:text-[#9b9a97]">2 In Progress</span>
+        </div>
+        <div id="paraProjectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Cold Archives -->
+      <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-4">
+        <div class="flex items-center justify-between cursor-pointer select-none" onclick="toggleArchivesCollapse()">
+          <span class="text-xs font-bold text-[#787774] dark:text-[#9b9a97]">Cold Storage Archives (Completed Projects)</span>
+          <span id="archiveToggleIcon" class="text-xs text-[#787774]">▼</span>
+        </div>
+        <div id="paraArchivesList" class="mt-3 space-y-2 hidden pt-2 border-t border-[#e9e9e7] dark:border-[#2e2e2e]">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ------------------------------------------------------------ -->
+    <!-- PILLAR 3: FINANCE OS PRO                                     -->
+    <!-- ------------------------------------------------------------ -->
+    <div id="pillar-finance" class="pillar-view hidden space-y-6 animate-in fade-in duration-150">
+      
+      <!-- Heading -->
+      <div class="border-b border-[#e9e9e7] dark:border-[#2e2e2e] pb-4 flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-extrabold tracking-tight text-[#37352f] dark:text-[#e3e2e0]">Finance OS</h1>
+          <p class="text-xs text-[#787774] dark:text-[#9b9a97] mt-0.5">Project cash-flow, business expenses, and subscriptions.</p>
+        </div>
+        <button onclick="openActionSheet('spend')" class="spring-press text-xs font-bold bg-[#37352f] dark:bg-[#e3e2e0] text-white dark:text-[#191919] px-3.5 py-2 rounded-xl transition shadow-xs">
+          + Log Spend
+        </button>
+      </div>
+
+      <!-- Financial Metric Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-3.5">
+        <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-4 shadow-xs">
+          <span class="text-[11px] font-bold text-[#787774] dark:text-[#9b9a97] block">Calculated Net Worth</span>
+          <span class="text-2xl font-extrabold text-[#37352f] dark:text-[#e3e2e0] mt-1 block font-mono" id="finNetWorth">$48,250.00</span>
+          <span class="text-[10px] text-[#3e6843] dark:text-[#8fc496] mt-1 block font-semibold">+5.8% this month</span>
+        </div>
+
+        <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-4 shadow-xs">
+          <span class="text-[11px] font-bold text-[#787774] dark:text-[#9b9a97] block">Monthly Inflow</span>
+          <span class="text-2xl font-extrabold text-[#3e6843] dark:text-[#8fc496] mt-1 block font-mono" id="finMonthlyIncome">$5,850.00</span>
+          <span class="text-[10px] text-[#787774] dark:text-[#9b9a97] mt-1 block">Digital Products & Growth</span>
+        </div>
+
+        <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-4 shadow-xs">
+          <span class="text-[11px] font-bold text-[#787774] dark:text-[#9b9a97] block">Monthly Outflow</span>
+          <span class="text-2xl font-extrabold text-[#37352f] dark:text-[#e3e2e0] mt-1 block font-mono" id="finMonthlyExpenses">$2,400.00</span>
+          <span class="text-[10px] text-[#787774] dark:text-[#9b9a97] mt-1 block">Operational & Tools</span>
+        </div>
+
+        <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-4 shadow-xs">
+          <span class="text-[11px] font-bold text-[#787774] dark:text-[#9b9a97] block">Net Savings Rate</span>
+          <span class="text-2xl font-extrabold text-[#3e6843] dark:text-[#8fc496] mt-1 block font-mono" id="finNetSurplus">+59%</span>
+          <span class="text-[10px] text-[#787774] dark:text-[#9b9a97] mt-1 block">Surplus: +$3,450.00</span>
+        </div>
+      </div>
+
+      <!-- Financial Split: Transaction Ledger (Left 7) + Subscriptions (Right 5) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Project-Linked Transactions Table -->
+        <div class="lg:col-span-7 bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97] mb-3">Project-Attributed Transactions</h3>
+          <div id="financeTransactionsList" class="space-y-2">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- Subscriptions -->
+        <div class="lg:col-span-5 bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">Active Subscriptions</h3>
+            <span id="subsMonthlyDrain" class="text-xs font-bold text-[#975b36]">-$74.00/mo</span>
+          </div>
+          <div id="financeSubscriptionsList" class="space-y-2">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ------------------------------------------------------------ -->
+    <!-- PILLAR 4: FITNESS & WELLNESS                                 -->
+    <!-- ------------------------------------------------------------ -->
+    <div id="pillar-fitness" class="pillar-view hidden space-y-6 animate-in fade-in duration-150">
+      
+      <!-- Heading -->
+      <div class="border-b border-[#e9e9e7] dark:border-[#2e2e2e] pb-4 flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-extrabold tracking-tight text-[#37352f] dark:text-[#e3e2e0]">Fitness & Wellness</h1>
+          <p class="text-xs text-[#787774] dark:text-[#9b9a97] mt-0.5">Physical routines auto-syncing to daily habits.</p>
+        </div>
+        <span class="text-xs px-2.5 py-1 rounded-full bg-[#edf3ec] dark:bg-[#233326] text-[#3e6843] dark:text-[#8fc496] font-bold">
+          Auto-Sync to Habits Active
+        </span>
+      </div>
+
+      <!-- Workout Routines -->
+      <div>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97] mb-3">Active Routines</h3>
+        <div id="fitnessRoutinesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ------------------------------------------------------------ -->
+    <!-- PILLAR 5: KNOWLEDGE HUB                                      -->
+    <!-- ------------------------------------------------------------ -->
+    <div id="pillar-knowledge" class="pillar-view hidden space-y-6 animate-in fade-in duration-150">
+      
+      <!-- Heading -->
+      <div class="border-b border-[#e9e9e7] dark:border-[#2e2e2e] pb-4 flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-extrabold tracking-tight text-[#37352f] dark:text-[#e3e2e0]">Knowledge & Reference</h1>
+          <p class="text-xs text-[#787774] dark:text-[#9b9a97] mt-0.5">Bookshelf and swipe files linked to active projects.</p>
+        </div>
+        <button onclick="openActionSheet('resource')" class="spring-press text-xs font-bold bg-[#37352f] dark:bg-[#e3e2e0] text-white dark:text-[#191919] px-3.5 py-2 rounded-xl transition shadow-xs">
+          + Add Resource
+        </button>
+      </div>
+
+      <!-- Bookshelf -->
+      <div>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97] mb-3">Bookshelf</h3>
+        <div id="knowledgeBooksGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Project Reference Vault -->
+      <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97] mb-3">Project Reference Vault</h3>
+        <div id="knowledgeVaultList" class="space-y-2">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- 3. MOBILE FLOATING GLASS THUMB DOCK (iOS / Android)            -->
+  <!-- ============================================================== -->
+  <div class="md:hidden fixed bottom-5 left-4 right-4 z-40 flex items-center justify-between px-5 py-2.5 glass-dock">
+    <!-- Tab: Today -->
+    <button onclick="switchPillar('cockpit')" id="m-nav-cockpit" class="spring-press flex flex-col items-center gap-0.5 text-[#37352f] dark:text-white">
+      <i data-lucide="sun" class="w-4 h-4"></i>
+      <span class="text-[9px] font-bold">Today</span>
+    </button>
+
+    <!-- Tab: PARA -->
+    <button onclick="switchPillar('para')" id="m-nav-para" class="spring-press flex flex-col items-center gap-0.5 text-[#787774] dark:text-[#9b9a97]">
+      <i data-lucide="layers" class="w-4 h-4"></i>
+      <span class="text-[9px] font-medium">PARA</span>
+    </button>
+
+    <!-- Center Elevated Action Button (Floating Pill) -->
+    <button onclick="openActionSheet('quick')" class="spring-press w-11 h-11 rounded-full bg-[#37352f] dark:bg-white text-white dark:text-[#191919] flex items-center justify-center shadow-lg -mt-5 ring-4 ring-[#fbfbfa] dark:ring-[#191919]">
+      <i data-lucide="plus" class="w-5 h-5"></i>
+    </button>
+
+    <!-- Tab: Fitness -->
+    <button onclick="switchPillar('fitness')" id="m-nav-fitness" class="spring-press flex flex-col items-center gap-0.5 text-[#787774] dark:text-[#9b9a97]">
+      <i data-lucide="activity" class="w-4 h-4"></i>
+      <span class="text-[9px] font-medium">Fitness</span>
+    </button>
+
+    <!-- Tab: Finance -->
+    <button onclick="switchPillar('finance')" id="m-nav-finance" class="spring-press flex flex-col items-center gap-0.5 text-[#787774] dark:text-[#9b9a97]">
+      <i data-lucide="wallet" class="w-4 h-4"></i>
+      <span class="text-[9px] font-medium">Finance</span>
+    </button>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 4. NATIVE SLIDE-UP BOTTOM SHEET (Zero window.prompt)           -->
+  <!-- ============================================================== -->
+  <div id="actionSheetBackdrop" onclick="closeActionSheet()" class="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-xs z-50 hidden transition-opacity"></div>
+  <aside id="actionSheet" class="fixed left-0 right-0 bottom-0 bg-white dark:bg-[#202020] border-t border-[#e9e9e7] dark:border-[#2e2e2e] rounded-t-[32px] p-6 z-50 transform translate-y-full transition-transform duration-200 shadow-2xl max-w-lg mx-auto space-y-4">
+    <div class="w-10 h-1 bg-[#e9e9e7] dark:bg-[#333] rounded-full mx-auto -mt-1 mb-2"></div>
+    <div class="flex items-center justify-between pb-2 border-b border-[#e9e9e7] dark:border-[#2e2e2e]">
+      <h3 id="sheetHeading" class="text-sm font-bold text-[#37352f] dark:text-[#e3e2e0]">Add New Item</h3>
+      <button onclick="closeActionSheet()" class="p-1 rounded-full text-[#787774] hover:text-[#37352f]"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+    <div id="sheetFormContainer" class="space-y-3 text-xs">
+      <!-- Dynamic Form Loaded via JS -->
+    </div>
+  </aside>
+
+  <!-- ============================================================== -->
+  <!-- 5. ⌘K OMNIBAR MODAL                                            -->
+  <!-- ============================================================== -->
+  <div id="omnibarModal" class="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-xs z-50 hidden flex items-start justify-center pt-24 p-4">
+    <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden">
+      <div class="p-4 border-b border-[#e9e9e7] dark:border-[#2e2e2e] flex items-center gap-3">
+        <i data-lucide="search" class="w-4 h-4 text-[#787774]"></i>
+        <input 
+          id="omnibarInput" 
+          type="text" 
+          placeholder="Capture task, type spend ($45 Lunch), or jump to section..." 
+          class="w-full bg-transparent text-xs text-[#37352f] dark:text-white placeholder-[#9b9a97] focus:outline-none"
+          onkeydown="handleOmnibarKey(event)"
+        />
+        <kbd class="text-[10px] bg-[#f1f1ef] dark:bg-[#2a2a2a] px-1.5 py-0.5 rounded text-[#787774] font-mono">ESC</kbd>
+      </div>
+      <div class="p-2 text-xs text-[#787774] dark:text-[#9b9a97] space-y-1">
+        <div onclick="omnibarAction('task')" class="p-2 rounded-xl hover:bg-[#f7f6f3] dark:hover:bg-[#262626] cursor-pointer flex justify-between">
+          <span>+ Add Task (Press Enter)</span>
+          <span class="text-[10px]">Today</span>
+        </div>
+        <div onclick="omnibarAction('spend')" class="p-2 rounded-xl hover:bg-[#f7f6f3] dark:hover:bg-[#262626] cursor-pointer flex justify-between">
+          <span>+ Log Spend ($amount name)</span>
+          <span class="text-[10px]">Finance</span>
+        </div>
+        <div onclick="omnibarAction('workout')" class="p-2 rounded-xl hover:bg-[#f7f6f3] dark:hover:bg-[#262626] cursor-pointer flex justify-between">
+          <span>✓ Mark Workout Complete</span>
+          <span class="text-[10px]">Fitness</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 6. BACKUP & OWNERSHIP MODAL                                    -->
+  <!-- ============================================================== -->
+  <div id="backupModal" class="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl max-w-sm w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="font-bold text-sm text-[#37352f] dark:text-[#e3e2e0]">Data Ownership & Export</h3>
+        <button onclick="toggleBackupModal(false)" class="text-[#787774] hover:text-[#37352f]"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <p class="text-xs text-[#787774] dark:text-[#9b9a97] mb-4 leading-relaxed">
+        Your data is saved 100% locally in your browser. Download an offline backup anytime or sync across devices via JSON.
+      </p>
+      <div class="space-y-2.5">
+        <button onclick="exportSystemJSON()" class="spring-press w-full bg-[#37352f] dark:bg-[#e3e2e0] text-white dark:text-[#191919] text-xs font-bold py-2.5 rounded-xl transition shadow-xs">
+          Download Backup (.json)
+        </button>
+        <label class="spring-press w-full bg-[#f1f1ef] dark:bg-[#2a2a2a] text-[#37352f] dark:text-[#e3e2e0] text-xs font-bold py-2.5 rounded-xl flex items-center justify-center cursor-pointer border border-[#e9e9e7] dark:border-[#333]">
+          Restore from File
+          <input type="file" id="importJsonInput" onchange="importSystemJSON(event)" accept=".json" class="hidden" />
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 7. APPLICATION LOGIC & PROCEDURAL WEB AUDIO SYNTHESIZER        -->
+  <!-- ============================================================== -->
+  <script>
+    const SYSTEM_STORAGE_KEY = 'ZENBRAIN_UNIFIED_PRO_V1';
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    // Procedural Web Audio Synthesizer (Instant zero-asset acoustics)
+    function playAudio(type) {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+
+        if (type === 'tick') {
+          // Things 3 Mechanical Switch Micro-Click
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(1100, now);
+          osc.frequency.exponentialRampToValueAtTime(320, now + 0.02);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.025);
+        } else if (type === 'water') {
+          // Liquid drop
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(650, now);
+          osc.frequency.exponentialRampToValueAtTime(1350, now + 0.06);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.09);
+        } else if (type === 'chord') {
+          // 528Hz Solfeggio Harmonic Chord (Day Cleared)
+          [528, 660, 792].forEach((freq, i) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + (i * 0.04));
+            gain.gain.setValueAtTime(0.12, now + (i * 0.04));
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + (i * 0.04));
+            osc.stop(now + 0.65);
+          });
+        }
+      } catch (e) {
+        console.warn('Audio synthesis issue:', e);
+      }
+    }
+
+    function toggleAudio() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById('soundToggleBtn');
+      btn.innerHTML = soundEnabled 
+        ? `<i data-lucide="volume-2" class="w-3.5 h-3.5 text-[#3e6843] dark:text-[#8fc496]"></i>`
+        : `<i data-lucide="volume-x" class="w-3.5 h-3.5 text-[#a33d3d]"></i>`;
+      lucide.createIcons();
+    }
+
+    // Theme Toggle
+    function toggleTheme() {
+      playAudio('tick');
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('ZENBRAIN_THEME', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    }
+    if (localStorage.getItem('ZENBRAIN_THEME') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+
+    // Default Master State
+    const factoryState = {
+      areas: [
+        { id: 'area-wealth', name: 'Business & Wealth', desc: 'Revenue, digital products, investments', tagClass: 'bg-[#edf3ec] dark:bg-[#233326] text-[#3e6843] dark:text-[#8fc496]' },
+        { id: 'area-craft', name: 'Product & Craft', desc: 'Design, code excellence, writing', tagClass: 'bg-[#faece3] dark:bg-[#382b22] text-[#975b36] dark:text-[#e4a77e]' },
+        { id: 'area-health', name: 'Health & Energy', desc: 'Workouts, nutrition, sleep', tagClass: 'bg-[#e7f3f8] dark:bg-[#20323c] text-[#285d77] dark:text-[#89bcd6]' },
+        { id: 'area-growth', name: 'Personal Growth', desc: 'Reading, mental models, discipline', tagClass: 'bg-[#fbf3db] dark:bg-[#362e1c] text-[#89632a] dark:text-[#d3a85b]' }
+      ],
+      projects: [
+        { id: 'proj-1', areaId: 'area-wealth', name: 'Launch Threads Digital Product', deadline: 'Nov 20', milestoneProgress: 75, budgetAllocated: 500, status: 'active', notes: 'Zero-bloat Notion alternative targeting Gumroad launch.' },
+        { id: 'proj-2', areaId: 'area-craft', name: 'ZenBrain UI Design System V1', deadline: 'Nov 18', milestoneProgress: 95, budgetAllocated: 200, status: 'active', notes: 'Tactile Things 3 physics, warm editorial paper canvas, zero AI slop.' },
+        { id: 'proj-3', areaId: 'area-wealth', name: 'Newsletter Launch (Archive)', deadline: 'Oct 15', milestoneProgress: 100, budgetAllocated: 150, status: 'archived', notes: 'Preserved in cold archives.' }
+      ],
+      tasks: [
+        { id: 't-1', projectId: 'proj-1', title: 'Finalize Gumroad sales copy & launch pricing', isBig3: true, completed: false },
+        { id: 't-2', projectId: 'proj-2', title: 'Verify calm Notion warm-paper palette', isBig3: true, completed: true },
+        { id: 't-3', projectId: 'proj-1', title: 'Draft 5 viral Threads launch hooks (S.H.A.P.E.)', isBig3: true, completed: false },
+        { id: 't-4', projectId: 'proj-2', title: 'Connect tactile 7-day habit dot matrix', isBig3: false, completed: true },
+        { id: 't-5', projectId: null, title: 'Hydrate 3.0L & evening mobility stretch', isBig3: false, completed: false }
+      ],
+      habits: [
+        { id: 'h-1', title: 'Morning Deep Work (90m)', streak: 14, history: [1, 1, 1, 1, 1, 1, 1] },
+        { id: 'h-2', title: 'Physical Workout Executed', streak: 6, history: [1, 1, 1, 1, 0, 1, 1] },
+        { id: 'h-3', title: '180g Daily Protein Adherence', streak: 10, history: [1, 1, 1, 1, 1, 1, 1] },
+        { id: 'h-4', title: 'Read 20 Pages Non-Fiction', streak: 21, history: [1, 1, 1, 1, 1, 1, 1] }
+      ],
+      finance: {
+        transactions: [
+          { id: 'tx-1', projectId: 'proj-1', title: 'Domain & Gumroad Pro Setup', amount: -49.00, date: 'Nov 12' },
+          { id: 'tx-2', projectId: 'proj-2', title: 'Design Assets & Font Licensing', amount: -15.00, date: 'Nov 10' },
+          { id: 'tx-3', projectId: null, title: 'Weekly Groceries & Meal Prep', amount: -185.00, date: 'Nov 13' },
+          { id: 'tx-4', projectId: 'proj-1', title: 'Threads Pre-Order Inflow', amount: 320.00, date: 'Nov 14' }
+        ],
+        subscriptions: [
+          { id: 'sub-1', name: 'Domain & Cloud', cost: 15.00, renewalDate: 'Nov 28' },
+          { id: 'sub-2', name: 'Software Suite', cost: 20.00, renewalDate: 'Dec 01' },
+          { id: 'sub-3', name: 'Gym Membership', cost: 39.00, renewalDate: 'Dec 10' }
+        ]
+      },
+      fitness: {
+        macros: { proteinCurrent: 145, proteinTarget: 180, caloriesCurrent: 1950, caloriesTarget: 2400, waterCurrent: 2.0, waterTarget: 3.0 },
+        routines: [
+          { id: 'r-1', name: 'Push Hypertrophy', duration: '55m', focus: 'Chest, Shoulders, Triceps' },
+          { id: 'r-2', name: 'Pull & Core', duration: '50m', focus: 'Back, Biceps, Core' },
+          { id: 'r-3', name: 'Legs & Conditioning', duration: '60m', focus: 'Lower Body & Zone 2' }
+        ]
+      },
+      knowledge: {
+        books: [
+          { id: 'b-1', title: 'Building a Second Brain', author: 'Tiago Forte', progress: 100, takeaway: 'Organize by actionability (PARA), not by abstract topic.' },
+          { id: 'b-2', title: 'The Almanack of Naval Ravikant', author: 'Eric Jorgenson', progress: 85, takeaway: 'Leverage code and media with zero marginal cost of reproduction.' },
+          { id: 'b-3', title: 'Atomic Habits', author: 'James Clear', progress: 100, takeaway: 'You fall to the level of your systems.' }
+        ],
+        resources: [
+          { id: 'res-1', title: 'Threads Viral Hook Swipe File (S.H.A.P.E.)', type: 'Swipe File', linkedProject: 'Launch Threads Digital Product' },
+          { id: 'res-2', title: 'Minimalist Editorial Component System', type: 'Design', linkedProject: 'ZenBrain UI Design System V1' }
+        ]
+      },
+      dailyTakeaway: 'Focus on pure utility. An uncluttered workspace gives back mental bandwidth.'
+    };
+
+    let appState = loadState();
+
+    function loadState() {
+      const saved = localStorage.getItem(SYSTEM_STORAGE_KEY);
+      if (saved) {
+        try { return JSON.parse(saved); } catch(e) {}
+      }
+      return JSON.parse(JSON.stringify(factoryState));
+    }
+
+    function saveState() {
+      localStorage.setItem(SYSTEM_STORAGE_KEY, JSON.stringify(appState));
+      render();
+    }
+
+    // Pillar Navigation (Desktop & Mobile Synchronized)
+    function switchPillar(id) {
+      playAudio('tick');
+      ['cockpit', 'para', 'finance', 'fitness', 'knowledge'].forEach(p => {
+        const el = document.getElementById(`pillar-${p}`);
+        if (el) el.classList.add('hidden');
+
+        // Desktop nav tab
+        const dBtn = document.getElementById(`nav-${p}`);
+        if (dBtn) {
+          dBtn.classList.remove('bg-white', 'dark:bg-[#2a2a2a]', 'text-[#37352f]', 'dark:text-white', 'shadow-xs');
+          dBtn.classList.add('text-[#787774]', 'dark:text-[#9b9a97]');
+        }
+
+        // Mobile thumb dock tab
+        const mBtn = document.getElementById(`m-nav-${p}`);
+        if (mBtn) {
+          mBtn.classList.remove('text-[#37352f]', 'dark:text-white');
+          mBtn.classList.add('text-[#787774]', 'dark:text-[#9b9a97]');
+          mBtn.querySelector('span').classList.replace('font-bold', 'font-medium');
+        }
+      });
+
+      const activeEl = document.getElementById(`pillar-${id}`);
+      if (activeEl) activeEl.classList.remove('hidden');
+
+      const activeDBtn = document.getElementById(`nav-${id}`);
+      if (activeDBtn) {
+        activeDBtn.classList.remove('text-[#787774]', 'dark:text-[#9b9a97]');
+        activeDBtn.classList.add('bg-white', 'dark:bg-[#2a2a2a]', 'text-[#37352f]', 'dark:text-white', 'shadow-xs');
+      }
+
+      const activeMBtn = document.getElementById(`m-nav-${id}`);
+      if (activeMBtn) {
+        activeMBtn.classList.remove('text-[#787774]', 'dark:text-[#9b9a97]');
+        activeMBtn.classList.add('text-[#37352f]', 'dark:text-white');
+        activeMBtn.querySelector('span').classList.replace('font-medium', 'font-bold');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      lucide.createIcons();
+    }
+
+    // Task Toggles with Spring & Day Cleared Ritual
+    function toggleTask(id) {
+      playAudio('tick');
+      const t = appState.tasks.find(task => task.id === id);
+      if (t) {
+        t.completed = !t.completed;
+        if (t.completed) {
+          confetti({ particleCount: 25, spread: 45, origin: { y: 0.6 }, colors: ['#3e6843', '#975b36', '#285d77'] });
+        }
+        if (t.projectId) {
+          const pTasks = appState.tasks.filter(tk => tk.projectId === t.projectId);
+          const done = pTasks.filter(tk => tk.completed).length;
+          const p = appState.projects.find(proj => proj.id === t.projectId);
+          if (p && pTasks.length) p.milestoneProgress = Math.round((done / pTasks.length) * 100);
+        }
+        saveState();
+
+        // Check for Day Cleared
+        const big3 = appState.tasks.filter(tk => tk.isBig3);
+        const big3Done = big3.filter(tk => tk.completed).length;
+        if (big3Done === big3.length && big3.length > 0) {
+          playAudio('chord');
+          confetti({ particleCount: 60, spread: 75, origin: { y: 0.5 }, colors: ['#f59e0b', '#10b981', '#3b82f6'] });
+        }
+      }
+    }
+
+    // Habit Toggles with Micro-confetti
+    function toggleHabit(id) {
+      playAudio('tick');
+      const h = appState.habits.find(hab => hab.id === id);
+      if (h) {
+        h.history[6] = h.history[6] === 1 ? 0 : 1;
+        h.streak = h.history[6] === 1 ? h.streak + 1 : Math.max(0, h.streak - 1);
+        if (h.history[6] === 1) {
+          confetti({ particleCount: 15, spread: 30, origin: { y: 0.7 }, colors: ['#3e6843'] });
+        }
+        saveState();
+      }
+    }
+
+    // Fast 1-Tap Macros
+    function addQuickMacro(protein, calories, waterMl = 0) {
+      playAudio(waterMl ? 'water' : 'tick');
+      appState.fitness.macros.proteinCurrent = Math.min(250, appState.fitness.macros.proteinCurrent + protein);
+      appState.fitness.macros.caloriesCurrent = Math.min(4000, appState.fitness.macros.caloriesCurrent + calories);
+      if (waterMl) appState.fitness.macros.waterCurrent = parseFloat((appState.fitness.macros.waterCurrent + (waterMl/1000)).toFixed(1));
+      confetti({ particleCount: 15, spread: 35, origin: { y: 0.7 }, colors: ['#975b36', '#285d77'] });
+      saveState();
+    }
+    function resetDailyMacros() {
+      playAudio('tick');
+      appState.fitness.macros.proteinCurrent = 0;
+      appState.fitness.macros.caloriesCurrent = 0;
+      appState.fitness.macros.waterCurrent = 0.0;
+      saveState();
+    }
+
+    function addQuickSpend(amount) {
+      playAudio('tick');
+      appState.finance.transactions.unshift({
+        id: 'tx-' + Date.now(),
+        projectId: 'proj-1',
+        title: 'Working Lunch & Coffee',
+        amount: -Math.abs(amount),
+        date: 'Today'
+      });
+      saveState();
+    }
+
+    function logWorkout(name) {
+      playAudio('tick');
+      const healthHabit = appState.habits.find(h => h.id === 'h-2');
+      if (healthHabit) {
+        healthHabit.history[6] = 1;
+        healthHabit.streak += 1;
+      }
+      confetti({ particleCount: 35, spread: 55, origin: { y: 0.6 }, colors: ['#3e6843', '#285d77'] });
+      saveState();
+    }
+
+    function saveDailyTakeaway(val) {
+      appState.dailyTakeaway = val;
+      localStorage.setItem(SYSTEM_STORAGE_KEY, JSON.stringify(appState));
+    }
+
+    // Native Slide-Up Bottom Sheet (Replaces window.prompt)
+    function openActionSheet(type) {
+      playAudio('tick');
+      const backdrop = document.getElementById('actionSheetBackdrop');
+      const sheet = document.getElementById('actionSheet');
+      const heading = document.getElementById('sheetHeading');
+      const container = document.getElementById('sheetFormContainer');
+
+      if (type === 'task' || type === 'quick') {
+        heading.textContent = 'Add Next Action';
+        container.innerHTML = `
+          <input id="sheetTaskInput" type="text" placeholder="Task name..." class="w-full p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#333] text-xs text-[#37352f] dark:text-white outline-none" />
+          <div class="flex items-center gap-2 pt-2">
+            <button onclick="submitSheetTask(true)" class="spring-press flex-1 py-2.5 rounded-xl bg-[#faece3] text-[#975b36] font-bold text-xs">Add to Big 3 (★)</button>
+            <button onclick="submitSheetTask(false)" class="spring-press flex-1 py-2.5 rounded-xl bg-[#37352f] dark:bg-white text-white dark:text-[#191919] font-bold text-xs">Add as Action</button>
+          </div>
+        `;
+      } else if (type === 'spend') {
+        heading.textContent = 'Log Spend';
+        container.innerHTML = `
+          <input id="sheetSpendDesc" type="text" placeholder="Expense description..." class="w-full p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#333] text-xs text-[#37352f] dark:text-white outline-none" />
+          <input id="sheetSpendAmt" type="number" placeholder="Amount ($)..." class="w-full p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#333] text-xs text-[#37352f] dark:text-white outline-none" />
+          <button onclick="submitSheetSpend()" class="spring-press w-full py-2.5 rounded-xl bg-[#37352f] dark:bg-white text-white dark:text-[#191919] font-bold text-xs">Save Spend</button>
+        `;
+      } else if (type === 'habit') {
+        heading.textContent = 'Create Daily Habit';
+        container.innerHTML = `
+          <input id="sheetHabitInput" type="text" placeholder="Habit name (e.g. 20 Pages Reading)..." class="w-full p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#333] text-xs text-[#37352f] dark:text-white outline-none" />
+          <button onclick="submitSheetHabit()" class="spring-press w-full py-2.5 rounded-xl bg-[#37352f] dark:bg-white text-white dark:text-[#191919] font-bold text-xs">Start Streak</button>
+        `;
+      } else if (type === 'project') {
+        heading.textContent = 'Create New Project';
+        container.innerHTML = `
+          <input id="sheetProjName" type="text" placeholder="Project name..." class="w-full p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#333] text-xs text-[#37352f] dark:text-white outline-none" />
+          <input id="sheetProjDeadline" type="text" placeholder="Target deadline (e.g. Dec 15)..." class="w-full p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#333] text-xs text-[#37352f] dark:text-white outline-none" />
+          <button onclick="submitSheetProject()" class="spring-press w-full py-2.5 rounded-xl bg-[#37352f] dark:bg-white text-white dark:text-[#191919] font-bold text-xs">Launch Project</button>
+        `;
+      }
+
+      backdrop.classList.remove('hidden');
+      sheet.classList.remove('translate-y-full');
+      setTimeout(() => {
+        const inp = sheet.querySelector('input');
+        if (inp) inp.focus();
+      }, 100);
+    }
+
+    function closeActionSheet() {
+      playAudio('tick');
+      document.getElementById('actionSheetBackdrop').classList.add('hidden');
+      document.getElementById('actionSheet').classList.add('translate-y-full');
+    }
+
+    function submitSheetTask(isBig3) {
+      const val = document.getElementById('sheetTaskInput').value.trim();
+      if (!val) return;
+      appState.tasks.unshift({ id: 't-' + Date.now(), projectId: 'proj-1', title: val, isBig3: isBig3, completed: false });
+      closeActionSheet();
+      saveState();
+    }
+    function submitSheetSpend() {
+      const desc = document.getElementById('sheetSpendDesc').value.trim();
+      const amt = parseFloat(document.getElementById('sheetSpendAmt').value);
+      if (desc && !isNaN(amt)) {
+        appState.finance.transactions.unshift({ id: 'tx-' + Date.now(), projectId: 'proj-1', title: desc, amount: -Math.abs(amt), date: 'Today' });
+        closeActionSheet();
+        saveState();
+      }
+    }
+    function submitSheetHabit() {
+      const val = document.getElementById('sheetHabitInput').value.trim();
+      if (!val) return;
+      appState.habits.push({ id: 'h-' + Date.now(), title: val, streak: 1, history: [0, 0, 0, 0, 0, 0, 1] });
+      closeActionSheet();
+      saveState();
+    }
+    function submitSheetProject() {
+      const name = document.getElementById('sheetProjName').value.trim();
+      const deadline = document.getElementById('sheetProjDeadline').value.trim() || 'Ongoing';
+      if (!name) return;
+      appState.projects.unshift({ id: 'proj-' + Date.now(), areaId: 'area-wealth', name: name, deadline: deadline, milestoneProgress: 0, budgetAllocated: 250, status: 'active', notes: 'Initiated via mobile.' });
+      closeActionSheet();
+      saveState();
+    }
+
+    // Omnibar
+    function toggleOmnibar(show) {
+      playAudio('tick');
+      document.getElementById('omnibarModal').classList.toggle('hidden', !show);
+      if (show) document.getElementById('omnibarInput').focus();
+    }
+    window.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); toggleOmnibar(true); }
+      if (e.key === 'Escape') { toggleOmnibar(false); closeActionSheet(); toggleBackupModal(false); }
+    });
+    function handleOmnibarKey(e) {
+      if (e.key === 'Enter') {
+        const val = e.target.value.trim();
+        if (!val) return;
+        if (val.startsWith('$')) {
+          const parts = val.slice(1).split(' ');
+          const amt = parseFloat(parts[0]);
+          const name = parts.slice(1).join(' ') || 'Quick Spend';
+          if (!isNaN(amt)) {
+            appState.finance.transactions.unshift({ id: 'tx-' + Date.now(), projectId: null, title: name, amount: -Math.abs(amt), date: 'Today' });
+          }
+        } else {
+          appState.tasks.unshift({ id: 't-' + Date.now(), projectId: 'proj-1', title: val, isBig3: false, completed: false });
+        }
+        e.target.value = '';
+        toggleOmnibar(false);
+        saveState();
+      }
+    }
+    function omnibarAction(type) {
+      const inp = document.getElementById('omnibarInput');
+      if (type === 'task') inp.value = 'Draft launch email announcement';
+      if (type === 'spend') inp.value = '$45 Domain renewal';
+      if (type === 'workout') { logWorkout('Push Hypertrophy'); toggleOmnibar(false); }
+      inp.focus();
+    }
+
+    // Backup & Restore
+    function toggleBackupModal(show) {
+      playAudio('tick');
+      document.getElementById('backupModal').classList.toggle('hidden', !show);
+    }
+    function exportSystemJSON() {
+      playAudio('tick');
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
+      const a = document.createElement('a');
+      a.setAttribute("href", dataStr);
+      a.setAttribute("download", `zenbrain_backup_${new Date().toISOString().slice(0, 10)}.json`);
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      toggleBackupModal(false);
+    }
+    function importSystemJSON(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const r = new FileReader();
+      r.onload = function(evt) {
+        try {
+          appState = JSON.parse(evt.target.result);
+          saveState();
+          alert('Backup restored!');
+          toggleBackupModal(false);
+        } catch(err) { alert('Invalid file'); }
+      };
+      r.readAsText(file);
+    }
+
+    function toggleArchivesCollapse() {
+      playAudio('tick');
+      const el = document.getElementById('paraArchivesList');
+      const icon = document.getElementById('archiveToggleIcon');
+      el.classList.toggle('hidden');
+      icon.textContent = el.classList.contains('hidden') ? '▼' : '▲';
+    }
+
+    // ==============================================================
+    // RENDER ENGINE (Calm, Tactile & Responsive)
+    // ==============================================================
+    function render() {
+      // 1. Cockpit The Big 3
+      const big3 = appState.tasks.filter(t => t.isBig3);
+      const big3Done = big3.filter(t => t.completed).length;
+      document.getElementById('big3DoneBadge').textContent = `${big3Done} of ${big3.length} Done`;
+
+      // Check for Day Cleared banner
+      const dayClearedBanner = document.getElementById('dayClearedBanner');
+      if (big3Done === big3.length && big3.length > 0) {
+        dayClearedBanner.classList.remove('hidden');
+        dayClearedBanner.classList.add('golden-bloom');
+      } else {
+        dayClearedBanner.classList.add('hidden');
+      }
+
+      document.getElementById('cockpitBig3List').innerHTML = big3.map(t => {
+        const proj = appState.projects.find(p => p.id === t.projectId);
+        return `
+          <div class="spring-press flex items-center justify-between p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] cursor-pointer" onclick="toggleTask('${t.id}')">
+            <div class="flex items-center gap-3">
+              <div class="w-5 h-5 rounded-full border ${t.completed ? 'bg-[#37352f] dark:bg-white text-white dark:text-[#191919] border-transparent' : 'border-[#9b9a97]'} flex items-center justify-center text-xs font-bold transition">
+                ${t.completed ? '✓' : ''}
+              </div>
+              <div>
+                <p class="text-xs font-semibold ${t.completed ? 'line-through text-[#9b9a97]' : 'text-[#37352f] dark:text-[#e3e2e0]'}">${t.title}</p>
+                <span class="text-[10px] text-[#787774]">${proj ? proj.name : 'General Area'}</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-bold text-[#89632a] bg-[#fbf3db] dark:bg-[#362e1c] px-2 py-0.5 rounded-full">★ Essential</span>
+          </div>
+        `;
+      }).join('');
+
+      // 2. Cockpit Next Actions
+      const nextActions = appState.tasks.filter(t => !t.isBig3);
+      document.getElementById('cockpitNextActionsList').innerHTML = nextActions.map(t => `
+        <div class="spring-press flex items-center justify-between p-2.5 rounded-xl hover:bg-[#f7f6f3] dark:hover:bg-[#262626] border border-transparent transition cursor-pointer" onclick="toggleTask('${t.id}')">
+          <div class="flex items-center gap-2.5">
+            <div class="w-4 h-4 rounded border ${t.completed ? 'bg-[#37352f] dark:bg-white text-white dark:text-[#191919] border-transparent' : 'border-[#9b9a97]'} flex items-center justify-center text-[10px] font-bold">
+              ${t.completed ? '✓' : ''}
+            </div>
+            <span class="text-xs ${t.completed ? 'line-through text-[#9b9a97]' : 'text-[#37352f] dark:text-[#e3e2e0]'}">${t.title}</span>
+          </div>
+        </div>
+      `).join('');
+
+      // 3. Cockpit Habits
+      const days = ['M', 'T', 'W', 'T', 'F', 'S', 'T'];
+      document.getElementById('cockpitHabitsList').innerHTML = appState.habits.map(h => `
+        <div class="p-2.5 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] flex items-center justify-between">
+          <div>
+            <span class="text-xs font-semibold text-[#37352f] dark:text-[#e3e2e0] block">${h.title}</span>
+            <span class="text-[10px] text-[#787774] font-medium">🔥 ${h.streak} day streak</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            ${h.history.map((val, idx) => {
+              const isToday = idx === 6;
+              return `
+                <button 
+                  ${isToday ? `onclick="toggleHabit('${h.id}')"` : ''}
+                  title="${days[idx]}"
+                  class="spring-press w-5 h-5 rounded-md text-[10px] flex items-center justify-center transition font-bold ${val === 1 ? 'bg-[#3e6843] dark:bg-[#8fc496] text-white dark:text-[#191919] shadow-xs' : 'bg-[#e9e9e7] dark:bg-[#333] text-transparent'} ${isToday ? 'ring-2 ring-[#3e6843]/30 cursor-pointer' : 'cursor-default'}"
+                >
+                  ${val === 1 ? '✓' : ''}
+                </button>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('cockpitDailyTakeaway').value = appState.dailyTakeaway || '';
+
+      // 4. PARA Areas
+      document.getElementById('paraAreasGrid').innerHTML = appState.areas.map(a => `
+        <div class="p-4 rounded-2xl bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] shadow-xs">
+          <span class="text-xs px-2.5 py-0.5 rounded-full font-bold inline-block mb-2 ${a.tagClass}">${a.name}</span>
+          <p class="text-[11px] text-[#787774] dark:text-[#9b9a97] leading-relaxed">${a.desc}</p>
+        </div>
+      `).join('');
+
+      // PARA Projects
+      const activeProjects = appState.projects.filter(p => p.status === 'active');
+      document.getElementById('activeProjectsCountBadge').textContent = `${activeProjects.length} In Progress`;
+      document.getElementById('paraProjectsGrid').innerHTML = activeProjects.map(p => {
+        const area = appState.areas.find(a => a.id === p.areaId);
+        const spend = appState.finance.transactions.filter(t => t.projectId === p.id).reduce((s, t) => s + (t.amount < 0 ? Math.abs(t.amount) : 0), 0);
+        return `
+          <div class="spring-press p-4 rounded-2xl bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] hover:border-[#787774] shadow-xs flex flex-col justify-between cursor-pointer" onclick="openActionSheet('project')">
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-xs font-bold text-[#37352f] dark:text-[#e3e2e0]">${p.name}</span>
+                <span class="text-[10px] text-[#787774] font-bold">${p.deadline}</span>
+              </div>
+              <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${area ? area.tagClass : ''}">${area ? area.name : 'Area'}</span>
+            </div>
+            <div class="mt-4 pt-3 border-t border-[#e9e9e7] dark:border-[#2e2e2e] flex justify-between text-xs text-[#787774]">
+              <span>Milestone: <strong>${p.milestoneProgress}%</strong></span>
+              <span class="font-mono font-bold">$${spend} / $${p.budgetAllocated}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // PARA Archives
+      document.getElementById('paraArchivesList').innerHTML = appState.projects.filter(p => p.status === 'archived').map(p => `
+        <div class="p-2.5 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] flex justify-between text-xs text-[#787774]">
+          <span class="line-through">${p.name}</span>
+          <span class="text-[10px] font-bold text-[#3e6843]">Completed</span>
+        </div>
+      `).join('');
+
+      // 5. Finance Transactions
+      document.getElementById('financeTransactionsList').innerHTML = appState.finance.transactions.map(t => {
+        const isInc = t.amount > 0;
+        return `
+          <div class="p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] flex items-center justify-between">
+            <div>
+              <span class="text-xs font-semibold text-[#37352f] dark:text-[#e3e2e0] block">${t.title}</span>
+              <span class="text-[10px] text-[#787774]">${t.date}</span>
+            </div>
+            <span class="text-xs font-mono font-bold ${isInc ? 'text-[#3e6843] dark:text-[#8fc496]' : 'text-[#37352f] dark:text-[#e3e2e0]'}">
+              ${isInc ? '+' : ''}$${Math.abs(t.amount).toFixed(2)}
+            </span>
+          </div>
+        `;
+      }).join('');
+
+      // Subscriptions
+      document.getElementById('financeSubscriptionsList').innerHTML = appState.finance.subscriptions.map(s => `
+        <div class="p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] flex items-center justify-between">
+          <div>
+            <span class="text-xs font-semibold text-[#37352f] dark:text-[#e3e2e0] block">${s.name}</span>
+            <span class="text-[10px] text-[#787774]">Renews ${s.renewalDate}</span>
+          </div>
+          <span class="text-xs font-mono font-bold text-[#975b36]">-$${s.cost.toFixed(2)}/mo</span>
+        </div>
+      `).join('');
+
+      // 6. Fitness Routines
+      document.getElementById('fitnessRoutinesGrid').innerHTML = appState.fitness.routines.map(r => `
+        <div class="p-4 rounded-2xl bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-xs font-bold text-[#37352f] dark:text-[#e3e2e0]">${r.name}</span>
+              <span class="text-[10px] text-[#787774] font-mono">${r.duration}</span>
+            </div>
+            <p class="text-[11px] text-[#787774] leading-relaxed">${r.focus}</p>
+          </div>
+          <button onclick="logWorkout('${r.name}')" class="spring-press mt-4 text-xs font-bold bg-[#f1f1ef] dark:bg-[#2a2a2a] hover:bg-[#37352f] hover:text-white dark:hover:bg-white dark:hover:text-[#191919] text-[#37352f] dark:text-[#e3e2e0] py-2 rounded-xl transition border border-[#e9e9e7] dark:border-[#333]">
+            ✓ Log & Auto-Sync
+          </button>
+        </div>
+      `).join('');
+
+      // 7. Knowledge Books
+      document.getElementById('knowledgeBooksGrid').innerHTML = appState.knowledge.books.map(b => `
+        <div class="p-4 rounded-2xl bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] shadow-xs flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold text-[#37352f] dark:text-[#e3e2e0] block">${b.title}</span>
+            <span class="text-[10px] text-[#787774] block mb-2">${b.author}</span>
+            <p class="text-[11px] text-[#787774] italic p-2.5 rounded-xl bg-[#f7f6f3] dark:bg-[#252525]">"${b.takeaway}"</p>
+          </div>
+          <div class="mt-3 text-[10px] text-[#787774] flex justify-between font-medium">
+            <span>Progress: ${b.progress}%</span>
+            <span>${b.progress === 100 ? 'Completed' : 'Reading'}</span>
+          </div>
+        </div>
+      `).join('');
+
+      // Knowledge Vault
+      document.getElementById('knowledgeVaultList').innerHTML = appState.knowledge.resources.map(res => `
+        <div class="p-3 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e] flex items-center justify-between">
+          <span class="text-xs font-semibold text-[#37352f] dark:text-[#e3e2e0]">${res.title}</span>
+          <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#f1f1ef] dark:bg-[#202020] text-[#787774] border border-[#e9e9e7] dark:border-[#333] font-medium">${res.type}</span>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      render();
+    });
+  </script>
+</body>
+</html>
