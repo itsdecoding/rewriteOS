@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>ZenBrain OS — Minimal Life Operating System</title>
+  <title>Rewrite OS — The Mind & Life Operating System</title>
   
   <!-- Mobile Native PWA Meta Tags (iOS & Android) -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="ZenBrain" />
+  <meta name="apple-mobile-web-app-title" content="Rewrite OS" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#191919" media="(prefers-color-scheme: dark)" />
@@ -140,7 +140,7 @@
       </div>
       <div>
         <div class="flex items-center gap-2">
-          <span class="font-extrabold text-sm tracking-tight text-[#37352f] dark:text-[#e3e2e0]">ZenBrain</span>
+          <span class="font-extrabold text-sm tracking-tight text-[#37352f] dark:text-[#e3e2e0]">Rewrite<span class="text-[#787774] font-semibold ml-0.5">OS</span></span>
           <span class="text-[11px] text-[#787774] dark:text-[#9b9a97] hidden sm:inline">/ Life Workspace</span>
           <span class="text-[9px] uppercase font-bold px-1.5 py-0.2 rounded-full bg-[#edf3ec] dark:bg-[#233326] text-[#3e6843] dark:text-[#8fc496]">PRO+</span>
         </div>
@@ -629,7 +629,7 @@
   <!-- 7. APPLICATION LOGIC & PROCEDURAL WEB AUDIO SYNTHESIZER        -->
   <!-- ============================================================== -->
   <script>
-    const SYSTEM_STORAGE_KEY = 'ZENBRAIN_UNIFIED_PRO_V1';
+    const SYSTEM_STORAGE_KEY = 'REWRITE_OS_UNIFIED_V1';
     let soundEnabled = true;
     let audioCtx = null;
 
@@ -700,9 +700,9 @@
     function toggleTheme() {
       playAudio('tick');
       document.documentElement.classList.toggle('dark');
-      localStorage.setItem('ZENBRAIN_THEME', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      localStorage.setItem('REWRITE_OS_THEME', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
     }
-    if (localStorage.getItem('ZENBRAIN_THEME') === 'dark') {
+    if (localStorage.getItem('REWRITE_OS_THEME') === 'dark') {
       document.documentElement.classList.add('dark');
     }
 
@@ -716,7 +716,7 @@
       ],
       projects: [
         { id: 'proj-1', areaId: 'area-wealth', name: 'Launch Threads Digital Product', deadline: 'Nov 20', milestoneProgress: 75, budgetAllocated: 500, status: 'active', notes: 'Zero-bloat Notion alternative targeting Gumroad launch.' },
-        { id: 'proj-2', areaId: 'area-craft', name: 'ZenBrain UI Design System V1', deadline: 'Nov 18', milestoneProgress: 95, budgetAllocated: 200, status: 'active', notes: 'Tactile Things 3 physics, warm editorial paper canvas, zero AI slop.' },
+        { id: 'proj-2', areaId: 'area-craft', name: 'Rewrite OS UI Design System V1', deadline: 'Nov 18', milestoneProgress: 95, budgetAllocated: 200, status: 'active', notes: 'Tactile Things 3 physics, warm editorial paper canvas, zero AI slop.' },
         { id: 'proj-3', areaId: 'area-wealth', name: 'Newsletter Launch (Archive)', deadline: 'Oct 15', milestoneProgress: 100, budgetAllocated: 150, status: 'archived', notes: 'Preserved in cold archives.' }
       ],
       tasks: [
@@ -761,7 +761,7 @@
         ],
         resources: [
           { id: 'res-1', title: 'Threads Viral Hook Swipe File (S.H.A.P.E.)', type: 'Swipe File', linkedProject: 'Launch Threads Digital Product' },
-          { id: 'res-2', title: 'Minimalist Editorial Component System', type: 'Design', linkedProject: 'ZenBrain UI Design System V1' }
+          { id: 'res-2', title: 'Minimalist Editorial Component System', type: 'Design', linkedProject: 'Rewrite OS UI Design System V1' }
         ]
       },
       dailyTakeaway: 'Focus on pure utility. An uncluttered workspace gives back mental bandwidth.'
@@ -1043,7 +1043,7 @@
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
       const a = document.createElement('a');
       a.setAttribute("href", dataStr);
-      a.setAttribute("download", `zenbrain_backup_${new Date().toISOString().slice(0, 10)}.json`);
+      a.setAttribute("download", `rewriteos_backup_${new Date().toISOString().slice(0, 10)}.json`);
       document.body.appendChild(a);
       a.click();
       a.remove();
