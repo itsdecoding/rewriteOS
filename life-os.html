@@ -407,6 +407,30 @@
     .muted{color:var(--muted)}
     .hidden{display:none !important}
 
+    .suite-switch-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .suite-switch-btn:hover {
+      background: var(--text);
+      color: var(--bg);
+      transform: translateY(-1px);
+    }
+    [data-theme="light"] .suite-switch-btn {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
     /* ── UPGRADE MODAL ─────────────────────────────────────────── */
     .upgrade-backdrop{
       position:fixed;inset:0;background:rgba(0,0,0,.64);z-index:8500;opacity:0;pointer-events:none;transition:.22s ease
@@ -1128,16 +1152,27 @@
       <button class="drawer-item" onclick="openSheet('task')"><i class="fa-solid fa-list-check"></i><span>Add task</span></button>
       <button class="drawer-item" onclick="openSheet('goal')"><i class="fa-solid fa-bullseye"></i><span>Add goal</span></button>
       <div class="divider"></div>
+      <div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--muted); padding:8px 16px 4px;">Rewrite OS Ecosystem</div>
+      <a href="index.html#cockpit" class="drawer-item"><i class="fa-solid fa-sun"></i><span>Today Cockpit</span></a>
+      <a href="index.html#para" class="drawer-item"><i class="fa-solid fa-layer-group"></i><span>P.A.R.A Second Brain</span></a>
+      <a href="index.html#finance" class="drawer-item"><i class="fa-solid fa-wallet"></i><span>Finance OS</span></a>
+      <a href="index.html#fitness" class="drawer-item"><i class="fa-solid fa-heart-pulse"></i><span>Fitness &amp; Wellness</span></a>
+      <a href="index.html#knowledge" class="drawer-item"><i class="fa-solid fa-book-bookmark"></i><span>Knowledge Vault</span></a>
+      <div class="divider"></div>
       <button class="drawer-item" onclick="exportJSON()"><i class="fa-solid fa-cloud-arrow-down"></i><span>Export Backup (.json)</span></button>
       <button class="drawer-item" onclick="triggerImportJSON()"><i class="fa-solid fa-cloud-arrow-up"></i><span>Restore Backup</span></button>
     </aside>
 
     <div class="topbar">
       <button class="icon-btn hot" onclick="openDrawer()"><i class="fa-solid fa-bars"></i></button>
-      <div>
+      <div style="flex:1; min-width:0;">
         <div class="title" id="topTitle">Rewrite Life OS</div>
         <div class="subtitle" id="topSubtitle">The Mind &amp; Life Operating System • Local Vault</div>
       </div>
+      <a href="index.html" class="suite-switch-btn" title="Return to Second Brain OS">
+        <i class="fa-solid fa-brain"></i>
+        <span>Second Brain OS</span>
+      </a>
       <button class="icon-btn" onclick="openSheet('task')"><i class="fa-solid fa-plus"></i></button>
       <div class="sync-pill" title="Local Vault Status" onclick="toast('🔒 Rewrite OS Local Vault: 100% offline-first. Your habits, reflections, and goals are stored privately on your device.')" style="cursor:pointer">
         <span class="sync-dot synced" id="syncDot"></span>

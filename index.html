@@ -143,6 +143,11 @@
           <span class="font-extrabold text-sm tracking-tight text-[#37352f] dark:text-[#e3e2e0]">Rewrite<span class="text-[#787774] font-semibold ml-0.5">OS</span></span>
           <span class="text-[11px] text-[#787774] dark:text-[#9b9a97] hidden sm:inline">/ Life Workspace</span>
           <span class="text-[9px] uppercase font-bold px-1.5 py-0.2 rounded-full bg-[#edf3ec] dark:bg-[#233326] text-[#3e6843] dark:text-[#8fc496]">PRO+</span>
+          <!-- Ecosystem Switcher to Life OS -->
+          <a href="life-os.html" class="spring-press hidden sm:flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-lg bg-[#f7f6f3] dark:bg-[#262626] border border-[#e9e9e7] dark:border-[#333] text-[#37352f] dark:text-white hover:border-[#787774] transition shadow-xs" title="Open Rewrite Life OS Habit & Discipline Tracker">
+            <span>🌿 Life OS</span>
+            <i data-lucide="arrow-up-right" class="w-3 h-3 text-[#787774]"></i>
+          </a>
         </div>
       </div>
     </div>
@@ -667,6 +672,10 @@
         <div onclick="omnibarAction('workout')" class="p-2 rounded-xl hover:bg-[#f7f6f3] dark:hover:bg-[#262626] cursor-pointer flex justify-between">
           <span>✓ Mark Workout Complete</span>
           <span class="text-[10px]">Fitness</span>
+        </div>
+        <div onclick="window.location.href='life-os.html'" class="p-2 rounded-xl hover:bg-[#edf3ec] dark:hover:bg-[#233326] cursor-pointer flex justify-between text-[#3e6843] dark:text-[#8fc496] font-semibold border-t border-[#e9e9e7] dark:border-[#2e2e2e] mt-1 pt-2">
+          <span>🌿 Open Rewrite Life OS (Habits & Goals)</span>
+          <span class="text-[10px] font-mono">App Switcher ↗</span>
         </div>
       </div>
     </div>
@@ -1640,9 +1649,18 @@
       lucide.createIcons();
     }
 
+    function handleRouteHash() {
+      const hash = window.location.hash.replace('#', '');
+      if (['cockpit', 'para', 'finance', 'fitness', 'knowledge'].includes(hash)) {
+        switchPillar(hash);
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       render();
+      handleRouteHash();
     });
+    window.addEventListener('hashchange', handleRouteHash);
   </script>
 </body>
 </html>
