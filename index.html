@@ -253,6 +253,40 @@
             </div>
           </div>
 
+          <!-- Focus Pomodoro Station (Cross-linked to Active P.A.R.A Project) -->
+          <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">Deep Work Focus Station</span>
+                <span id="focusActiveBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#f1f1ef] dark:bg-[#2a2a2a] text-[#787774]">Standby</span>
+              </div>
+              <!-- Ambient Sound Toggle -->
+              <button onclick="toggleAmbientSound()" id="ambientSoundBtn" class="spring-press text-xs px-2.5 py-1 rounded-lg bg-[#f7f6f3] dark:bg-[#262626] border border-[#e9e9e7] dark:border-[#333] text-[#787774] dark:text-[#9b9a97] flex items-center gap-1 font-medium">
+                <i data-lucide="cloud-rain" class="w-3.5 h-3.5"></i> <span id="ambientSoundText">Rain Sound Off</span>
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between p-4 rounded-xl bg-[#f7f6f3] dark:bg-[#252525] border border-[#e9e9e7] dark:border-[#2e2e2e]">
+              <div>
+                <div class="text-3xl font-extrabold font-mono tracking-tight text-[#37352f] dark:text-[#e3e2e0]" id="timerDisplay">25:00</div>
+                <div class="text-[11px] text-[#787774] mt-0.5 flex items-center gap-1">
+                  <span>Target:</span>
+                  <select id="timerProjectSelect" onchange="setTimerProject(this.value)" class="bg-transparent font-bold text-[#37352f] dark:text-white outline-none cursor-pointer">
+                    <!-- Populated dynamically via JS -->
+                  </select>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="toggleFocusTimer()" id="timerToggleBtn" class="spring-press px-4 py-2 rounded-xl bg-[#37352f] dark:bg-white text-white dark:text-[#191919] text-xs font-bold shadow-xs">
+                  Start Session
+                </button>
+                <button onclick="resetFocusTimer()" class="spring-press p-2 rounded-xl bg-white dark:bg-[#2a2a2a] border border-[#e9e9e7] dark:border-[#333] text-[#787774] hover:text-[#37352f]">
+                  <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
           <!-- GTD Next Actions (Things 3 style tactile rows) -->
           <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs">
             <div class="flex items-center justify-between mb-4">
@@ -269,9 +303,37 @@
 
         </div>
 
-        <!-- Right 5 Cols: 7-Day Habit Matrix & 1-Tap Fast Ingestion -->
+        <!-- Right 5 Cols: Heatmap, Habit Matrix & 1-Tap Fast Ingestion -->
         <div class="lg:col-span-5 space-y-6">
           
+          <!-- Unified 42-Day Multi-Pillar Kinetic Heatmap (From Life OS!) -->
+          <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">42-Day Consistency Heatmap</span>
+              <span class="text-[10px] text-[#3e6843] bg-[#edf3ec] dark:bg-[#233326] px-2 py-0.5 rounded-full font-bold">Universal Pulse</span>
+            </div>
+            
+            <p class="text-[10px] text-[#787774] dark:text-[#9b9a97]">Aggregates habits, project focus, workouts & tasks in real-time.</p>
+
+            <!-- 7 Columns x 6 Rows Heatmap Grid -->
+            <div id="unifiedHeatmapGrid" class="grid grid-cols-7 gap-1.5 pt-1">
+              <!-- Rendered via JS -->
+            </div>
+
+            <div class="flex items-center justify-between text-[10px] text-[#787774] pt-2 border-t border-[#e9e9e7] dark:border-[#2e2e2e]">
+              <span>42 Days Ago</span>
+              <div class="flex items-center gap-1">
+                <span>Less</span>
+                <span class="w-2.5 h-2.5 rounded-xs bg-[#f1f1ef] dark:bg-[#2a2a2a]"></span>
+                <span class="w-2.5 h-2.5 rounded-xs bg-[#c2dec1] dark:bg-[#264728]"></span>
+                <span class="w-2.5 h-2.5 rounded-xs bg-[#7fae83] dark:bg-[#326935]"></span>
+                <span class="w-2.5 h-2.5 rounded-xs bg-[#3e6843] dark:bg-[#8fc496]"></span>
+                <span>More</span>
+              </div>
+              <span>Today</span>
+            </div>
+          </div>
+
           <!-- Compound Habit Matrix with Tactile 7-Day Dots -->
           <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs">
             <div class="flex items-center justify-between mb-4">
@@ -319,12 +381,21 @@
             </div>
           </div>
 
-          <!-- Daily Reflection / Scratchpad Note -->
-          <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">Evening Takeaway</span>
-              <span class="text-[10px] text-[#9b9a97]">Local-first auto-save</span>
+          <!-- Mood Matrix & Daily Reflection Capsule -->
+          <div class="bg-white dark:bg-[#202020] border border-[#e9e9e7] dark:border-[#2e2e2e] rounded-2xl p-5 shadow-xs space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-[#787774] dark:text-[#9b9a97]">Mindset & Reflection</span>
+              <span class="text-[10px] text-[#9b9a97]">Shared Vault Sync</span>
             </div>
+
+            <!-- Mood Emojis -->
+            <div class="flex items-center justify-between gap-1" id="moodRowContainer">
+              <button onclick="setMood('🔥 Driven')" class="spring-press mood-btn flex-1 py-1.5 rounded-lg bg-[#f7f6f3] dark:bg-[#262626] border border-[#e9e9e7] dark:border-[#333] text-xs font-semibold hover:border-[#37352f]">🔥 Driven</button>
+              <button onclick="setMood('🌱 Calm')" class="spring-press mood-btn flex-1 py-1.5 rounded-lg bg-[#f7f6f3] dark:bg-[#262626] border border-[#e9e9e7] dark:border-[#333] text-xs font-semibold hover:border-[#37352f]">🌱 Calm</button>
+              <button onclick="setMood('⚡ Focused')" class="spring-press mood-btn flex-1 py-1.5 rounded-lg bg-[#f7f6f3] dark:bg-[#262626] border border-[#e9e9e7] dark:border-[#333] text-xs font-semibold hover:border-[#37352f]">⚡ Focused</button>
+              <button onclick="setMood('😴 Drained')" class="spring-press mood-btn flex-1 py-1.5 rounded-lg bg-[#f7f6f3] dark:bg-[#262626] border border-[#e9e9e7] dark:border-[#333] text-xs font-semibold hover:border-[#37352f]">😴 Drained</button>
+            </div>
+
             <textarea 
               id="cockpitDailyTakeaway"
               oninput="saveDailyTakeaway(this.value)"
@@ -708,6 +779,22 @@
 
     // Default Master State
     const factoryState = {
+      focus: {
+        running: false,
+        secondsLeft: 1500,
+        selectedProjectId: 'proj-1',
+        totalMinutesLogged: 125,
+        ambientSound: false
+      },
+      mood: '🔥 Driven',
+      heatmapScores: [
+        1, 2, 0, 3, 2, 4, 1,
+        2, 3, 1, 4, 3, 2, 3,
+        1, 0, 2, 3, 4, 2, 1,
+        3, 2, 4, 3, 1, 2, 4,
+        2, 3, 3, 4, 2, 4, 3,
+        2, 4, 3, 4, 4, 3, 4
+      ],
       areas: [
         { id: 'area-wealth', name: 'Business & Wealth', desc: 'Revenue, digital products, investments', tagClass: 'bg-[#edf3ec] dark:bg-[#233326] text-[#3e6843] dark:text-[#8fc496]' },
         { id: 'area-craft', name: 'Product & Craft', desc: 'Design, code excellence, writing', tagClass: 'bg-[#faece3] dark:bg-[#382b22] text-[#975b36] dark:text-[#e4a77e]' },
@@ -772,7 +859,10 @@
     function loadState() {
       const saved = localStorage.getItem(SYSTEM_STORAGE_KEY);
       if (saved) {
-        try { return JSON.parse(saved); } catch(e) {}
+        try {
+          const parsed = JSON.parse(saved);
+          return Object.assign({}, JSON.parse(JSON.stringify(factoryState)), parsed);
+        } catch(e) {}
       }
       return JSON.parse(JSON.stringify(factoryState));
     }
@@ -824,6 +914,286 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
       lucide.createIcons();
     }
+
+    // ==============================================================
+    // FOCUS POMODORO STATION (Cross-Linked to P.A.R.A Projects)
+    // ==============================================================
+    let focusTimerInterval = null;
+    let ambientSoundNode = null;
+
+    function toggleFocusTimer() {
+      playAudio('tick');
+      if (appState.focus.running) {
+        pauseFocusTimer();
+      } else {
+        startFocusTimer();
+      }
+    }
+
+    function startFocusTimer() {
+      appState.focus.running = true;
+      const badge = document.getElementById('focusActiveBadge');
+      if (badge) {
+        badge.textContent = 'Active (25m)';
+        badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#edf3ec] dark:bg-[#233326] text-[#3e6843] dark:text-[#8fc496]';
+      }
+      const btn = document.getElementById('timerToggleBtn');
+      if (btn) btn.textContent = 'Pause';
+
+      if (focusTimerInterval) clearInterval(focusTimerInterval);
+      focusTimerInterval = setInterval(() => {
+        if (appState.focus.secondsLeft > 0) {
+          appState.focus.secondsLeft--;
+          updateTimerDisplay();
+        } else {
+          completeFocusSession();
+        }
+      }, 1000);
+    }
+
+    function pauseFocusTimer() {
+      appState.focus.running = false;
+      if (focusTimerInterval) clearInterval(focusTimerInterval);
+      const badge = document.getElementById('focusActiveBadge');
+      if (badge) {
+        badge.textContent = 'Paused';
+        badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#faece3] dark:bg-[#382b22] text-[#975b36]';
+      }
+      const btn = document.getElementById('timerToggleBtn');
+      if (btn) btn.textContent = 'Resume';
+      saveState();
+    }
+
+    function resetFocusTimer() {
+      playAudio('tick');
+      if (focusTimerInterval) clearInterval(focusTimerInterval);
+      appState.focus.running = false;
+      appState.focus.secondsLeft = 1500;
+      const badge = document.getElementById('focusActiveBadge');
+      if (badge) {
+        badge.textContent = 'Standby';
+        badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#f1f1ef] dark:bg-[#2a2a2a] text-[#787774]';
+      }
+      const btn = document.getElementById('timerToggleBtn');
+      if (btn) btn.textContent = 'Start Session';
+      updateTimerDisplay();
+      saveState();
+    }
+
+    function updateTimerDisplay() {
+      const m = Math.floor(appState.focus.secondsLeft / 60);
+      const s = appState.focus.secondsLeft % 60;
+      const str = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      const el = document.getElementById('timerDisplay');
+      if (el) el.textContent = str;
+    }
+
+    function completeFocusSession() {
+      if (focusTimerInterval) clearInterval(focusTimerInterval);
+      appState.focus.running = false;
+      appState.focus.secondsLeft = 1500;
+      appState.focus.totalMinutesLogged = (appState.focus.totalMinutesLogged || 0) + 25;
+
+      // CROSS-PILLAR REWRITE BRIDGE:
+      // 1. Advance linked P.A.R.A. Project milestone progress by +5%
+      const targetProj = appState.projects.find(p => p.id === appState.focus.selectedProjectId);
+      if (targetProj) {
+        targetProj.milestoneProgress = Math.min(100, (targetProj.milestoneProgress || 0) + 5);
+      }
+
+      // 2. Light up today's heatmap cell to maximum emerald intensity
+      if (appState.heatmapScores && appState.heatmapScores.length) {
+        appState.heatmapScores[appState.heatmapScores.length - 1] = 4;
+      }
+
+      // 3. Play 528Hz Solfeggio triumph chord
+      playAudio('chord');
+      confetti({ particleCount: 55, spread: 65, origin: { y: 0.6 }, colors: ['#3e6843', '#8fc496', '#fbf3db'] });
+
+      // 4. Sync out to Life OS shared keys
+      syncToLifeOS();
+      saveState();
+      render();
+    }
+
+    function setTimerProject(projId) {
+      playAudio('tick');
+      appState.focus.selectedProjectId = projId;
+      saveState();
+    }
+
+    // ==============================================================
+    // PROCEDURAL AMBIENT RAIN SOUND (Web Audio API - Zero MP3s)
+    // ==============================================================
+    function toggleAmbientSound() {
+      playAudio('tick');
+      appState.focus.ambientSound = !appState.focus.ambientSound;
+      const btn = document.getElementById('ambientSoundBtn');
+      const txt = document.getElementById('ambientSoundText');
+
+      if (appState.focus.ambientSound) {
+        startRainAudio();
+        if (txt) txt.textContent = 'Rain Playing';
+        if (btn) btn.classList.add('bg-[#edf3ec]', 'dark:bg-[#233326]', 'text-[#3e6843]', 'border-[#7fae83]');
+      } else {
+        stopRainAudio();
+        if (txt) txt.textContent = 'Rain Sound Off';
+        if (btn) btn.classList.remove('bg-[#edf3ec]', 'dark:bg-[#233326]', 'text-[#3e6843]', 'border-[#7fae83]');
+      }
+      lucide.createIcons();
+    }
+
+    function startRainAudio() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const bufferSize = audioCtx.sampleRate * 2;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          b0 = 0.99886 * b0 + white * 0.0555179;
+          b1 = 0.99332 * b1 + white * 0.0750759;
+          b2 = 0.96900 * b2 + white * 0.1538520;
+          b3 = 0.86650 * b3 + white * 0.3104856;
+          b4 = 0.55000 * b4 + white * 0.5329522;
+          b5 = -0.7616 * b5 - white * 0.0168980;
+          data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.04;
+          b6 = white * 0.115926;
+        }
+
+        const noiseSource = audioCtx.createBufferSource();
+        noiseSource.buffer = buffer;
+        noiseSource.loop = true;
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(750, audioCtx.currentTime);
+
+        const gainNode = audioCtx.createGain();
+        gainNode.gain.setValueAtTime(0.12, audioCtx.currentTime);
+
+        noiseSource.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        noiseSource.start();
+        ambientSoundNode = { source: noiseSource, gain: gainNode };
+      } catch(e) {
+        console.warn('Ambient rain sound error:', e);
+      }
+    }
+
+    function stopRainAudio() {
+      if (ambientSoundNode && ambientSoundNode.source) {
+        try {
+          ambientSoundNode.source.stop();
+          ambientSoundNode.source.disconnect();
+        } catch(e) {}
+        ambientSoundNode = null;
+      }
+    }
+
+    // ==============================================================
+    // 42-DAY KINETIC HEATMAP & MOOD MATRIX
+    // ==============================================================
+    function renderHeatmap() {
+      const grid = document.getElementById('unifiedHeatmapGrid');
+      if (!grid) return;
+      const colors = [
+        'bg-[#f1f1ef] dark:bg-[#2a2a2a]',
+        'bg-[#edf3ec] dark:bg-[#1f2d22] border border-[#c2dec1]/40',
+        'bg-[#c2dec1] dark:bg-[#264728]',
+        'bg-[#7fae83] dark:bg-[#326935]',
+        'bg-[#3e6843] dark:bg-[#8fc496]'
+      ];
+
+      const scores = appState.heatmapScores || [];
+      grid.innerHTML = scores.map((score, i) => {
+        const isToday = i === scores.length - 1;
+        const colorClass = colors[Math.min(4, Math.max(0, score))];
+        const ring = isToday ? 'ring-2 ring-[#3e6843]/50 scale-105' : '';
+        return `<div class="aspect-square rounded-xs ${colorClass} ${ring} transition hover:scale-125 cursor-pointer" title="Day ${i+1}: ${score} multi-pillar actions logged"></div>`;
+      }).join('');
+    }
+
+    function setMood(moodName) {
+      playAudio('tick');
+      appState.mood = moodName;
+      highlightActiveMood();
+      saveState();
+    }
+
+    function highlightActiveMood() {
+      const container = document.getElementById('moodRowContainer');
+      if (!container) return;
+      const buttons = container.querySelectorAll('.mood-btn');
+      buttons.forEach(btn => {
+        if (btn.textContent.trim() === appState.mood) {
+          btn.className = 'spring-press mood-btn flex-1 py-1.5 rounded-lg bg-[#37352f] dark:bg-white text-white dark:text-[#191919] font-bold text-xs shadow-xs';
+        } else {
+          btn.className = 'spring-press mood-btn flex-1 py-1.5 rounded-lg bg-[#f7f6f3] dark:bg-[#262626] border border-[#e9e9e7] dark:border-[#333] text-xs font-semibold text-[#787774] dark:text-[#9b9a97] hover:border-[#37352f]';
+        }
+      });
+    }
+
+    // ==============================================================
+    // CROSS-APP SYNCHRONIZATION BRIDGE (Rewrite OS <-> Life OS)
+    // ==============================================================
+    function syncFromLifeOS() {
+      try {
+        const lifeHabits = localStorage.getItem('lifeflow_demo_habits');
+        if (lifeHabits) {
+          const parsedHabits = JSON.parse(lifeHabits);
+          parsedHabits.forEach(lh => {
+            const existing = appState.habits.find(h => h.title.toLowerCase() === lh.name.toLowerCase());
+            if (existing) {
+              existing.streak = lh.streak || existing.streak;
+            } else if (appState.habits.length < 6) {
+              appState.habits.push({
+                id: 'h-' + lh.id,
+                title: lh.name,
+                streak: lh.streak || 1,
+                history: [1, 1, 1, 1, 1, 1, 1]
+              });
+            }
+          });
+        }
+
+        const lifeFocus = localStorage.getItem('lifeflow_demo_focus');
+        if (lifeFocus) {
+          const parsedFocus = JSON.parse(lifeFocus);
+          if (parsedFocus.totalMinutes) {
+            appState.focus.totalMinutesLogged = Math.max(appState.focus.totalMinutesLogged || 0, parsedFocus.totalMinutes);
+          }
+        }
+      } catch(e) {
+        console.warn('Sync from Life OS error:', e);
+      }
+    }
+
+    function syncToLifeOS() {
+      try {
+        const existingFocus = localStorage.getItem('lifeflow_demo_focus');
+        let fObj = existingFocus ? JSON.parse(existingFocus) : { totalMinutes: 0, sessions: [] };
+        fObj.totalMinutes = (fObj.totalMinutes || 0) + 25;
+        fObj.sessions.push({ date: new Date().toISOString(), duration: 25, project: appState.focus.selectedProjectId });
+        localStorage.setItem('lifeflow_demo_focus', JSON.stringify(fObj));
+      } catch(e) {}
+    }
+
+    window.addEventListener('storage', (e) => {
+      if (e.key && (e.key.startsWith('lifeflow_demo_') || e.key.startsWith('rewrite_') || e.key === SYSTEM_STORAGE_KEY)) {
+        if (e.key !== SYSTEM_STORAGE_KEY) {
+          syncFromLifeOS();
+        } else {
+          appState = loadState();
+        }
+        render();
+      }
+    });
 
     // Task Toggles with Spring & Day Cleared Ritual
     function toggleTask(id) {
@@ -1252,6 +1622,20 @@
           <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#f1f1ef] dark:bg-[#202020] text-[#787774] border border-[#e9e9e7] dark:border-[#333] font-medium">${res.type}</span>
         </div>
       `).join('');
+
+      // 8. Focus Station Controls & Project Attribution
+      const select = document.getElementById('timerProjectSelect');
+      if (select) {
+        const activeProjects = appState.projects.filter(p => p.status === 'active');
+        select.innerHTML = activeProjects.map(p => `
+          <option value="${p.id}" ${p.id === (appState.focus ? appState.focus.selectedProjectId : 'proj-1') ? 'selected' : ''} class="bg-white dark:bg-[#202020] text-[#37352f] dark:text-white">
+            ${p.name}
+          </option>
+        `).join('');
+      }
+      updateTimerDisplay();
+      highlightActiveMood();
+      renderHeatmap();
 
       lucide.createIcons();
     }
