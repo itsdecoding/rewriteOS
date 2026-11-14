@@ -19,10 +19,10 @@
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1600" />
   <meta property="og:image:height" content="908" />
-  <meta property="og:image:alt" content="LifeFlow OS by Rewrite Minds" />
+  <meta property="og:image:alt" content="Rewrite Life OS by Rewrite Minds" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="LifeFlow OS | Build Better Habits" />
-  <meta name="twitter:description" content="LifeFlow is the first step toward a productivity ecosystem where people do not improve alone." />
+  <meta name="twitter:title" content="Rewrite Life OS | Build Better Habits" />
+  <meta name="twitter:description" content="Rewrite Life OS is the first step toward a productivity ecosystem where people do not improve alone." />
   <meta name="twitter:image" content="https://rewriteminds.vercel.app/og-image-wide.png" />
   <link rel="manifest" href="/manifest.json" />
   <title>Rewrite Life OS | The Mind & Life Operating System</title>
@@ -43,49 +43,49 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#07070F;
-      --surface:#10101E;
-      --surface2:#181828;
-      --surface3:#1F1F35;
-      --primary:#7B5EA7;
-      --primary-bright:#9D7FD4;
-      --primary-glow:rgba(123,94,167,.25);
-      --gold:#F0C040;
-      --gold-glow:rgba(240,192,64,.2);
-      --emerald:#2DD4A0;
-      --emerald-glow:rgba(45,212,160,.2);
-      --coral:#FF6B6B;
-      --text:#EEEEF5;
-      --muted:#7A7A99;
-      --inactive:#3A3A55;
-      --border:rgba(255,255,255,.06);
-      --glass:rgba(255,255,255,.04);
+      --bg:#191919;
+      --surface:#202020;
+      --surface2:#262626;
+      --surface3:#2A2A2A;
+      --primary:#3e6843;
+      --primary-bright:#8fc496;
+      --primary-glow:rgba(62,104,67,.25);
+      --gold:#d3a85b;
+      --gold-glow:rgba(211,168,91,.2);
+      --emerald:#3e6843;
+      --emerald-glow:rgba(62,104,67,.2);
+      --coral:#a33d3d;
+      --text:#e3e2e0;
+      --muted:#9b9a97;
+      --inactive:#4a4a4a;
+      --border:#2e2e2e;
+      --glass:rgba(32,32,32,.9);
       --nav:88px;
       --pad:16px;
-      --radius:22px;
-      --shadow:0 8px 32px rgba(0,0,0,.34);
-      --shadow-lg:0 18px 60px rgba(0,0,0,.44);
+      --radius:16px;
+      --shadow:0 2px 8px rgba(0,0,0,.2);
+      --shadow-lg:0 8px 24px rgba(0,0,0,.3);
       color-scheme:dark;
-      font-family:"DM Sans", system-ui, sans-serif;
+      font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     }
     [data-theme="light"]{
-      --bg:#F5F3EE;
+      --bg:#FBFBFA;
       --surface:#FFFFFF;
-      --surface2:#F8F7F4;
-      --surface3:#F1EEEA;
-      --primary:#6F52B5;
-      --primary-bright:#8B6ED1;
-      --primary-glow:rgba(111,82,181,.16);
-      --gold:#D29A1A;
-      --gold-glow:rgba(210,154,26,.18);
-      --emerald:#12B886;
-      --emerald-glow:rgba(18,184,134,.18);
-      --coral:#E45858;
-      --text:#151320;
-      --muted:#625D73;
-      --inactive:#8B839C;
-      --border:rgba(41,35,66,.10);
-      --glass:rgba(255,255,255,.92);
+      --surface2:#F7F6F3;
+      --surface3:#F1F1EF;
+      --primary:#37352F;
+      --primary-bright:#3E6843;
+      --primary-glow:rgba(62,104,67,.15);
+      --gold:#89632A;
+      --gold-glow:rgba(137,99,42,.15);
+      --emerald:#3E6843;
+      --emerald-glow:rgba(62,104,67,.18);
+      --coral:#A33D3D;
+      --text:#37352F;
+      --muted:#787774;
+      --inactive:#9B9A97;
+      --border:#E9E9E7;
+      --glass:rgba(255,255,255,.95);
       color-scheme:light;
     }
     *{box-sizing:border-box}
@@ -1049,7 +1049,7 @@
             <path d="M16 6C10.48 6 6 10.48 6 16C6 21.52 10.48 26 16 26" stroke="url(#logoGradBadge)" stroke-width="4" stroke-linecap="round"/>
             <circle cx="16" cy="16" r="4" fill="url(#logoGradBadge)"/>
           </svg>
-          <span style="font-weight:800">LifeFlow OS</span>
+          <span style="font-weight:800">Rewrite Life OS</span>
         </div>
         <div class="auth-logo">Build your rhythm.</div>
         <p class="auth-tagline">Habits, focus, reflection, and goals — all synced to your account.</p>
@@ -1116,7 +1116,7 @@
               <path d="M16 6C10.48 6 6 10.48 6 16C6 21.52 10.48 26 16 26" stroke="url(#logoGradOnb)" stroke-width="4" stroke-linecap="round"/>
               <circle cx="16" cy="16" r="4" fill="url(#logoGradOnb)"/>
             </svg>
-            <span>LifeFlow OS</span>
+            <span>Rewrite Life OS</span>
           </div>
           <button class="secondary" style="min-height:38px;padding:0 12px" onclick="skipOnboarding()">Skip</button>
         </div>
@@ -1163,19 +1163,6 @@
       <button class="drawer-item" onclick="triggerImportJSON()"><i class="fa-solid fa-cloud-arrow-up"></i><span>Restore Backup</span></button>
     </aside>
 
-    <div class="ecosystem-global-bar" style="background:#141414; border-bottom:1px solid rgba(255,255,255,0.08); padding:8px 16px; display:flex; align-items:center; justify-content:space-between; font-size:11px; z-index:900; position:relative;">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <span style="font-weight:900; letter-spacing:0.5px; color:#fff;">⚡ REWRITE OS SUITE</span>
-        <span style="font-size:9px; background:rgba(62,104,67,0.4); color:#8fc496; padding:2px 8px; border-radius:999px; font-weight:700;">Life OS Active</span>
-      </div>
-      <div style="display:flex; align-items:center; gap:6px;">
-        <a href="index.html#dashboard" style="display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border-radius:8px; background:rgba(255,255,255,0.12); color:#fff; text-decoration:none; font-weight:700; border:1px solid rgba(255,255,255,0.15);"><i class="fa-solid fa-gauge-high"></i> Unified Dashboard</a>
-        <a href="index.html#para" style="display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:8px; background:rgba(255,255,255,0.05); color:#aaa; text-decoration:none; font-weight:600;"><i class="fa-solid fa-brain"></i> Second Brain</a>
-        <a href="index.html#finance" style="display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:8px; background:rgba(255,255,255,0.05); color:#aaa; text-decoration:none; font-weight:600;"><i class="fa-solid fa-wallet"></i> Finance</a>
-        <a href="index.html#fitness" style="display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:8px; background:rgba(255,255,255,0.05); color:#aaa; text-decoration:none; font-weight:600;"><i class="fa-solid fa-heart-pulse"></i> Fitness</a>
-      </div>
-    </div>
-
     <div class="topbar">
       <button class="icon-btn hot" onclick="openDrawer()"><i class="fa-solid fa-bars"></i></button>
       <div style="flex:1; min-width:0;">
@@ -1183,7 +1170,7 @@
         <div class="subtitle" id="topSubtitle">The Mind &amp; Life Operating System • Local Vault</div>
       </div>
       <a href="index.html#dashboard" class="suite-switch-btn" title="Return to Command Center">
-        <i class="fa-solid fa-gauge-high"></i>
+        <i class="fa-solid fa-arrow-left"></i>
         <span>Command Center</span>
       </a>
       <button class="icon-btn" onclick="openSheet('task')"><i class="fa-solid fa-plus"></i></button>
@@ -2082,7 +2069,7 @@
       const el = $('#'+map[name]);
       if (el) el.classList.add('active');
       const titles = {
-        home:['LifeFlow OS','Build unbreakable momentum.'],
+        home:['Rewrite Life OS','Build unbreakable momentum.'],
         journal:['Journal','Reflect, reset, repeat.'],
         focus:['Focus','Go deep for a while.'],
         analytics:['Analytics','See the pattern.'],
@@ -2819,7 +2806,7 @@
       renderSettingsProTab();
       _syncProfileUI();
       const titles = {
-        home:'LifeFlow OS',journal:'Journal',focus:'Focus',analytics:'Analytics',
+        home:'Rewrite Life OS',journal:'Journal',focus:'Focus',analytics:'Analytics',
         goals:'Goals',achievements:'Achievements',settings:'Settings'
       };
       const subs = {
@@ -2967,7 +2954,7 @@
     /* ── ONBOARDING ───────────────────────────────────────────── */
     function initOnboarding(){
       const slides = [
-        {title:'Welcome to LifeFlow OS', text:'A calm command center for habits, focus, and reflection.', emoji:'✨'},
+        {title:'Welcome to Rewrite Life OS', text:'A calm command center for habits, focus, and reflection.', emoji:'✨'},
         {title:'Build Unbreakable Habits', text:'Track streaks, complete habits, and keep the momentum moving.', emoji:'🌱'},
         {title:'Stay Focused & Reflect', text:'Pomodoro, ambient audio, journaling, and analytics in one place.', emoji:'🧠'},
         {title:'Deep Work, On Demand', text:'Switch into flow with a timer, sound, and a clean screen.', emoji:'🎧'},
