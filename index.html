@@ -102,12 +102,11 @@
 
     /* Golden Hour Bloom */
     @keyframes goldenGlow {
-      0% { opacity: 0; transform: scale(0.97); }
-      50% { opacity: 0.18; transform: scale(1.02); }
-      100% { opacity: 0.09; transform: scale(1); }
+      0% { opacity: 0; transform: scale(0.96); }
+      100% { opacity: 1; transform: scale(1); }
     }
     .golden-bloom {
-      animation: goldenGlow 1.2s ease-out forwards;
+      animation: goldenGlow 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     /* Subtle Scrollbar */
