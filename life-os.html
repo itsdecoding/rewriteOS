@@ -3055,6 +3055,13 @@
 
     init();
 
+    // Cross-document Storage Bridge (Real-time sync with Rewrite OS master cockpit)
+    window.addEventListener('storage', (e) => {
+      if (e.key && (e.key.startsWith('rewrite_') || e.key.startsWith('lifeflow_') || e.key === 'REWRITE_OS_UNIFIED_V1')) {
+        loadAllData().then(() => renderAll());
+      }
+    });
+
     // Intersection Observer for scroll animations
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
