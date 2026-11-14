@@ -1,0 +1,3077 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#07070F" id="metaThemeColor" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Rewrite Minds" />
+  <meta name="description" content="Rewrite Life OS — Standalone Digital Product. Offline-first command center for habits, deep focus, reflections, and life goals." />
+  <link rel="canonical" href="https://rewriteminds.vercel.app/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Rewrite Minds" />
+  <meta property="og:title" content="Rewrite Life OS | The Mind & Life Operating System" />
+  <meta property="og:description" content="LifeFlow is the first step toward a productivity ecosystem where people do not improve alone." />
+  <meta property="og:url" content="https://rewriteminds.vercel.app/" />
+  <meta property="og:image" content="https://rewriteminds.vercel.app/og-image-wide.png" />
+  <meta property="og:image:secure_url" content="https://rewriteminds.vercel.app/og-image-wide.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1600" />
+  <meta property="og:image:height" content="908" />
+  <meta property="og:image:alt" content="LifeFlow OS by Rewrite Minds" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="LifeFlow OS | Build Better Habits" />
+  <meta name="twitter:description" content="LifeFlow is the first step toward a productivity ecosystem where people do not improve alone." />
+  <meta name="twitter:image" content="https://rewriteminds.vercel.app/og-image-wide.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <title>Rewrite Life OS | The Mind & Life Operating System</title>
+  <!-- BUG FIX: Instant theme restore prevents flash of wrong theme on load -->
+  <script>
+    (function(){
+      try {
+        var t = localStorage.getItem('lf_theme') || 'dark';
+        var eff = t === 'system' ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark') : t;
+        document.documentElement.dataset.theme = eff;
+      } catch(e) {}
+    })();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#07070F;
+      --surface:#10101E;
+      --surface2:#181828;
+      --surface3:#1F1F35;
+      --primary:#7B5EA7;
+      --primary-bright:#9D7FD4;
+      --primary-glow:rgba(123,94,167,.25);
+      --gold:#F0C040;
+      --gold-glow:rgba(240,192,64,.2);
+      --emerald:#2DD4A0;
+      --emerald-glow:rgba(45,212,160,.2);
+      --coral:#FF6B6B;
+      --text:#EEEEF5;
+      --muted:#7A7A99;
+      --inactive:#3A3A55;
+      --border:rgba(255,255,255,.06);
+      --glass:rgba(255,255,255,.04);
+      --nav:88px;
+      --pad:16px;
+      --radius:22px;
+      --shadow:0 8px 32px rgba(0,0,0,.34);
+      --shadow-lg:0 18px 60px rgba(0,0,0,.44);
+      color-scheme:dark;
+      font-family:"DM Sans", system-ui, sans-serif;
+    }
+    [data-theme="light"]{
+      --bg:#F5F3EE;
+      --surface:#FFFFFF;
+      --surface2:#F8F7F4;
+      --surface3:#F1EEEA;
+      --primary:#6F52B5;
+      --primary-bright:#8B6ED1;
+      --primary-glow:rgba(111,82,181,.16);
+      --gold:#D29A1A;
+      --gold-glow:rgba(210,154,26,.18);
+      --emerald:#12B886;
+      --emerald-glow:rgba(18,184,134,.18);
+      --coral:#E45858;
+      --text:#151320;
+      --muted:#625D73;
+      --inactive:#8B839C;
+      --border:rgba(41,35,66,.10);
+      --glass:rgba(255,255,255,.92);
+      color-scheme:light;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text)}
+    body{
+      min-height:100vh;min-height:100dvh;overflow:hidden;
+      -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    }
+    body:before{
+      content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.18;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode:screen;
+    }
+    [data-theme="light"] body:before{opacity:.08;mix-blend-mode:multiply;}
+    button,input,textarea,select{font:inherit}
+    button{border:0;background:none;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+    input,textarea,select{
+      width:100%;min-height:48px;padding:12px 13px;border-radius:14px;
+      border:1px solid var(--border);background:var(--surface3);color:var(--text);outline:none;
+    }
+    [data-theme="light"] input,
+    [data-theme="light"] textarea,
+    [data-theme="light"] select{background:var(--surface2);border-color:var(--border);}
+    textarea{min-height:120px;resize:vertical}
+    a{color:inherit;text-decoration:none}
+    .app{
+      position:relative;z-index:1;width:100%;max-width:560px;height:100vh;height:100dvh;
+      margin:0 auto;overflow:hidden;background:
+        radial-gradient(ellipse at 18% 10%, rgba(123,94,167,.18) 0%, transparent 45%),
+        radial-gradient(ellipse at 86% 8%, rgba(45,212,160,.08) 0%, transparent 38%),
+        var(--bg);
+      border-left:1px solid rgba(255,255,255,.03);border-right:1px solid rgba(255,255,255,.03);
+    }
+    [data-theme="light"] .app{
+      background:
+        radial-gradient(ellipse at 18% 10%, rgba(111,82,181,.12) 0%, transparent 44%),
+        radial-gradient(ellipse at 86% 8%, rgba(18,184,134,.06) 0%, transparent 38%),
+        var(--bg);
+      border-left:1px solid rgba(41,35,66,.06);
+      border-right:1px solid rgba(41,35,66,.06);
+    }
+    .screen{
+      position:absolute;inset:0 0 var(--nav);overflow:auto;padding-top:96px;padding-bottom:24px;display:none;
+      scrollbar-width:none;animation:screenIn .24s ease both;
+    }
+    .screen::-webkit-scrollbar{display:none}
+    .screen.active{display:block}
+    @keyframes screenIn{from{opacity:0;transform:translate3d(16px,0,0)}to{opacity:1;transform:none}}
+    .topbar{
+      min-height:82px;padding:18px var(--pad) 10px;display:grid;grid-template-columns:44px 1fr auto auto;align-items:center;gap:10px;
+      position:sticky;top:0;z-index:20;
+      background:linear-gradient(180deg, rgba(7,7,15,.98), rgba(7,7,15,.72) 78%, transparent);
+      backdrop-filter:blur(14px);
+    }
+    [data-theme="light"] .topbar{
+      background:linear-gradient(180deg, rgba(245,243,238,.98), rgba(245,243,238,.72) 78%, transparent);
+    }
+    .title{font-size:clamp(24px, 7vw, 34px);font-weight:800;letter-spacing:-.03em;line-height:1.02}
+    .subtitle{color:var(--muted);font-size:12px;margin-top:4px}
+    .icon-btn{
+      width:44px;height:44px;border-radius:15px;display:grid;place-items:center;color:var(--muted);
+      background:rgba(255,255,255,.02);border:1px solid transparent;
+    }
+    [data-theme="light"] .icon-btn{background:rgba(20,16,35,.04);}
+    .icon-btn.hot{color:var(--primary-bright);border-color:var(--border);background:var(--glass)}
+    .avatar{
+      width:42px;height:42px;border-radius:999px;display:grid;place-items:center;font-weight:900;color:#07070F;
+      background:linear-gradient(135deg, var(--gold), var(--primary-bright));box-shadow:0 0 0 3px rgba(240,192,64,.12)
+    }
+    .icon{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2.25;stroke-linecap:round;stroke-linejoin:round}
+    .fill{fill:currentColor;stroke:none}
+    .content{padding:0 var(--pad)}
+    .glass{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);box-shadow:var(--shadow)}
+    .hero-card{
+      border-radius:24px;padding:18px;background:
+        radial-gradient(circle at 12% 0%, rgba(123,94,167,.24), transparent 42%),
+        radial-gradient(circle at 92% 12%, rgba(240,192,64,.14), transparent 34%),
+        var(--glass);border:1px solid var(--border);box-shadow:0 12px 44px rgba(0,0,0,.34)
+    }
+    [data-theme="light"] .hero-card{box-shadow:0 4px 24px rgba(30,24,48,.1);}
+    .eyebrow{color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:800}
+    .hero-title{font-size:24px;font-weight:900;letter-spacing:-.03em;margin-top:8px;line-height:1.05}
+    .micro{color:var(--muted);font-size:12px;line-height:1.5}
+    .summary-row{
+      display:grid;grid-auto-flow:column;grid-auto-columns:minmax(156px,1fr);gap:12px;overflow:auto;margin:18px 0 20px;
+      scrollbar-width:none
+    }
+    .summary-row::-webkit-scrollbar{display:none}
+    .summary{
+      min-height:122px;border-radius:20px;padding:15px;position:relative;overflow:hidden
+    }
+    .summary:after{content:"";position:absolute;inset:auto -32px -34px auto;width:98px;height:98px;border-radius:50%;background:var(--primary-glow);filter:blur(3px)}
+    .stat{margin-top:10px;font-size:26px;font-weight:900;letter-spacing:-.02em}
+    .progress-ring{
+      width:48px;height:48px;border-radius:50%;display:grid;place-items:center;
+      background:conic-gradient(var(--primary-bright) var(--pct,0%), rgba(255,255,255,.08) 0);color:var(--text);font-size:11px;font-weight:900;margin-top:12px;position:relative
+    }
+    .progress-ring:before{content:"";position:absolute;width:34px;height:34px;border-radius:50%;background:var(--surface2)}
+    .progress-ring span{position:relative;z-index:1}
+    .section-title{margin:22px 0 12px;font-size:18px;font-weight:850;letter-spacing:-.02em}
+    .actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .action{
+      min-height:98px;border-radius:20px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;text-align:center;color:var(--text)
+    }
+    .action-icon{
+      width:44px;height:44px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg, var(--primary), #42418e);box-shadow:0 0 24px rgba(123,94,167,.22)
+    }
+    .action span:last-child{font-size:12px;font-weight:800}
+    .chip-row{display:flex;gap:10px;overflow:auto;scrollbar-width:none}
+    .chip-row::-webkit-scrollbar{display:none}
+    .chip{
+      flex:0 0 auto;border-radius:999px;padding:10px 13px;display:flex;align-items:center;gap:10px;color:var(--text);
+      background:rgba(255,255,255,.045);border:1px solid var(--border)
+    }
+    [data-theme="light"] .chip{background:rgba(20,16,35,.05);}
+    .dot{width:9px;height:9px;border-radius:50%;background:var(--primary-bright);box-shadow:0 0 12px currentColor}
+    .list{display:grid;gap:12px}
+    .item{
+      border-radius:20px;padding:14px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;
+      background:var(--glass);border:1px solid var(--border)
+    }
+    .check{
+      width:34px;height:34px;border-radius:50%;border:1.5px solid var(--inactive);display:grid;place-items:center;color:#07070F;flex-shrink:0
+    }
+    .check.done{background:var(--emerald);border-color:var(--emerald);box-shadow:0 0 22px var(--emerald-glow)}
+    .item-title{font-weight:850}
+    .done-text{color:var(--muted);text-decoration:line-through}
+    .meta{color:var(--muted);font-size:12px;margin-top:5px;display:flex;flex-wrap:wrap;gap:8px}
+    .pill{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:0 10px;border-radius:999px;background:rgba(255,255,255,.045);color:var(--muted);font-size:12px;font-weight:750}
+    [data-theme="light"] .pill{background:rgba(20,16,35,.06);}
+    .bottom-nav{
+      position:absolute;left:0;right:0;bottom:0;height:var(--nav);padding:10px 18px calc(10px + env(safe-area-inset-bottom));
+      display:grid;grid-template-columns:repeat(5,1fr);gap:6px;background:rgba(16,16,30,.96);border-top:1px solid var(--border);backdrop-filter:blur(22px);z-index:50
+    }
+    [data-theme="light"] .bottom-nav{background:rgba(255,255,255,.94);border-top:1px solid rgba(41,35,66,.08);}
+    .tab{position:relative;color:var(--inactive);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:0}
+    .tab:before{content:"";width:34px;height:5px;border-radius:999px;background:transparent;transform:translateY(-8px)}
+    .tab.active{color:var(--primary-bright)}
+    .tab.active:before{background:var(--primary-bright);box-shadow:0 0 18px var(--primary-glow)}
+    .tab span:last-child{display:none;color:var(--text);font-size:11px;font-weight:800}
+    .tab.active span:last-child{display:block}
+    [data-theme="light"] .tab{color:#8e87a0;}
+    [data-theme="light"] .tab.active{color:var(--primary-bright);}
+    .fab{
+      position:absolute;right:18px;bottom:calc(var(--nav) + 18px);width:64px;height:64px;border-radius:22px;display:grid;place-items:center;z-index:45;
+      background:linear-gradient(135deg, var(--primary-bright), var(--primary));box-shadow:0 0 28px rgba(123,94,167,.42), 0 18px 40px rgba(0,0,0,.42)
+    }
+    .drawer-backdrop,.sheet-backdrop,.auth-backdrop,.onb-backdrop{
+      position:absolute;inset:0;opacity:0;pointer-events:none;background:rgba(0,0,0,.58);transition:.22s ease;z-index:80
+    }
+    .drawer-backdrop.open,.sheet-backdrop.open,.auth-backdrop.open,.onb-backdrop.open{opacity:1;pointer-events:auto}
+    .drawer{
+      position:absolute;inset:0 auto 0 0;width:min(84vw,350px);padding:22px 16px;
+      background:rgba(16,16,30,.96);backdrop-filter:blur(24px);
+      border-right:1px solid var(--border);box-shadow:0 24px 60px rgba(0,0,0,.52);
+      transform:translateX(-105%);transition:.34s cubic-bezier(.2,1.1,.2,1);z-index:90;overflow:auto
+    }
+    [data-theme="light"] .drawer{
+      background:rgba(255,255,255,.97);
+      border-right:1px solid rgba(41,35,66,.08);
+      box-shadow:0 18px 42px rgba(30,24,48,.12);
+    }
+    .drawer.open{transform:none}
+    .user-card{display:flex;gap:12px;align-items:center;padding:14px;border-radius:22px;margin-bottom:16px}
+    .drawer-item{
+      width:100%;min-height:48px;display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;padding:0 12px;border-radius:16px;color:var(--text);text-align:left;font-weight:780
+    }
+    [data-theme="light"] .drawer-item{color:#1D1A2A;}
+    .drawer-item.active{background:var(--primary-glow);box-shadow:inset 3px 0 0 var(--primary-bright)}
+    [data-theme="light"] .drawer-item.active{background:rgba(111,82,181,.14);}
+    .drawer-item .badge{color:var(--gold);background:rgba(240,192,64,.12);padding:4px 8px;border-radius:99px;font-size:11px}
+    .divider{height:1px;background:var(--border);margin:12px 8px}
+    [data-theme="light"] .divider{background:rgba(41,35,66,.08);}
+    .sheet{
+      position:absolute;left:0;right:0;bottom:0;max-height:88dvh;transform:translateY(106%);
+      transition:transform .28s cubic-bezier(.2,1,.2,1), opacity .28s ease, visibility .28s ease;z-index:100;
+      background:rgba(16,16,30,.98);border:1px solid var(--border);border-radius:24px 24px 0 0;
+      box-shadow:0 -22px 70px rgba(0,0,0,.55);overflow:hidden;
+      visibility:hidden;opacity:0;pointer-events:none;
+    }
+    [data-theme="light"] .sheet{background:rgba(255,255,255,.99);}
+    .sheet.open{transform:none;visibility:visible;opacity:1;pointer-events:auto;}
+    .grab{width:44px;height:5px;border-radius:99px;background:rgba(255,255,255,.16);margin:9px auto 0}
+    [data-theme="light"] .grab{background:rgba(0,0,0,.14);}
+    .sheet-head{min-height:60px;padding:8px 18px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+    .sheet-title{flex:1;font-size:20px;font-weight:900;letter-spacing:-.02em}
+    .sheet-body{padding:18px;overflow:auto;max-height:calc(88dvh - 74px)}
+    .form{display:grid;gap:14px}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .primary,.secondary,.danger{min-height:52px;border-radius:14px;font-weight:900}
+    .primary{background:linear-gradient(135deg, var(--primary-bright), var(--primary));color:#fff;box-shadow:0 0 22px rgba(123,94,167,.24)}
+    /* BUG FIX: secondary was nearly invisible in light mode (rgba(255,255,255,.06)) */
+    .secondary{background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--border)}
+    [data-theme="light"] .secondary{background:rgba(20,16,35,.07);border-color:rgba(41,35,66,.12);}
+    .danger{color:var(--coral);background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.14)}
+    .save-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+    .section-card{border-radius:20px;padding:16px;border:1px solid var(--border);background:var(--glass);box-shadow:var(--shadow)}
+    .empty{
+      min-height:calc(100dvh - 260px - var(--nav));display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px 14px
+    }
+    .empty h2{margin:0 0 8px;font-size:22px;letter-spacing:-.02em}
+    .empty p{margin:0;max-width:300px;color:var(--muted);line-height:1.45}
+    .moods{display:flex;gap:8px;overflow:auto;padding-bottom:4px}
+    .mood{
+      flex:0 0 auto;border-radius:999px;padding:10px 12px;background:rgba(255,255,255,.045);border:1px solid var(--border);font-size:13px;font-weight:800
+    }
+    [data-theme="light"] .mood{background:rgba(20,16,35,.05);}
+    .mood.active{background:var(--primary-glow);color:var(--primary-bright)}
+    .heatmap{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+    .heat{aspect-ratio:1;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid var(--border)}
+    [data-theme="light"] .heat{background:rgba(20,16,35,.05);}
+    .heat.level-1{background:rgba(123,94,167,.20)}
+    .heat.level-2{background:rgba(123,94,167,.35)}
+    .heat.level-3{background:rgba(123,94,167,.55)}
+    .heat.level-4{background:rgba(45,212,160,.55)}
+    .timer-box{
+      border-radius:24px;padding:18px;background:
+        radial-gradient(circle at 12% 0%, rgba(123,94,167,.24), transparent 42%),
+        radial-gradient(circle at 92% 12%, rgba(240,192,64,.14), transparent 34%),
+        var(--glass);border:1px solid var(--border);box-shadow:0 12px 44px rgba(0,0,0,.34)
+    }
+    .timer-time{font-size:clamp(44px, 14vw, 64px);font-weight:900;letter-spacing:-.05em;text-align:center;margin:8px 0 6px}
+    .timer-mode{display:flex;gap:8px;overflow:auto;padding-bottom:4px}
+    .mode-pill{
+      flex:0 0 auto;padding:9px 12px;border-radius:999px;background:rgba(255,255,255,.045);border:1px solid var(--border);font-weight:800;font-size:13px
+    }
+    [data-theme="light"] .mode-pill{background:rgba(20,16,35,.05);}
+    .mode-pill.active{background:var(--primary-glow);color:var(--primary-bright)}
+    .audio-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .audio-btn{min-height:76px;border-radius:18px;padding:14px;text-align:left;background:var(--glass);border:1px solid var(--border)}
+    .audio-btn.active{outline:2px solid var(--primary-bright)}
+    .auth-screen,.onboarding-screen{
+      position:fixed;inset:0;z-index:9000;display:none;overflow-y:auto;background:
+        radial-gradient(circle at 18% 10%, rgba(123,94,167,.16), transparent 32%),
+        radial-gradient(circle at 82% 18%, rgba(45,212,160,.08), transparent 28%),
+        var(--bg)
+    }
+    [data-theme="light"] .auth-screen,[data-theme="light"] .onboarding-screen{
+      background:
+        radial-gradient(circle at 18% 10%, rgba(111,82,181,.08), transparent 32%),
+        radial-gradient(circle at 82% 18%, rgba(18,184,134,.06), transparent 28%),
+        var(--bg);
+    }
+    .auth-screen.open,.onboarding-screen.open{display:block}
+    .auth-wrap,.onb-wrap{
+      position:relative;z-index:1;max-width:560px;min-height:100%;margin:0 auto;padding:24px 16px calc(24px + env(safe-area-inset-bottom));display:flex;flex-direction:column;justify-content:center
+    }
+    .auth-card,.onb-card{
+      border-radius:28px;padding:24px;background:
+        radial-gradient(circle at 12% 0%, rgba(123,94,167,.24), transparent 42%),
+        radial-gradient(circle at 92% 12%, rgba(240,192,64,.14), transparent 34%),
+        var(--glass);border:1px solid var(--border);box-shadow:var(--shadow-lg)
+    }
+    .brand-badge{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--border);
+      color:var(--gold);font-weight:800;font-size:12px
+    }
+    .auth-logo{font-size:clamp(26px, 6vw, 34px);font-weight:900;letter-spacing:-.04em;margin-top:14px}
+    .auth-tagline{color:var(--muted);line-height:1.5;margin:8px 0 0;font-size:14px}
+    .auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+    .auth-tab{min-height:48px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid var(--border);font-weight:900}
+    [data-theme="light"] .auth-tab{background:rgba(20,16,35,.04);}
+    .auth-tab.active{background:var(--primary);color:white;border-color:transparent}
+    .auth-field{margin-top:12px}
+    .auth-lbl{display:block;margin:0 0 7px;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .auth-input-wrap{position:relative}
+    .auth-input{padding-left:42px}
+    .auth-input-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.8}
+    .auth-err{
+      display:none;margin-top:12px;padding:10px 12px;border-radius:14px;background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.22);color:var(--coral);font-weight:700;font-size:13px
+    }
+    .auth-cta,.auth-google{width:100%;min-height:52px;border-radius:16px;font-weight:900}
+    .auth-cta{margin-top:14px;background:linear-gradient(135deg, var(--primary-bright), var(--primary));box-shadow:0 0 22px rgba(123,94,167,.24);color:white}
+    .auth-google{margin-top:10px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text)}
+    [data-theme="light"] .auth-google{background:rgba(20,16,35,.05);}
+    .auth-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+    .auth-chip{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--border);font-size:12px;font-weight:800}
+    [data-theme="light"] .auth-chip{background:rgba(20,16,35,.045);}
+    .onb-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .onb-top{display:flex;gap:8px;align-items:center;justify-content:space-between}
+    .onb-brand{font-weight:900}
+    .onb-cta{min-height:52px;border-radius:16px;background:linear-gradient(135deg, var(--primary-bright), var(--primary));color:white;font-weight:900;width:100%;margin-top:16px}
+    .onb-track{display:flex;gap:8px;margin:14px 0}
+    .onb-dot{height:8px;flex:1;border-radius:999px;background:rgba(255,255,255,.10)}
+    [data-theme="light"] .onb-dot{background:rgba(20,16,35,.10);}
+    .onb-dot.active{background:var(--primary-bright)}
+    .onb-slide{display:none;animation:screenIn .24s ease both}
+    .onb-slide.active{display:block}
+    .onb-art{
+      height:220px;border-radius:24px;background:
+        radial-gradient(circle at 50% 38%, rgba(123,94,167,.32), transparent 34%),
+        radial-gradient(circle at 30% 20%, rgba(240,192,64,.18), transparent 18%),
+        radial-gradient(circle at 70% 70%, rgba(45,212,160,.12), transparent 20%),
+        rgba(255,255,255,.03);
+      border:1px solid var(--border);display:grid;place-items:center;margin-bottom:16px
+    }
+    .onb-title{font-size:28px;font-weight:900;letter-spacing:-.03em;line-height:1.05;margin:0 0 10px}
+    .onb-text{margin:0;color:var(--muted);line-height:1.55}
+    .toast{
+      position:fixed;left:50%;bottom:calc(var(--nav) + 16px);transform:translateX(-50%) translateY(150px);opacity:0;
+      background:rgba(14,14,23,.96);border:1px solid var(--border);color:var(--text);padding:12px 16px;border-radius:16px;z-index:9999;transition:transform .28s cubic-bezier(.34,1.56,.64,1), opacity .2s ease;box-shadow:var(--shadow-lg);font-weight:800;white-space:nowrap;max-width:calc(100vw - 40px);text-overflow:ellipsis;overflow:hidden;pointer-events:none;
+    }
+    [data-theme="light"] .toast{background:rgba(255,255,255,.98);box-shadow:0 8px 32px rgba(30,24,48,.18);}
+    .toast.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto;}
+    .sync-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--border);font-size:12px;font-weight:800;color:var(--muted)}
+    [data-theme="light"] .sync-pill{background:rgba(20,16,35,.04);}
+    .sync-dot{width:8px;height:8px;border-radius:50%;background:var(--coral)}
+    .sync-dot.synced{background:var(--emerald);box-shadow:0 0 10px var(--emerald-glow)}
+    .sync-dot.syncing{background:var(--gold);box-shadow:0 0 10px var(--gold-glow)}
+    .sync-dot.demo{background:var(--primary-bright);box-shadow:0 0 10px rgba(139,92,246,0.6);animation:demoPulse 1.8s infinite ease-in-out}
+    @keyframes demoPulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; box-shadow: 0 0 4px rgba(139,92,246,0.4); }
+      50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 12px rgba(139,92,246,0.8); }
+    }
+    #drawerEmail, #profileEmail, .user-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+    .small{font-size:12px;color:var(--muted)}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .gap{height:12px}
+    .muted{color:var(--muted)}
+    .hidden{display:none !important}
+
+    /* ── UPGRADE MODAL ─────────────────────────────────────────── */
+    .upgrade-backdrop{
+      position:fixed;inset:0;background:rgba(0,0,0,.64);z-index:8500;opacity:0;pointer-events:none;transition:.22s ease
+    }
+    .upgrade-backdrop.open{opacity:1;pointer-events:auto}
+    .upgrade-modal{
+      position:fixed;left:0;right:0;bottom:0;max-height:94dvh;transform:translateY(110%);
+      transition:transform .34s cubic-bezier(.2,1,.2,1), opacity .34s ease, visibility .34s ease;z-index:8600;
+      background:var(--surface);border:1px solid var(--border);border-radius:28px 28px 0 0;
+      box-shadow:0 -24px 80px rgba(0,0,0,.6);overflow-y:auto;
+      scrollbar-width:none;max-width:560px;margin:0 auto;
+      visibility:hidden;opacity:0;pointer-events:none;
+    }
+    .upgrade-modal::-webkit-scrollbar{display:none}
+    .upgrade-modal.open{transform:none;visibility:visible;opacity:1;pointer-events:auto;}
+    .upgrade-head{min-height:60px;padding:8px 18px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+    .upgrade-body{padding:20px 18px 40px}
+    .upgrade-hero{text-align:center;padding:10px 0 22px}
+    .upgrade-hero-icon{font-size:52px;line-height:1}
+    .upgrade-hero-title{font-size:22px;font-weight:900;letter-spacing:-.03em;margin-top:14px}
+    .upgrade-hero-sub{color:var(--muted);font-size:13px;margin-top:8px;line-height:1.5}
+    .vision-link{
+      display:flex;align-items:center;justify-content:center;gap:7px;margin:0 0 18px;
+      color:var(--primary-bright);font-size:12px;font-weight:800;text-decoration:none
+    }
+    .vision-link:hover{color:var(--text)}
+    .upgrade-features{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px}
+    .upgrade-feat{font-size:12px;font-weight:700;padding:9px 11px;border-radius:12px;background:var(--glass);border:1px solid var(--border);display:flex;align-items:center;gap:6px}
+    .checkout-reminder{
+      display:flex;align-items:flex-start;gap:8px;padding:10px 12px;margin-bottom:14px;
+      border:1px solid rgba(123,94,167,.24);background:rgba(123,94,167,.08);
+      border-radius:12px;color:var(--muted);font-size:11px;line-height:1.45
+    }
+    .checkout-reminder i{color:var(--primary-bright);margin-top:2px}
+    .checkout-reminder strong{color:var(--text)}
+    .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+    .plan-card{
+      border-radius:20px;padding:16px 10px;border:1px solid var(--border);background:var(--glass);
+      text-align:center;cursor:pointer;transition:.2s ease;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center
+    }
+    .plan-card:hover{border-color:var(--primary-bright);transform:translateY(-3px);box-shadow:0 12px 36px rgba(123,94,167,.18)}
+    .plan-card:active{transform:none}
+    .plan-featured{
+      border-color:var(--gold) !important;
+      background:linear-gradient(160deg,rgba(240,192,64,.1),rgba(123,94,167,.08));
+      box-shadow:0 0 32px rgba(240,192,64,.12)
+    }
+    .plan-lifetime{
+      border-color:rgba(255,107,107,.58);
+      background:linear-gradient(160deg,rgba(255,107,107,.1),rgba(240,192,64,.1),rgba(123,94,167,.07));
+      animation:lifetimeGlow 1.8s ease-in-out infinite
+    }
+    .plan-badge{
+      position:absolute;top:-1px;left:50%;transform:translateX(-50%);
+      background:linear-gradient(135deg,var(--gold),#D4A017);color:#07070F;
+      font-size:9px;font-weight:900;padding:3px 10px;border-radius:0 0 10px 10px;letter-spacing:.04em;white-space:nowrap
+    }
+    .limited-time-badge{background:linear-gradient(135deg,var(--coral),var(--gold));animation:limitedBadge 1.15s ease-in-out infinite}
+    .plan-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:14px}
+    .plan-price{font-size:26px;font-weight:900;letter-spacing:-.03em;margin:6px 0 2px;color:var(--text)}
+    .plan-period{font-size:10px;color:var(--muted);margin-bottom:14px;line-height:1.3}
+    .founding-label{font-size:9px;color:var(--coral);font-weight:900;text-transform:uppercase;margin-top:-8px;margin-bottom:7px}
+    .spots-left{
+      display:flex;align-items:center;gap:5px;font-size:10px;font-weight:900;color:var(--coral);
+      background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.26);border-radius:999px;
+      padding:4px 7px;margin:-7px 0 11px;animation:spotsPulse 1.25s ease-in-out infinite
+    }
+    .spots-left:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--coral);box-shadow:0 0 8px var(--coral)}
+    .plan-cta{
+      width:100%;min-height:34px;border-radius:10px;font-weight:900;font-size:12px;
+      background:linear-gradient(135deg,var(--primary-bright),var(--primary));color:white;border:0;cursor:pointer;
+      transition:.16s ease;flex-shrink:0;margin-top:auto
+    }
+    .plan-cta:hover{opacity:.88}
+    .plan-featured .plan-cta{background:linear-gradient(135deg,var(--gold),#C49012);color:#07070F}
+    .plan-lifetime .plan-cta{background:linear-gradient(135deg,var(--coral),#E54E65)}
+    .upgrade-guarantee{text-align:center;font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5}
+    @keyframes lifetimeGlow{
+      0%,100%{box-shadow:0 0 0 1px rgba(255,107,107,.12),0 10px 26px rgba(255,107,107,.08)}
+      50%{box-shadow:0 0 0 2px rgba(255,107,107,.34),0 14px 38px rgba(255,107,107,.25)}
+    }
+    @keyframes limitedBadge{0%,100%{filter:brightness(1)}50%{filter:brightness(1.18)}}
+    @keyframes spotsPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+    /* ── SETTINGS EXTRAS ───────────────────────────────────────── */
+    .settings-toggle{display:flex;align-items:center;justify-content:space-between;min-height:44px}
+    .toggle-switch{width:44px;height:24px;border-radius:999px;background:var(--inactive);position:relative;cursor:pointer;transition:.2s ease;border:0;flex-shrink:0}
+    .toggle-switch.on{background:var(--emerald)}
+    .toggle-switch:before{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s ease}
+    .toggle-switch.on:before{transform:translateX(20px)}
+    .pro-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,rgba(240,192,64,.18),rgba(123,94,167,.14));border:1px solid rgba(240,192,64,.28);font-size:11px;font-weight:900;color:var(--gold)}
+
+    /* ── RESPONSIVE DESKTOP LAYOUT ───────────────────────────── */
+    @media (min-width: 760px) {
+      html, body { width:100%;height:100%;overflow:hidden; }
+      .auth-wrap, .onb-wrap { max-width:none;padding:32px;align-items:center;justify-content:center; }
+      .auth-card, .onb-card { width:min(980px, 92vw);padding:28px; }
+      .auth-card { display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center; }
+      .auth-logo { font-size:clamp(38px, 4vw, 62px); }
+      .auth-meta { grid-column:1 / -1; }
+      .app {
+        max-width:none;width:100vw;display:grid;
+        grid-template-columns:280px minmax(0, 1fr);
+        grid-template-rows:96px minmax(0, 1fr);
+        border:0;
+      }
+      .drawer {
+        position:relative;left:auto;top:auto;bottom:auto;width:100%;height:100%;
+        transform:none !important;grid-column:1;grid-row:1 / span 2;
+        border-right:1px solid var(--border);
+        background:rgba(16, 16, 30, .92);
+      }
+      /* BUG FIX: light theme must override the desktop drawer background */
+      [data-theme="light"] .drawer {
+        background:rgba(255,255,255,.97);
+      }
+      .drawer-backdrop, .sheet-backdrop { display:none !important; }
+      .topbar {
+        position:relative;grid-column:2;grid-row:1;min-height:96px;padding:18px 28px 14px;
+        background:linear-gradient(180deg, rgba(7,7,15,.96), rgba(7,7,15,.78) 74%, transparent);
+      }
+      /* BUG FIX: light theme must override desktop topbar background */
+      [data-theme="light"] .topbar {
+        background:linear-gradient(180deg, rgba(245,243,238,.98), rgba(245,243,238,.78) 74%, transparent);
+      }
+      .screen {
+        position:relative;inset:auto;grid-column:2;grid-row:2;
+        height:auto;min-height:0;overflow:auto;padding-top:0;padding-bottom:34px;
+      }
+      .content { max-width:1200px;padding:0 28px 28px;margin:0 auto; }
+      .bottom-nav { display:none; }
+      .fab { position:fixed;right:28px;bottom:28px; }
+      .summary-row { grid-auto-columns:minmax(180px, 1fr); }
+      .actions { grid-template-columns:repeat(4, 1fr); }
+      .audio-grid { grid-template-columns:repeat(3, 1fr); }
+      #achievementsGrid { grid-template-columns:repeat(3, 1fr) !important; }
+      .upgrade-features { grid-template-columns:repeat(3,1fr); }
+      .sheet {
+        left:auto;right:24px;bottom:24px;width:min(720px, calc(100vw - 340px));
+        max-height:calc(100vh - 120px);border-radius:24px;
+      }
+      .sheet-body { max-height:calc(100vh - 196px); }
+      .upgrade-modal {
+        left:auto;right:0;bottom:0;width:min(560px,100vw);
+        border-radius:28px 28px 0 0;
+      }
+      .plans { gap:12px; }
+    }
+    
+    /* LANDING PAGE ENHANCED CSS */
+    .landing-screen {
+      position:fixed;top:0;left:0;right:0;bottom:0;z-index:9000;
+      background:var(--bg);color:var(--text);
+      display:flex;flex-direction:column;
+      opacity:0;pointer-events:none;transition:opacity .3s ease;
+      overflow-y:auto; scroll-behavior: smooth; overflow-x:hidden;
+    }
+    .landing-screen.open { opacity:1;pointer-events:auto; }
+    .landing-nav {
+      display:flex;align-items:center;justify-content:space-between;
+      padding:24px 5%;max-width:1200px;margin:0 auto;width:100%;
+      position:relative; z-index:10;
+    }
+    .landing-logo { font-weight:900;font-size:20px;letter-spacing:-.5px; }
+    .landing-nav-links { display:flex;gap:12px; }
+    .btn-large { padding:0 32px;height:56px;font-size:16px;border-radius:28px;gap:12px; }
+
+    /* Canvas background */
+    #bgCanvas { position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-3; pointer-events:none; }
+    
+    /* Background Grid & Ambient Orbs */
+    .bg-grid {
+      position:fixed;top:0;left:0;width:100vw;height:100vh;
+      background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 60px 60px;
+      z-index:-2; pointer-events:none;
+    }
+    .bg-orb {
+      position:fixed; border-radius:50%; filter:blur(120px); opacity:0.35; z-index:-1; pointer-events:none;
+      animation: orbFloat 25s ease-in-out infinite alternate;
+    }
+    .orb-1 { width:600px; height:600px; background:var(--primary); top:-100px; left:-100px; }
+    .orb-2 { width:500px; height:500px; background:var(--emerald); bottom:-100px; right:-100px; animation-delay:-10s; }
+    @keyframes orbFloat { 0%{transform:translate(0,0) scale(1);} 100%{transform:translate(80px, 80px) scale(1.15);} }
+
+    /* Reveal Animations */
+    .reveal { opacity:0; transform:translateY(40px); transition:all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.active { opacity:1; transform:translateY(0); }
+
+    /* Hero Section */
+    .landing-hero { min-height:95vh; padding-top:120px; display:flex; flex-direction:column; align-items:center; position:relative; z-index:1; }
+    .hero-badge { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); padding:8px 16px; border-radius:99px; font-size:14px; font-weight:700; color:var(--primary-bright); margin-bottom:32px; letter-spacing:1px; text-transform:uppercase; backdrop-filter:blur(10px); }
+    .landing-title { font-size:clamp(56px, 9vw, 110px); font-weight:900; line-height:0.95; letter-spacing:-3px; text-align:center; margin:0; background:linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.55) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .landing-subtitle { font-size:clamp(18px, 2.5vw, 22px); color:var(--muted); margin:32px 0 48px; max-width:600px; line-height:1.5; text-align:center; }
+    
+    /* 3D Mockup Container */
+    .mockup-container { margin-top:60px; width:100%; max-width:900px; perspective:2000px; }
+    .mockup-window {
+      background:rgba(18,18,18,0.85); border:1px solid rgba(255,255,255,0.08); border-radius:24px; box-shadow:0 40px 100px rgba(0,0,0,0.8);
+      backdrop-filter:blur(20px); padding:24px;
+      transform: rotateX(12deg) translateY(0);
+      animation: levitate 6s ease-in-out infinite alternate;
+    }
+    @keyframes levitate { 0%{transform: rotateX(12deg) translateY(0);} 100%{transform: rotateX(12deg) translateY(-15px);} }
+    .mockup-header { display:flex; gap:8px; margin-bottom:24px; }
+    .mockup-dot { width:12px; height:12px; border-radius:50%; background:rgba(255,255,255,0.2); }
+    .mockup-body { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    @media(max-width:768px){ .mockup-body { grid-template-columns:1fr; } }
+    .mockup-box { background:rgba(255,255,255,0.02); border-radius:16px; padding:24px; border:1px solid rgba(255,255,255,0.05); }
+
+    /* Visual Sections */
+    .visual-section { padding:140px 24px; max-width:1200px; margin:0 auto; display:flex; flex-direction:column; align-items:center; text-align:center; position:relative; z-index:1; }
+    .visual-grid { display:grid; grid-template-columns:1fr; gap:48px; width:100%; margin-top:80px; }
+    @media(min-width:1024px){ .visual-grid { grid-template-columns:1fr 1fr; text-align:left; align-items:center; } }
+    
+    .visual-glass { background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:32px; padding:48px; backdrop-filter:blur(10px); position:relative; overflow:hidden; }
+    .visual-glass::after { content:''; position:absolute; top:0; left:-100%; width:50%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent); animation: shine 8s infinite; }
+    @keyframes shine { 100%{left:200%;} }
+    
+    .giant-icon { font-size:64px; color:var(--primary-bright); margin-bottom:24px; filter:drop-shadow(0 0 20px rgba(124,58,237,0.4)); }
+    
+    /* Mocks */
+    .mock-heat { display:grid; grid-template-columns: repeat(7, 1fr); gap:6px; max-width:200px; margin:0 auto; }
+    .mock-heat div { width:100%; aspect-ratio:1; border-radius:4px; background:rgba(255,255,255,0.05); }
+    .mock-heat div.active-1 { background:var(--primary); opacity:0.4; }
+    .mock-heat div.active-2 { background:var(--primary); opacity:0.8; }
+    .mock-heat div.active-3 { background:var(--primary-bright); }
+    .mock-heat div.active-g1 { background:var(--emerald); opacity:0.4; }
+    .mock-heat div.active-g2 { background:var(--emerald); opacity:0.8; }
+
+    .audio-waves { display:flex; gap:6px; height:60px; align-items:flex-end; }
+    .audio-waves div { width:8px; background:var(--primary-bright); border-radius:4px; animation: waveBounce 1s infinite alternate; }
+    .audio-waves div:nth-child(2){animation-delay:0.2s;} .audio-waves div:nth-child(3){animation-delay:0.4s;} .audio-waves div:nth-child(4){animation-delay:0.6s;} .audio-waves div:nth-child(5){animation-delay:0.8s;}
+    @keyframes waveBounce { 0%{height:20%;} 100%{height:100%;} }
+
+    .habit-mock { display:flex; flex-direction:column; gap:12px; }
+    .habit-mock-item { display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.03); padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.05); }
+    .habit-check { width:24px; height:24px; border-radius:6px; background:var(--emerald); display:flex; align-items:center; justify-content:center; color:#000; font-size:12px; }
+    .habit-line { height:12px; border-radius:6px; background:rgba(255,255,255,0.2); width:50%; }
+
+    /* Task List Mock */
+    .task-mock-item { display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.03); padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.05); margin-bottom:12px; }
+    .task-priority { font-size:11px; font-weight:700; padding:4px 8px; border-radius:4px; text-transform:uppercase; }
+    .task-priority.high { background:rgba(239,68,68,0.15); color:#f87171; }
+    .task-priority.med { background:rgba(245,158,11,0.15); color:#fbbf24; }
+
+    /* Journal Mock */
+    .journal-mock-card { background:rgba(255,255,255,0.03); padding:24px; border-radius:16px; border:1px solid rgba(255,255,255,0.05); text-align:left; }
+    .mood-chip-mock { display:inline-block; padding:6px 12px; border-radius:20px; background:rgba(124,58,237,0.15); color:var(--primary-bright); font-size:13px; font-weight:700; margin-bottom:12px; }
+
+    .bottom-cta { padding:140px 24px; text-align:center; position:relative; z-index:1; }
+    .bottom-cta-box { background:linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0) 100%); border:1px solid rgba(255,255,255,0.08); border-radius:48px; padding:80px 24px; max-width:900px; margin:0 auto; backdrop-filter:blur(20px); }
+    
+    /* Light Mode Overrides for Landing Page elements */
+    [data-theme="light"] .landing-title {
+      background: linear-gradient(180deg, #1e1b29 0%, rgba(30,27,41,0.65) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    [data-theme="light"] .hero-badge {
+      background: rgba(111,82,181,0.06);
+      border: 1px solid rgba(111,82,181,0.15);
+      color: var(--primary);
+    }
+    [data-theme="light"] .mockup-window {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(111, 82, 181, 0.12);
+      box-shadow: 0 40px 100px rgba(30, 24, 48, 0.08);
+      color: #1e1b29;
+    }
+    [data-theme="light"] .mockup-box {
+      background: rgba(111, 82, 181, 0.03);
+      border: 1px solid rgba(111, 82, 181, 0.06);
+      color: #1e1b29;
+    }
+    [data-theme="light"] .visual-glass {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(111, 82, 181, 0.1);
+      box-shadow: 0 30px 70px rgba(30, 24, 48, 0.04);
+    }
+    [data-theme="light"] .habit-mock-item {
+      background: rgba(111, 82, 181, 0.03);
+      border: 1px solid rgba(111, 82, 181, 0.06);
+    }
+    [data-theme="light"] .habit-line {
+      background: rgba(30, 27, 41, 0.15);
+    }
+    [data-theme="light"] .task-mock-item {
+      background: rgba(111, 82, 181, 0.03);
+      border: 1px solid rgba(111, 82, 181, 0.06);
+    }
+    [data-theme="light"] .journal-mock-card {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(111, 82, 181, 0.06);
+      box-shadow: 0 10px 30px rgba(30, 24, 48, 0.03);
+    }
+    [data-theme="light"] .bottom-cta-box {
+      background: linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.3) 100%);
+      border: 1px solid rgba(111, 82, 181, 0.12);
+      box-shadow: 0 40px 100px rgba(30, 24, 48, 0.06);
+    }
+
+    .auth-screen { z-index:9999; }
+
+    /* ── MOBILE UX & LAYOUT ENHANCEMENTS (max-width: 768px) ── */
+    @media (max-width: 768px) {
+      /* Fix Issue 4: Annoying Huge Gaps Between Landing Sections */
+      .visual-section {
+        padding: 60px 16px !important;
+      }
+      .visual-grid {
+        margin-top: 40px !important;
+        gap: 32px !important;
+      }
+
+      /* Fix Issue 1: Overlapping/Colliding Habit Mock Elements */
+      .visual-glass {
+        padding: 24px 16px !important;
+        border-radius: 20px !important;
+      }
+      .habit-mock-item {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 12px !important;
+        padding: 12px !important;
+      }
+      .habit-line {
+        flex: 1 !important;
+        max-width: 45% !important; /* Ensure it leaves plenty of room for text + icon */
+        min-width: 30px !important;
+      }
+
+      /* Fix Issue 2: Messy Landing Navigation & Logo Wrapping */
+      .landing-nav {
+        padding: 16px 12px !important;
+      }
+      .landing-logo {
+        font-size: 17px !important;
+        gap: 6px !important;
+      }
+      .landing-logo span {
+        white-space: nowrap !important;
+      }
+      .landing-nav-links {
+        gap: 8px !important;
+      }
+      .landing-nav-links button.primary {
+        padding: 0 12px !important;
+        font-size: 13px !important;
+        height: 38px !important;
+      }
+      .landing-nav-links button.secondary {
+        font-size: 13px !important;
+      }
+      .landing-title {
+        font-size: clamp(38px, 8vw, 56px) !important;
+        line-height: 1.05 !important;
+        letter-spacing: -1.5px !important;
+      }
+      .landing-subtitle {
+        margin: 20px 0 32px !important;
+        font-size: 16px !important;
+      }
+
+      /* Fix Issue 3: Colliding Dashboard Header and Hiding Main Screen */
+      .topbar {
+        min-height: 64px !important;
+        padding: 10px var(--pad) 8px !important;
+        grid-template-columns: 44px 1fr auto auto !important;
+      }
+      .topbar .title {
+        font-size: 19px !important;
+        font-weight: 800 !important;
+      }
+      .topbar .subtitle {
+        display: none !important; /* Hide long subtitle in mobile top header to prevent wrapping */
+      }
+      .topbar .sync-pill {
+        padding: 6px !important;
+        min-height: 0 !important;
+        background: transparent !important;
+        border: none !important;
+      }
+      .topbar .sync-pill #syncText {
+        display: none !important; /* Hide long 'Saved locally' text in top header */
+      }
+      .screen {
+        padding-top: 76px !important; /* Perfectly matches the compact 64px header */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LANDING PAGE -->
+  <div class="landing-screen" id="landingPage" style="display:none !important;">
+    <canvas id="bgCanvas"></canvas>
+    <div class="bg-grid"></div>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+
+    <nav class="landing-nav">
+      <div class="landing-logo" style="display:flex;align-items:center;gap:10px;font-weight:900;font-size:20px;letter-spacing:-0.5px">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="logoGrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#a78bfa" />
+              <stop offset="50%" stop-color="#8b5cf6" />
+              <stop offset="100%" stop-color="#34d399" />
+            </linearGradient>
+          </defs>
+          <circle cx="16" cy="16" r="14" stroke="url(#logoGrad)" stroke-width="2.5" opacity="0.2"/>
+          <path d="M16 6C10.48 6 6 10.48 6 16C6 21.52 10.48 26 16 26" stroke="url(#logoGrad)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M16 10C19.31 10 22 12.69 22 16C22 19.31 19.31 22 16 22" stroke="url(#logoGrad)" stroke-width="2" stroke-dasharray="3 3"/>
+          <circle cx="16" cy="16" r="3" fill="url(#logoGrad)"/>
+          <circle cx="22" cy="16" r="4" fill="#34d399"/>
+        </svg>
+        <span>Rewrite Minds <span style="background:var(--primary-bright);color:#fff;font-size:10px;font-weight:900;padding:2px 6px;border-radius:4px;vertical-align:middle;margin-left:4px;letter-spacing:1px;text-transform:uppercase">OS</span></span>
+      </div>
+      <div class="landing-nav-links">
+        <button class="secondary" style="border:none;background:transparent" onclick="showAuthModal('login')">Log in</button>
+        <button class="primary" style="padding:0 24px" onclick="showAuthModal('signup')">Get started</button>
+      </div>
+    </nav>
+    
+    <div class="landing-hero">
+      <div class="hero-badge reveal">The Future of Productivity</div>
+      <h1 class="landing-title reveal" style="transition-delay:0.1s">Your life,<br>unified.</h1>
+      <p class="landing-subtitle reveal" style="transition-delay:0.2s">Not just another tracker. A complete operating system built by Rewrite Minds to master your habits, deep work, and reflections.</p>
+      <div class="landing-cta-row reveal" style="transition-delay:0.3s;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px">
+        <button class="primary btn-large" onclick="signInWithGoogle()"><i class="fa-brands fa-google"></i> Start your OS for free</button>
+        <button class="secondary btn-large" style="border-color:var(--primary-bright);color:var(--primary-bright);background:rgba(139,92,246,0.06);font-weight:700" onclick="enterDemoMode()">👁️ Try Guest Mode</button>
+      </div>
+
+      <!-- 3D UI Mockup -->
+      <div class="mockup-container reveal" style="transition-delay:0.5s">
+        <div class="mockup-window">
+          <div class="mockup-header">
+            <div class="mockup-dot" style="background:#ff5f56"></div>
+            <div class="mockup-dot" style="background:#ffbd2e"></div>
+            <div class="mockup-dot" style="background:#27c93f"></div>
+          </div>
+          <div class="mockup-body">
+            <div class="mockup-box">
+              <div style="font-size:20px;font-weight:800;margin-bottom:12px">Deep Focus</div>
+              <div style="font-size:36px;font-weight:900;color:var(--primary-bright);font-variant-numeric:tabular-nums;margin-bottom:12px">25:00</div>
+              <div class="audio-waves"><div></div><div></div><div></div><div></div><div></div></div>
+            </div>
+            <div class="mockup-box">
+              <div style="font-size:20px;font-weight:800;margin-bottom:12px">Momentum</div>
+              <div class="mock-heat">
+                <div class="active-1"></div><div class="active-2"></div><div></div><div class="active-3"></div><div></div><div class="active-g1"></div><div class="active-g2"></div>
+                <div></div><div class="active-1"></div><div class="active-2"></div><div></div><div class="active-3"></div><div class="active-1"></div><div></div>
+                <div class="active-g1"></div><div class="active-g2"></div><div></div><div class="active-3"></div><div class="active-1"></div><div></div><div class="active-2"></div>
+                <div></div><div class="active-1"></div><div class="active-g2"></div><div></div><div class="active-3"></div><div></div><div class="active-1"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual Section 1: Unbreakable Habits OS -->
+    <div class="visual-section">
+      <div class="visual-grid">
+        <div class="visual-glass reveal">
+          <div class="habit-mock">
+            <div class="habit-mock-item">
+              <div class="habit-line"></div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="font-size:13px;font-weight:700;color:var(--primary-bright)">🔥 14 Days</span>
+                <div class="habit-check"><i class="fa-solid fa-check"></i></div>
+              </div>
+            </div>
+            <div class="habit-mock-item">
+              <div class="habit-line" style="width:70%"></div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="font-size:13px;font-weight:700;color:var(--primary-bright)">🔥 6 Days</span>
+                <div class="habit-check"><i class="fa-solid fa-check"></i></div>
+              </div>
+            </div>
+            <div class="habit-mock-item">
+              <div class="habit-line" style="width:40%"></div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="font-size:13px;font-weight:700;color:var(--primary-bright)">🔥 22 Days</span>
+                <div class="habit-check"><i class="fa-solid fa-check"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="giant-icon"><i class="fa-solid fa-seedling"></i></div>
+          <h2 class="landing-title" style="font-size:clamp(32px, 5vw, 48px);text-align:left">Unbreakable Habits.</h2>
+          <p class="landing-subtitle" style="text-align:left;margin-top:24px">Build momentum with visual streaks and simple mechanics. Watch the chain grow day by day, compounding your progress with absolute focus.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual Section 2: Enter the Flow Chamber -->
+    <div class="visual-section">
+      <div class="visual-grid" style="direction:rtl">
+        <div class="visual-glass reveal" style="direction:ltr">
+          <div style="text-align:center;padding:24px 0">
+            <div style="font-size:18px;color:var(--muted);margin-bottom:8px">Ambient Rainfall Synth</div>
+            <div class="audio-waves" style="height:80px;align-items:center;justify-content:center">
+               <div style="height:40px"></div><div style="height:80px"></div><div style="height:60px"></div><div style="height:90px"></div><div style="height:30px"></div>
+               <div style="height:70px"></div><div style="height:50px"></div><div style="height:80px"></div><div style="height:40px"></div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal" style="direction:ltr">
+          <div class="giant-icon"><i class="fa-solid fa-headphones"></i></div>
+          <h2 class="landing-title" style="font-size:clamp(32px, 5vw, 48px);text-align:left">Enter the Flow State.</h2>
+          <p class="landing-subtitle" style="text-align:left;margin-top:24px">A built-in Pomodoro timer paired with high-quality ambient audio. Instantly drop into deep work without launching another app or losing focus.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual Section 3: Unified Task Master -->
+    <div class="visual-section">
+      <div class="visual-grid">
+        <div class="visual-glass reveal">
+          <div class="task-mock-item">
+            <div class="habit-check" style="background:transparent;border:2px solid rgba(255,255,255,0.2)"></div>
+            <div class="habit-line" style="width:50%"></div>
+            <div style="flex:1"></div>
+            <span class="task-priority high">High</span>
+          </div>
+          <div class="task-mock-item">
+            <div class="habit-check" style="background:transparent;border:2px solid rgba(255,255,255,0.2)"></div>
+            <div class="habit-line" style="width:30%"></div>
+            <div style="flex:1"></div>
+            <span class="task-priority med">Medium</span>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="giant-icon"><i class="fa-solid fa-list-check"></i></div>
+          <h2 class="landing-title" style="font-size:clamp(32px, 5vw, 48px);text-align:left">Unified Task Master.</h2>
+          <p class="landing-subtitle" style="text-align:left;margin-top:24px">Bring all your daily obligations into one elegant workspace. Assign categories, priorities, and check items off with ease.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual Section 4: Daily Mind Reflections -->
+    <div class="visual-section">
+      <div class="visual-grid" style="direction:rtl">
+        <div class="visual-glass reveal" style="direction:ltr">
+          <div class="journal-mock-card">
+            <div class="mood-chip-mock">🧘 Calm & Focused</div>
+            <div style="font-size:18px;font-weight:800;margin-bottom:12px">The rhythm compounds...</div>
+            <div style="font-size:14px;color:var(--muted);line-height:1.6">Designed the entire Rewrite Minds life operating system today. Unifying habits, focus, journaling, and goals feels incredibly liberating. The system works.</div>
+          </div>
+        </div>
+        <div class="reveal" style="direction:ltr">
+          <div class="giant-icon"><i class="fa-solid fa-pen-nib"></i></div>
+          <h2 class="landing-title" style="font-size:clamp(32px, 5vw, 48px);text-align:left">Daily Mind Reflections.</h2>
+          <p class="landing-subtitle" style="text-align:left;margin-top:24px">Track your emotional landscape. Keep a minimalist daily journal to monitor your state of mind alongside your daily outcomes.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual Section 5: Compound Analytics -->
+    <div class="visual-section">
+      <div class="visual-grid">
+        <div class="visual-glass reveal">
+          <div style="text-align:center">
+            <div class="mock-heat" style="grid-template-columns: repeat(7, 1fr); gap:8px; max-width:280px">
+              <div class="active-1"></div><div class="active-2"></div><div class="active-g1"></div><div class="active-3"></div><div class="active-g2"></div><div class="active-g1"></div><div class="active-g2"></div>
+              <div class="active-3"></div><div class="active-1"></div><div class="active-2"></div><div class="active-3"></div><div class="active-1"></div><div class="active-3"></div><div class="active-g2"></div>
+              <div class="active-g1"></div><div class="active-g2"></div><div class="active-3"></div><div class="active-1"></div><div class="active-3"></div><div class="active-2"></div><div class="active-g1"></div>
+              <div class="active-1"></div><div class="active-3"></div><div class="active-g2"></div><div class="active-3"></div><div class="active-1"></div><div class="active-3"></div><div class="active-g2"></div>
+            </div>
+            <div style="margin-top:24px;font-size:24px;font-weight:900;color:var(--emerald)">+124% Focus Efficiency</div>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="giant-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <h2 class="landing-title" style="font-size:clamp(32px, 5vw, 48px);text-align:left">Compound Analytics.</h2>
+          <p class="landing-subtitle" style="text-align:left;margin-top:24px">Watch your patterns compound. Get visual proof of your consistency through our unified 42-day momentum heatmap and focus tracking charts.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="bottom-cta">
+      <div class="bottom-cta-box reveal">
+        <h2 class="landing-title" style="font-size:clamp(40px, 6vw, 64px)">Your new OS is ready.</h2>
+        <p class="landing-subtitle" style="margin:24px auto 48px;max-width:500px">Join the Rewrite Minds ecosystem. Everything you need to master your focus is waiting inside.</p>
+        <button class="primary btn-large" style="width:min(100%, 300px);font-size:18px" onclick="signInWithGoogle()"><i class="fa-brands fa-google"></i> Start for free</button>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid rgba(255,255,255,0.05);padding:64px 24px;text-align:center;color:var(--muted);font-size:14px;position:relative;z-index:1">
+      <div style="margin-bottom:16px;display:flex;justify-content:center;gap:24px;flex-wrap:wrap">
+        <a href="https://rewriteminds.vercel.app/privacy" target="_blank" style="color:var(--muted);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Privacy Policy</a>
+        <a href="https://rewriteminds.vercel.app/terms" target="_blank" style="color:var(--muted);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Terms of Service</a>
+        <a href="https://rewriteminds.vercel.app/refunds" target="_blank" style="color:var(--muted);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Refund Policy</a>
+      </div>
+      &copy; 2026 Rewrite Minds OS. Built for focus.
+    </div>
+  </div>
+
+  <!-- AUTH SCREEN -->
+  <div class="auth-screen" id="authScreen" style="display:none !important;">
+    <div class="auth-wrap">
+      <div class="auth-card">
+        <div class="brand-badge" style="display:inline-flex;align-items:center;gap:8px">
+          <svg width="18" height="18" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="logoGradBadge" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#a78bfa" /><stop offset="100%" stop-color="#34d399" />
+              </linearGradient>
+            </defs>
+            <circle cx="16" cy="16" r="14" stroke="url(#logoGradBadge)" stroke-width="3" opacity="0.3"/>
+            <path d="M16 6C10.48 6 6 10.48 6 16C6 21.52 10.48 26 16 26" stroke="url(#logoGradBadge)" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="16" cy="16" r="4" fill="url(#logoGradBadge)"/>
+          </svg>
+          <span style="font-weight:800">LifeFlow OS</span>
+        </div>
+        <div class="auth-logo">Build your rhythm.</div>
+        <p class="auth-tagline">Habits, focus, reflection, and goals — all synced to your account.</p>
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="loginTab" onclick="setAuthTab('login')">Sign In</button>
+          <button class="auth-tab" id="signupTab" onclick="setAuthTab('signup')">Create Account</button>
+        </div>
+        
+        <!-- Google OAuth Button -->
+        <button class="secondary" style="width:100%;height:44px;margin-bottom:12px;font-weight:700" onclick="signInWithGoogle()">
+          <i class="fa-brands fa-google"></i> Continue with Google
+        </button>
+        <button class="secondary demo-btn" style="width:100%;height:44px;margin-bottom:12px;font-weight:700;border-color:var(--primary-bright);color:var(--primary-bright);background:rgba(139,92,246,0.06);display:flex;align-items:center;justify-content:center;gap:8px" onclick="enterDemoMode()">
+          👁️ Try Guest Mode (No sign in)
+        </button>
+        <div style="text-align:center;font-size:12px;color:var(--muted);margin-bottom:16px;text-transform:uppercase;letter-spacing:1px;font-weight:700">Or</div>
+        
+        <div class="auth-field" id="nameField" style="display:none">
+          <label class="auth-lbl">Your Name</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">👤</span>
+            <input id="nameInput" class="auth-input" type="text" placeholder="Your name">
+          </div>
+        </div>
+        <div class="auth-field">
+          <label class="auth-lbl">Email Address</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">✉️</span>
+            <input id="emailInput" class="auth-input" type="email" placeholder="you@example.com" autocomplete="email">
+          </div>
+        </div>
+        <div class="auth-field">
+          <label class="auth-lbl">Password</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">🔒</span>
+            <input id="passwordInput" class="auth-input" type="password" placeholder="Min. 6 characters" autocomplete="current-password">
+          </div>
+        </div>
+        <div class="auth-err" id="authError"></div>
+        <button class="auth-cta" onclick="submitAuth()" id="authBtn">Sign In</button>
+        <div class="auth-meta">
+          <div class="auth-chip">☁️ Cloud Sync</div>
+          <div class="auth-chip">🔥 Streaks</div>
+          <div class="auth-chip">🧠 Focus OS</div>
+          <div class="auth-chip">📓 Journal</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ONBOARDING SCREEN -->
+  <div class="onboarding-screen" id="onboardingScreen">
+    <div class="onb-wrap">
+      <div class="onb-card">
+        <div class="onb-head">
+          <div class="onb-brand" style="display:inline-flex;align-items:center;gap:8px;font-weight:900">
+            <svg width="18" height="18" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="logoGradOnb" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#a78bfa" /><stop offset="100%" stop-color="#34d399" />
+                </linearGradient>
+              </defs>
+              <circle cx="16" cy="16" r="14" stroke="url(#logoGradOnb)" stroke-width="3" opacity="0.3"/>
+              <path d="M16 6C10.48 6 6 10.48 6 16C6 21.52 10.48 26 16 26" stroke="url(#logoGradOnb)" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="16" cy="16" r="4" fill="url(#logoGradOnb)"/>
+            </svg>
+            <span>LifeFlow OS</span>
+          </div>
+          <button class="secondary" style="min-height:38px;padding:0 12px" onclick="skipOnboarding()">Skip</button>
+        </div>
+        <div class="onb-track" id="onbTrack"></div>
+        <div id="onbSlides"></div>
+        <button class="onb-cta" id="onbCta" onclick="nextSlide()">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP SHELL -->
+  <div class="app" id="appShell">
+    <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
+    <div class="sheet-backdrop" id="sheetBackdrop" onclick="closeSheet()"></div>
+
+    <aside class="drawer" id="drawer">
+      <div class="user-card glass">
+        <div class="avatar" id="drawerAvatar">RO</div>
+        <div style="min-width:0">
+          <div style="font-weight:900" id="drawerName">Sovereign Master</div>
+          <div class="small" id="drawerEmail">Master Edition • Offline Vault</div>
+        </div>
+      </div>
+      <button class="drawer-item active" data-nav="home" onclick="nav('home')"><i class="fa-solid fa-house"></i><span>Home</span></button>
+      <button class="drawer-item" data-nav="journal" onclick="nav('journal')"><i class="fa-solid fa-book-open"></i><span>Journal</span></button>
+      <button class="drawer-item" data-nav="focus" onclick="nav('focus')"><i class="fa-solid fa-stopwatch"></i><span>Focus</span></button>
+      <button class="drawer-item" data-nav="analytics" onclick="nav('analytics')"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></button>
+      <button class="drawer-item" data-nav="goals" onclick="nav('goals')"><i class="fa-solid fa-bullseye"></i><span>Goals</span><span class="badge">New</span></button>
+      <button class="drawer-item" data-nav="achievements" onclick="nav('achievements')"><i class="fa-solid fa-trophy"></i><span>Achievements</span></button>
+      <button class="drawer-item" data-nav="settings" onclick="nav('settings')"><i class="fa-solid fa-gear"></i><span>Settings</span></button>
+      <div class="divider"></div>
+      <button class="drawer-item" onclick="openSheet('habit')"><i class="fa-solid fa-circle-plus"></i><span>Add habit</span></button>
+      <button class="drawer-item" onclick="openSheet('task')"><i class="fa-solid fa-list-check"></i><span>Add task</span></button>
+      <button class="drawer-item" onclick="openSheet('goal')"><i class="fa-solid fa-bullseye"></i><span>Add goal</span></button>
+      <div class="divider"></div>
+      <button class="drawer-item" onclick="exportJSON()"><i class="fa-solid fa-cloud-arrow-down"></i><span>Export Backup (.json)</span></button>
+      <button class="drawer-item" onclick="triggerImportJSON()"><i class="fa-solid fa-cloud-arrow-up"></i><span>Restore Backup</span></button>
+    </aside>
+
+    <div class="topbar">
+      <button class="icon-btn hot" onclick="openDrawer()"><i class="fa-solid fa-bars"></i></button>
+      <div>
+        <div class="title" id="topTitle">Rewrite Life OS</div>
+        <div class="subtitle" id="topSubtitle">The Mind &amp; Life Operating System • Local Vault</div>
+      </div>
+      <button class="icon-btn" onclick="openSheet('task')"><i class="fa-solid fa-plus"></i></button>
+      <div class="sync-pill" title="Local Vault Status" onclick="toast('🔒 Rewrite OS Local Vault: 100% offline-first. Your habits, reflections, and goals are stored privately on your device.')" style="cursor:pointer">
+        <span class="sync-dot synced" id="syncDot"></span>
+        <span id="syncText">Local Vault 🔒</span>
+      </div>
+    </div>
+
+    <!-- HOME -->
+    <div class="screen active" id="homeScreen">
+      <div class="content">
+        <div class="hero-card">
+          <div class="eyebrow" id="greetingText">Welcome back</div>
+          <div class="hero-title">One small win at a time.</div>
+          <p class="micro" id="heroText">Your habits, tasks, focus sessions, and reflections stay in sync across devices.</p>
+        </div>
+        <div class="summary-row">
+          <div class="summary glass">
+            <div class="eyebrow">Today</div>
+            <div class="stat" id="todayStat">0</div>
+            <div class="micro">habits completed</div>
+            <div class="progress-ring" id="progressRing"><span id="progressText">0%</span></div>
+          </div>
+          <div class="summary glass">
+            <div class="eyebrow">Streak</div>
+            <div class="stat" id="streakStat">0</div>
+            <div class="micro">day momentum</div>
+          </div>
+          <div class="summary glass">
+            <div class="eyebrow">Focus</div>
+            <div class="stat" id="focusStat">0</div>
+            <div class="micro">minutes today</div>
+          </div>
+          <div class="summary glass">
+            <div class="eyebrow">Goals</div>
+            <div class="stat" id="goalStat">0</div>
+            <div class="micro">active goals</div>
+          </div>
+        </div>
+        <div class="section-title">Quick actions</div>
+        <div class="actions">
+          <button class="action glass" onclick="openSheet('habit')">
+            <div class="action-icon"><i class="fa-solid fa-seedling"></i></div><span>Habit</span>
+          </button>
+          <button class="action glass" onclick="openSheet('journal')">
+            <div class="action-icon"><i class="fa-solid fa-pen-nib"></i></div><span>Journal</span>
+          </button>
+          <button class="action glass" onclick="nav('focus')">
+            <div class="action-icon"><i class="fa-solid fa-fire"></i></div><span>Focus</span>
+          </button>
+        </div>
+        <div class="section-title">Habits</div>
+        <div id="habitsList" class="list"></div>
+        <div class="section-title">Tasks</div>
+        <div id="tasksList" class="list"></div>
+        <div class="section-title">Categories</div>
+        <div class="chip-row" id="categoryRow"></div>
+      </div>
+    </div>
+
+    <!-- JOURNAL -->
+    <div class="screen" id="journalScreen">
+      <div class="content">
+        <div class="hero-card">
+          <div class="eyebrow">Journal</div>
+          <div class="hero-title">How are you feeling today?</div>
+          <p class="micro">Write a line or two. Tiny reflections compound fast.</p>
+        </div>
+        <div class="gap"></div>
+        <div class="section-card">
+          <div class="moods" id="moodRow"></div>
+          <div class="gap"></div>
+          <button class="primary" style="width:100%" onclick="openSheet('journal')">New entry</button>
+        </div>
+        <div class="section-title">Recent entries</div>
+        <div id="journalList" class="list"></div>
+      </div>
+    </div>
+
+    <!-- FOCUS -->
+    <div class="screen" id="focusScreen">
+      <div class="content">
+        <div class="timer-box">
+          <div class="eyebrow">Focus</div>
+          <div class="timer-time" id="timerDisplay">25:00</div>
+          <div class="timer-mode" id="timerModeRow"></div>
+          <div class="row" style="margin-top:14px">
+            <button class="secondary" id="timerPlay" style="flex:1" onclick="toggleTimer()"><i class="fa-solid fa-play"></i> Start</button>
+            <button class="secondary" style="flex:1" onclick="resetTimer()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+          </div>
+          <div class="gap"></div>
+          <div class="row small">
+            <span>Sound</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span id="soundLabel">Rain</span>
+              <button class="icon-btn" onclick="toggleMute()" id="muteBtn" style="width:28px;height:28px;min-height:0;background:rgba(255,255,255,0.1);font-size:12px"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+          </div>
+          <div class="audio-grid" id="audioGrid"></div>
+          <input type="file" id="customAudioInput" accept="audio/*" style="display:none" onchange="handleCustomAudio(event)">
+        </div>
+        <div class="section-title">Recent focus sessions</div>
+        <div id="focusList" class="list"></div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS -->
+    <div class="screen" id="analyticsScreen">
+      <div class="content">
+        <div class="hero-card">
+          <div class="eyebrow">Analytics</div>
+          <div class="hero-title">See the pattern, then improve it.</div>
+          <p class="micro">Your heatmap and focus history update automatically.</p>
+        </div>
+        <div class="summary-row">
+          <div class="summary glass"><div class="eyebrow">Habits</div><div class="stat" id="anaHabits">0</div><div class="micro">tracked</div></div>
+          <div class="summary glass"><div class="eyebrow">Journal</div><div class="stat" id="anaJournal">0</div><div class="micro">entries</div></div>
+          <div class="summary glass"><div class="eyebrow">Sessions</div><div class="stat" id="anaFocus">0</div><div class="micro">focus logs</div></div>
+          <div class="summary glass"><div class="eyebrow">Goals</div><div class="stat" id="anaGoals">0</div><div class="micro">in progress</div></div>
+        </div>
+        <div class="section-card">
+          <div class="row"><div class="section-title" style="margin:0">Activity Heatmap</div><span class="small">Last 42 days</span></div>
+          <div style="height:10px"></div>
+          <div class="heatmap" id="heatmap"></div>
+        </div>
+        <div class="section-title">Focus history</div>
+        <div id="focusHistory" class="list"></div>
+      </div>
+    </div>
+
+    <!-- GOALS -->
+    <div class="screen" id="goalsScreen">
+      <div class="content">
+        <div class="hero-card">
+          <div class="eyebrow">Goals</div>
+          <div class="hero-title">Build outcomes, not just tasks.</div>
+          <p class="micro">Set targets with milestones and keep the momentum visible.</p>
+        </div>
+        <div class="gap"></div>
+        <button class="primary" style="width:100%" onclick="openSheet('goal')">Add goal</button>
+        <div class="section-title">Your goals</div>
+        <div id="goalsList" class="list"></div>
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENTS -->
+    <div class="screen" id="achievementsScreen">
+      <div class="content">
+        <div class="hero-card">
+          <div class="eyebrow">Achievements</div>
+          <div class="hero-title">Wins that stick.</div>
+          <p class="micro">Unlock badges by using the app consistently.</p>
+        </div>
+        <div class="section-title">Badge wall</div>
+        <div id="achievementsGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="screen" id="settingsScreen">
+      <div class="content">
+        <div class="hero-card">
+          <div class="eyebrow">Settings</div>
+          <div class="hero-title" id="profileName">Sovereign Master</div>
+          <p class="micro" id="profileEmail">Rewrite Life OS • Master Edition (Local Vault Active)</p>
+        </div>
+
+        <!-- Segmented Tab Toggle -->
+        
+
+        <!-- Section 1: Profile Settings -->
+        <div id="settingsProfileSection">
+          <div class="section-title">Account</div>
+          <div class="section-card">
+            <div class="row"><span class="small">Storage Mode</span><span class="sync-pill" onclick="toast('🔒 100% Offline Vault: Stored locally in your browser.')" style="cursor:pointer"><span class="sync-dot synced"></span><span id="accountSync">Local Vault 🔒</span></span></div>
+            <div class="gap"></div>
+            <div class="row"><span class="small">License</span><span class="badge" style="color:var(--gold);background:var(--gold-glow);border:1px solid rgba(240,192,64,.3);padding:4px 8px;border-radius:99px;font-size:11px;font-weight:800">MASTER LIFETIME</span></div>
+            <div class="gap"></div>
+            <div class="row"><span class="small">Operator</span><span class="small" id="profileName2">Sovereign Master</span></div>
+          </div>
+
+          <div class="section-title">Appearance</div>
+          <div class="section-card">
+            <div class="small" style="margin-bottom:10px">Theme</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="mode-pill active" onclick="setTheme('dark')">🌙 Dark</button>
+              <button class="mode-pill" onclick="setTheme('light')">☀️ Light</button>
+              <button class="mode-pill" onclick="setTheme('system')">⚙️ System</button>
+            </div>
+          </div>
+
+          <div class="section-title">Focus Sound</div>
+          <div class="section-card">
+            <div class="audio-grid" id="soundSettings"></div>
+          </div>
+
+          <div class="section-title">Local Vault &amp; Backups</div>
+          <div class="section-card" style="display:grid;gap:10px">
+            <button class="secondary" style="justify-content:flex-start;padding:0 16px;display:flex;align-items:center;gap:10px" onclick="exportJSON()">
+              <span>📦</span><span>Export Full Backup (.json)</span>
+            </button>
+            <button class="secondary" style="justify-content:flex-start;padding:0 16px;display:flex;align-items:center;gap:10px" onclick="triggerImportJSON()">
+              <span>📂</span><span>Restore from Backup (.json)</span>
+            </button>
+            <button class="secondary" style="justify-content:flex-start;padding:0 16px;display:flex;align-items:center;gap:10px" onclick="exportCSV()" id="exportCsvBtn">
+              <span>📊</span><span>Export Habits CSV Report</span>
+            </button>
+            <input type="file" id="jsonFileInput" accept=".json,application/json" onchange="handleImportFile(event)" style="display:none;" />
+          </div>
+
+          
+
+          <div class="section-title">About Rewrite OS</div>
+          <div class="section-card">
+            <div class="row"><span class="small">Product</span><span class="small">Rewrite Life OS</span></div>
+            <div class="gap"></div>
+            <div class="row"><span class="small">Edition</span><span class="small" style="color:var(--gold);font-weight:700">Master Lifetime Edition</span></div>
+            <div class="gap"></div>
+            <div class="row"><span class="small">Architecture</span><span class="small">Offline-First Local Vault</span></div>
+            <div class="gap"></div>
+            <div class="row"><span class="small">Version</span><span class="small">2.0.0</span></div>
+          </div>
+
+          <div class="section-title" style="color:var(--coral)">Database Management</div>
+          <div style="display:grid;gap:10px">
+            <button class="danger" onclick="clearAllData()">🗑️ Reset Database to Clean Slate</button>
+          </div>
+        </div>
+
+        
+
+        <!-- Dev mode toggle is kept in JS for developer console testing only (devSetPro()) -->
+        <div style="height:24px"></div>
+      </div>
+    </div>
+
+    <button class="fab" onclick="openSheet('habit')"><i class="fa-solid fa-plus"></i></button>
+
+    <nav class="bottom-nav">
+      <button class="tab active" data-nav="home" onclick="nav('home')"><i class="fa-solid fa-house"></i><span>Home</span></button>
+      <button class="tab" data-nav="journal" onclick="nav('journal')"><i class="fa-solid fa-book-open"></i><span>Journal</span></button>
+      <button class="tab" data-nav="focus" onclick="nav('focus')"><i class="fa-solid fa-stopwatch"></i><span>Focus</span></button>
+      <button class="tab" data-nav="analytics" onclick="nav('analytics')"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></button>
+      <button class="tab" data-nav="settings" onclick="nav('settings')"><i class="fa-solid fa-gear"></i><span>Settings</span></button>
+    </nav>
+
+    <div class="sheet" id="sheet">
+      <div class="grab"></div>
+      <div class="sheet-head">
+        <button class="icon-btn" onclick="closeSheet()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="sheet-title" id="sheetTitle">Add</div>
+        <button class="secondary" style="min-height:38px;padding:0 12px" onclick="closeSheet()">Done</button>
+      </div>
+      <div class="sheet-body" id="sheetBody"></div>
+    </div>
+  </div>
+
+  <!-- UPGRADE / PAYMENT MODAL -->
+  <div class="upgrade-backdrop" id="upgradeBackdrop" onclick="closeUpgradeModal()"></div>
+  <div class="upgrade-modal" id="upgradeModal">
+    <div class="grab"></div>
+    <div class="upgrade-head">
+      <button class="icon-btn" onclick="closeUpgradeModal()"><i class="fa-solid fa-xmark"></i></button>
+      <div class="sheet-title">Rewrite Life OS — Master License 👑</div>
+    </div>
+    <div class="upgrade-body">
+      <div class="upgrade-hero">
+        <div class="upgrade-hero-icon">⚡</div>
+        <div class="upgrade-hero-title">Unlock Everything</div>
+        <div class="upgrade-hero-sub">Unlimited habits, goals, full analytics, and priority support.</div>
+      </div>
+      <a class="vision-link" href="/pro">See the vision behind LifeFlow Pro <i class="fa-solid fa-arrow-right"></i></a>
+      <div class="upgrade-features">
+        <div class="upgrade-feat">✅ Unlimited habits</div>
+        <div class="upgrade-feat">✅ Unlimited journal</div>
+        <div class="upgrade-feat">✅ Goals & milestones</div>
+        <div class="upgrade-feat">✅ 30-day analytics</div>
+        <div class="upgrade-feat">✅ CSV data export</div>
+        <div class="upgrade-feat">✅ Priority support</div>
+      </div>
+      <div class="checkout-reminder">
+        <i class="fa-solid fa-circle-info"></i>
+        <div>Checkout is linked to your signed-in account. <strong>Use the same email in Lemon Squeezy</strong> for clean receipts and support.</div>
+      </div>
+      <div class="plans">
+        <div class="plan-card" onclick="openPlan('monthly')">
+          <div class="plan-label">Monthly</div>
+          <div class="plan-price">$4.99</div>
+          <div class="plan-period">per month</div>
+          <button class="plan-cta">Get Monthly</button>
+        </div>
+        <div class="plan-card plan-featured" onclick="openPlan('yearly')">
+          <div class="plan-badge">Best Value</div>
+          <div class="plan-label">Yearly</div>
+          <div class="plan-price">$2.99</div>
+          <div class="plan-period">per month<br>billed $35 / yr</div>
+          <button class="plan-cta">Get Yearly</button>
+        </div>
+        <div class="plan-card plan-lifetime" onclick="openPlan('lifetime')">
+          <div class="plan-badge limited-time-badge">Limited Time</div>
+          <div class="plan-label">Lifetime</div>
+          <div class="plan-price">$49</div>
+          <div class="founding-label">Lifetime Deal</div>
+          <div class="plan-period">one-time<br>own it forever</div>
+          <div class="spots-left">9 / 10 spots left</div>
+          <button class="plan-cta">Buy Once</button>
+        </div>
+      </div>
+      <div class="upgrade-guarantee">
+        Secure payment by Lemon Squeezy - 14-day money-back guarantee<br>
+        After payment, Pro unlocks on your next app load.
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- EXIT GUEST MODE MODAL -->
+  <div class="upgrade-backdrop" id="exitBackdrop" style="display:none !important;" onclick="closeExitModal()"></div>
+  <div class="upgrade-modal" id="exitModal" style="display:none !important;">
+    <div class="grab"></div>
+    <div class="upgrade-head">
+      <button class="icon-btn" onclick="closeExitModal()"><i class="fa-solid fa-xmark"></i></button>
+      <div class="sheet-title">Save Your Momentum! 🌊</div>
+    </div>
+    <div class="upgrade-body">
+      <div class="upgrade-hero">
+        <div class="upgrade-hero-icon" style="animation: pulse-glow 1.5s infinite; font-size: 52px">🌊</div>
+        <div class="upgrade-hero-title" style="font-size:24px;line-height:1.35;margin-top:16px;background:linear-gradient(135deg, #a78bfa, #34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent; font-weight: 900">Wait, don't lose your flow!</div>
+        <div class="upgrade-hero-sub" style="font-size:14px;color:var(--text);margin-top:12px;line-height:1.6;font-weight:500; text-align: center">
+          You've completed habits, journaled, and built momentum as a guest! But this progress is stored only on this browser.<br><br>
+          Create a free account in <strong>2 seconds</strong> to back it up to the cloud and keep your streak alive! 🚀
+        </div>
+      </div>
+      
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
+        <button class="primary" style="width:100%;height:48px;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px" onclick="convertGuestToAccount()">
+          ✨ Save My Progress (Create Free Account)
+        </button>
+        <button class="secondary" style="width:100%;height:44px;font-weight:700;border-color:rgba(255,107,107,0.3);color:#ff6b6b;background:rgba(255,107,107,0.06);display:flex;align-items:center;justify-content:center;gap:8px" onclick="confirmExitGuestAnyway()">
+          🚪 Discard & Exit Anyway
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ── SUPABASE ─────────────────────────────────────────────── */
+    const SUPA_URL = 'https://xahbsrfpgqlryzxdsezk.supabase.co';
+    const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhaGJzcmZwZ3Fscnl6eGRzZXprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMjYyNDgsImV4cCI6MjA5MzkwMjI0OH0.TKnQ97FAWJV4YQkr_NiKspVFD7VUyxHPgDOYnqdiSZM';
+    const supa = (typeof supabase !== 'undefined' && supabase.createClient) ? supabase.createClient(SUPA_URL, SUPA_KEY) : null;
+
+    /* ── CONSTANTS ────────────────────────────────────────────── */
+    const MOODS = ['🙂 Good','😊 Great','😌 Calm','😮‍💨 Tired','😟 Low','🔥 Driven'];
+    const TIMER_MODES = [
+      { key:'pomodoro',  label:'Pomodoro',  seconds:25*60 },
+      { key:'countdown', label:'Countdown', seconds:15*60 },
+      { key:'stopwatch', label:'Stopwatch', seconds:0 }
+    ];
+    const AUDIO_PRESETS = [
+      { key:'rain',   label:'Rain',   emoji:'🌧️', url:'https://raw.githubusercontent.com/bradtraversy/ambient-sound-mixer/main/audio/rain.mp3' },
+      { key:'waves',  label:'Waves',  emoji:'🌊', url:'https://raw.githubusercontent.com/bradtraversy/ambient-sound-mixer/main/audio/ocean.mp3' },
+      { key:'forest', label:'Forest', emoji:'🌲', url:'https://raw.githubusercontent.com/bradtraversy/ambient-sound-mixer/main/audio/night.mp3' },
+      { key:'fire',   label:'Fire',   emoji:'🔥', url:'https://raw.githubusercontent.com/bradtraversy/ambient-sound-mixer/main/audio/fireplace.mp3' },
+      { key:'birds',  label:'Birds',  emoji:'🐦', url:'https://raw.githubusercontent.com/bradtraversy/ambient-sound-mixer/main/audio/birds.mp3' },
+      { key:'custom', label:'Custom', emoji:'📂', url:'' }
+    ];
+    const ACHIEVEMENTS = [
+      { key:'first_habit',   icon:'🌱', title:'First Seed',          desc:'Created your first habit',         check:s=>s.habits.length>=1 },
+      { key:'first_task',    icon:'✅', title:'Task Master',         desc:'Completed your first task',        check:s=>s.tasks.some(t=>t.completed) },
+      { key:'first_journal', icon:'📖', title:'Inner Voice',         desc:'Wrote your first journal entry',   check:s=>s.journal.length>=1 },
+      { key:'streak_3',      icon:'🔥', title:'Warming Up',          desc:'3-day streak',                     check:s=>s.profile.current_streak>=3 },
+      { key:'streak_7',      icon:'⚡', title:'Week Warrior',        desc:'7-day streak',                     check:s=>s.profile.current_streak>=7 },
+      { key:'streak_21',     icon:'🏆', title:'Habit Former',        desc:'21-day streak',                    check:s=>s.profile.current_streak>=21 },
+      { key:'streak_66',     icon:'💎', title:'Locked In',           desc:'66-day streak',                    check:s=>s.profile.current_streak>=66 },
+      { key:'focus_60',      icon:'🧠', title:'Deep Worker',         desc:'60 mins total focus',              check:s=>s.profile.total_focus_minutes>=60 },
+      { key:'focus_500',     icon:'🚀', title:'Flow State',          desc:'500 mins total focus',             check:s=>s.profile.total_focus_minutes>=500 },
+      { key:'habits_5',      icon:'🌟', title:'Habit Stack',         desc:'Tracking 5+ habits',               check:s=>s.habits.length>=5 },
+      { key:'tasks_10',      icon:'📋', title:'Getting Things Done', desc:'10 tasks completed',               check:s=>s.tasks.filter(t=>t.completed).length>=10 },
+      { key:'journal_7',     icon:'✍️', title:'Reflector',          desc:'7 journal entries',                check:s=>s.journal.length>=7 },
+      { key:'perfect_day',   icon:'🌈', title:'Perfect Day',         desc:'All habits done in one day',       check:s=>checkPerfectDay(s) },
+      { key:'early_bird',    icon:'🌅', title:'Early Bird',          desc:'Focus session before 7 AM',        check:s=>checkEarlyBird(s) },
+      { key:'night_owl',     icon:'🦉', title:'Night Owl',           desc:'Focus session after 9 PM',         check:s=>checkNightOwl(s) },
+      { key:'goal_setter',   icon:'🎯', title:'Goal Setter',         desc:'Created your first goal',          check:s=>s.goals.length>=1 },
+    ];
+    const PLANS = {
+      monthly:  { url:'https://rewriteminds.lemonsqueezy.com/checkout/buy/1bc08d41-c4b2-4174-a981-90ea43c818f2' },
+      yearly:   { url:'https://rewriteminds.lemonsqueezy.com/checkout/buy/13a5f24f-b67d-47d1-86dd-64d3f8389254' },
+      lifetime: { url:'https://rewriteminds.lemonsqueezy.com/checkout/buy/0d8a85e3-6b0d-43b0-ae90-e63b7ca0f922' }
+    };
+    let pendingUpgrade = new URLSearchParams(window.location.search).get('upgrade') === '1';
+
+    /* ── AUDIO PLAYER ─────────────────────────────────────────── */
+    const audioPlayer = new Audio();
+    audioPlayer.loop = true;
+    let customAudioUrl = '';
+
+    /* ── STATE ────────────────────────────────────────────────── */
+    const state = {
+      user: null,
+      profile: {
+        name:'Friend', onboarding_done:false, theme_mode:'system',
+        focus_sound:'rain', current_streak:0, total_focus_minutes:0,
+        is_pro: true  // BUG FIX: was missing from initial state
+      },
+      habits:[], tasks:[], journal:[], focus:[], goals:[], achievements:[],
+      activeNav:'home', sheet:null, authTab:'login', onboardingIndex:0,
+      timer:{ mode:'pomodoro', running:false, seconds:25*60, handle:null },
+      sound:'rain', sync:'local',
+      categories:[
+        {name:'Health',color:'#7B5EA7'},
+        {name:'Study', color:'#2DD4A0'},
+        {name:'Work',  color:'#F0C040'},
+        {name:'Life',  color:'#FF6B6B'}
+      ]
+    };
+
+    /* ── UTILITIES ────────────────────────────────────────────── */
+    const $  = s => document.querySelector(s);
+    const today  = () => new Date().toISOString().slice(0,10);
+    const uid    = () => crypto.randomUUID();
+    const toDay  = d => new Date(d).toISOString().slice(0,10);
+    const fmtDate = d => new Date(d).toLocaleDateString([], {month:'short',day:'numeric'});
+    const fmtTime = d => new Date(d).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+    const clamp  = (n,mn,mx) => Math.max(mn,Math.min(mx,n));
+
+    function escapeHtml(str){
+      return String(str ?? '').replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+    }
+
+    function toast(msg){
+      const el = $('#toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=>el.classList.remove('show'), 2600);
+    }
+
+    function setSync(mode){
+      state.sync = mode;
+      document.querySelectorAll('.sync-dot').forEach(el => {
+        el.className = 'sync-dot synced';
+      });
+      document.querySelectorAll('#syncText, #accountSync, .sync-text').forEach(el => {
+        el.textContent = 'Local Vault 🔒';
+      });
+    }
+
+    /* ── THEME ────────────────────────────────────────────────── */
+    function applyTheme(mode){
+      mode = mode || state.profile.theme_mode || 'dark';
+      const sys = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      const eff = mode === 'system' ? sys : mode;
+      document.documentElement.dataset.theme = eff;
+      document.body.dataset.theme = eff;
+      const mc = document.getElementById('metaThemeColor');
+      if (mc) mc.setAttribute('content', eff === 'light' ? '#F5F3EE' : '#07070F');
+      // BUG FIX: cache theme to localStorage to prevent flash on reload
+      try { localStorage.setItem('lf_theme', mode); } catch(e){}
+      document.querySelectorAll('.mode-pill').forEach(btn => {
+        // Match button text (strip emoji prefix)
+        const txt = btn.textContent.trim().replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}⚙️☀️🌙]\s*/u,'').toLowerCase();
+        btn.classList.toggle('active', txt === mode);
+      });
+    }
+
+    const _tmq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: light)') : null;
+    if (_tmq) {
+      const _tl = () => { if (state.profile?.theme_mode === 'system') applyTheme('system'); };
+      _tmq.addEventListener ? _tmq.addEventListener('change', _tl) : _tmq.addListener(_tl);
+    }
+
+    /* ── AUTH ─────────────────────────────────────────────────── */
+    function setAuthTab(tab){
+      state.authTab = tab;
+      $('#loginTab').classList.toggle('active', tab==='login');
+      $('#signupTab').classList.toggle('active', tab==='signup');
+      $('#nameField').style.display = tab==='signup'?'block':'none';
+      $('#authBtn').textContent = tab==='login'?'Sign In':'Create Account';
+      $('#passwordInput').placeholder = tab==='login'?'Min. 6 characters':'Create a strong password';
+      $('#passwordInput').setAttribute('autocomplete', tab==='login'?'current-password':'new-password');
+      hideAuthError();
+    }
+
+    function showAuthError(msg){ const e=$('#authError'); e.textContent=msg; e.style.display='block'; }
+    function hideAuthError(){ $('#authError').style.display='none'; }
+    function authToast(msg){ toast(msg); }
+
+    async function submitAuth(){
+      const email    = $('#emailInput').value.trim();
+      const password = $('#passwordInput').value;
+      const name     = $('#nameInput').value.trim() || email.split('@')[0] || 'Friend';
+      hideAuthError();
+      if (!email || !email.includes('@')) return showAuthError('Please enter a valid email address.');
+      if (password.length < 6) return showAuthError('Password must be at least 6 characters.');
+      try {
+        if (state.authTab === 'login'){
+          const {data,error} = await supa.auth.signInWithPassword({email,password});
+          if (error) throw error;
+        } else {
+          const {data,error} = await supa.auth.signUp({email,password,options:{data:{full_name:name}}});
+          if (error) throw error;
+          if (!data?.session?.user && !data?.user) {
+            showAuthError('Check your email to confirm your account, then sign in.');
+          }
+        }
+      } catch(err){ showAuthError(err.message||'Authentication failed.'); }
+    }
+
+    function enterDemoMode() {
+      const demoUser = { id: 'demo_user', email: 'guest@lifeflow.io', is_demo: true };
+      
+      try {
+        let guestUuid = localStorage.getItem('lifeflow_guest_uuid');
+        if (!guestUuid) {
+          guestUuid = uid();
+          localStorage.setItem('lifeflow_guest_uuid', guestUuid);
+        }
+        supa.from('guest_analytics').insert({ guest_uuid: guestUuid, action: 'enter_guest' })
+          .then(({error}) => { if (error) console.warn('Guest log failed', error); });
+      } catch(e) { console.warn('Guest tracking error', e); }
+
+      bootUser(demoUser);
+    }
+
+    function openExitModal() {
+      $('#exitBackdrop').classList.add('open');
+      $('#exitModal').classList.add('open');
+    }
+
+    function closeExitModal() {
+      $('#exitBackdrop').classList.remove('open');
+      $('#exitModal').classList.remove('open');
+    }
+
+    function convertGuestToAccount() {
+      closeExitModal();
+      showAuthModal('signup');
+    }
+
+    function confirmExitGuestAnyway() {
+      closeExitModal();
+      try {
+        localStorage.removeItem('lifeflow_demo_profile');
+        localStorage.removeItem('lifeflow_demo_habits');
+        localStorage.removeItem('lifeflow_demo_tasks');
+        localStorage.removeItem('lifeflow_demo_journal');
+        localStorage.removeItem('lifeflow_demo_focus');
+        localStorage.removeItem('lifeflow_demo_goals');
+        localStorage.removeItem('lifeflow_demo_achievements');
+      } catch(e){}
+      state.user = null;
+      _booting = false;
+      $('#appShell').classList.add('hidden');
+      $('#landingPage').classList.add('open');
+      $('#authScreen').classList.remove('open');
+      toast('Guest session closed.');
+    }
+
+    async function signOut(){
+      toast("🔒 Rewrite Life OS is running in Local Master mode. Your data is stored on this device.");
+    }
+
+    let _booting = false;
+    async function bootUser(user){
+      if (_booting) return;
+      _booting = true;
+      try {
+        state.user = user;
+        
+        const authScreen = document.getElementById('authScreen');
+        const landingPage = document.getElementById('landingPage');
+        const appShell = document.getElementById('appShell');
+
+        if (authScreen) authScreen.classList.remove('open');
+        if (landingPage) landingPage.classList.remove('open');
+        if (appShell) appShell.classList.remove('hidden');
+
+        setSync('local');
+        await loadProfile();
+        await loadAllData();
+        applyTheme(state.profile.theme_mode || 'dark');
+        renderAll();
+        setSync('local');
+      } finally {
+        _booting = false;
+      }
+    }
+
+    /* ── PROFILE ──────────────────────────────────────────────── */
+    async function loadProfile(){
+      const fallback = 'Sovereign Master';
+      state.profile = {
+        name: fallback,
+        onboarding_done: true,
+        theme_mode: 'dark',
+        focus_sound: 'rain',
+        current_streak: 14,
+        total_focus_minutes: 420,
+        is_pro: true
+      };
+      
+      try {
+        const cached = localStorage.getItem('rewrite_life_os_profile') || localStorage.getItem('lifeflow_demo_profile');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          state.profile = Object.assign(state.profile, parsed);
+        }
+      } catch(e) { console.warn('loadProfile cached error', e); }
+      
+      state.profile.is_pro = true;
+      state.sound = state.profile.focus_sound || 'rain';
+      _syncProfileUI();
+      await saveProfile();
+    }
+
+    function _syncProfileUI(){
+      const name = state.profile?.name || 'Sovereign Master';
+      const email = 'Master Edition • Local Vault';
+      if ($('#drawerName'))   $('#drawerName').textContent   = name;
+      if ($('#drawerEmail'))  $('#drawerEmail').textContent  = email;
+      if ($('#drawerAvatar')) $('#drawerAvatar').textContent = name.slice(0,2).toUpperCase();
+      if ($('#profileName'))  $('#profileName').textContent  = name;
+      if ($('#profileEmail')) $('#profileEmail').textContent = 'Rewrite Life OS • Master Edition (Local Vault Active)';
+      if ($('#profileName2')) $('#profileName2').textContent = name;
+      if ($('#profileEmail2'))$('#profileEmail2').textContent = 'Offline Master';
+    }
+
+    async function saveProfile(){
+      if (!state.profile) return;
+      state.profile.is_pro = true;
+      try {
+        localStorage.setItem('rewrite_life_os_profile', JSON.stringify(state.profile));
+        localStorage.setItem('lifeflow_demo_profile', JSON.stringify(state.profile));
+      } catch(e) { console.warn('saveProfile error', e); }
+      _syncProfileUI();
+    }
+
+    /* ── DATA LOADING ─────────────────────────────────────────── */
+    async function loadAllData(){
+      if (!state.user) return;
+
+      if (state.user?.is_demo) {
+        setSync('local');
+        try {
+          const habits = localStorage.getItem('lifeflow_demo_habits');
+          const tasks = localStorage.getItem('lifeflow_demo_tasks');
+          const journal = localStorage.getItem('lifeflow_demo_journal');
+          const focus = localStorage.getItem('lifeflow_demo_focus');
+          const goals = localStorage.getItem('lifeflow_demo_goals');
+          const achievements = localStorage.getItem('lifeflow_demo_achievements');
+
+          if (habits && tasks && journal && focus && goals && achievements) {
+            state.habits = JSON.parse(habits);
+            state.tasks = JSON.parse(tasks);
+            state.journal = JSON.parse(journal);
+            state.focus = JSON.parse(focus);
+            state.goals = JSON.parse(goals);
+            state.achievements = JSON.parse(achievements);
+          } else {
+            // Generate highly engaging mock data
+            const todayStr = today();
+            const yesterdayStr = toDay(new Date(Date.now() - 86400000));
+            const dayBeforeYesterdayStr = toDay(new Date(Date.now() - 172800000));
+
+            // Habits
+            state.habits = [
+              {
+                id: 'demo-habit-1', user_id: 'demo_user', name: 'Morning Meditation',
+                category: 'Health', icon: '🧘', frequency: 'daily', goal: 1,
+                created_at: new Date(Date.now() - 30 * 86400000).toISOString(),
+                completions: [yesterdayStr, todayStr]
+              },
+              {
+                id: 'demo-habit-2', user_id: 'demo_user', name: 'Deep Focus Block',
+                category: 'Work', icon: '⚡', frequency: 'daily', goal: 1,
+                created_at: new Date(Date.now() - 30 * 86400000).toISOString(),
+                completions: [yesterdayStr]
+              },
+              {
+                id: 'demo-habit-3', user_id: 'demo_user', name: 'Gratitude Journal',
+                category: 'Life', icon: '✍️', frequency: 'daily', goal: 1,
+                created_at: new Date(Date.now() - 30 * 86400000).toISOString(),
+                completions: [todayStr]
+              },
+              {
+                id: 'demo-habit-4', user_id: 'demo_user', name: 'Read 20 Pages',
+                category: 'Study', icon: '📚', frequency: 'daily', goal: 1,
+                created_at: new Date(Date.now() - 30 * 86400000).toISOString(),
+                completions: []
+              }
+            ];
+
+            // Tasks
+            state.tasks = [
+              {
+                id: 'demo-task-1', user_id: 'demo_user', title: 'Plan my perfect day',
+                category: 'Life', priority: 'high', due_date: null, recurring: false,
+                completed: true, completed_at: new Date().toISOString(),
+                created_at: yesterdayStr
+              },
+              {
+                id: 'demo-task-2', user_id: 'demo_user', title: 'Update weekly goals',
+                category: 'Work', priority: 'medium', due_date: null, recurring: false,
+                completed: false, completed_at: null,
+                created_at: todayStr
+              },
+              {
+                id: 'demo-task-3', user_id: 'demo_user', title: 'Reflect on weekly focus hours',
+                category: 'Study', priority: 'low', due_date: null, recurring: false,
+                completed: false, completed_at: null,
+                created_at: todayStr
+              }
+            ];
+
+            // Goals
+            state.goals = [
+              {
+                id: 'demo-goal-1', user_id: 'demo_user', title: 'Read 12 books',
+                description: 'Build my mental model and understanding of complex systems.',
+                target_date: '2026-12-31', category: 'Study', progress: 45, completed: false,
+                created_at: new Date(Date.now() - 15 * 86400000).toISOString()
+              },
+              {
+                id: 'demo-goal-2', user_id: 'demo_user', title: 'Launch personal blog',
+                description: 'Write about tech stacks, styling frameworks, and personal philosophy.',
+                target_date: todayStr, category: 'Life', progress: 100, completed: true,
+                created_at: new Date(Date.now() - 25 * 86400000).toISOString()
+              }
+            ];
+
+            // Journal
+            state.journal = [
+              {
+                id: 'demo-journal-1', user_id: 'demo_user', title: 'A Fresh Start',
+                body: 'Entering LifeFlow OS as a guest. The glassmorphic design and ambient synths are exceptionally premium! It is very easy to fall into a state of deep concentration with the Rain synth enabled. I am going to try completing some tasks today!',
+                mood: '🔥 Driven', date: todayStr,
+                created_at: new Date().toISOString()
+              }
+            ];
+
+            // Focus sessions to light up the calendar momentum heatmap grid
+            state.focus = [];
+            for (let i = 0; i < 7; i++) {
+              const dayOffset = i * 86400000;
+              const date = new Date(Date.now() - dayOffset);
+              const dateStr = toDay(date);
+              
+              if (dateStr === dayBeforeYesterdayStr) continue;
+
+              const session = {
+                id: 'demo-focus-' + i,
+                user_id: 'demo_user',
+                mode: 'pomodoro',
+                duration_seconds: 25 * 60,
+                completed: true,
+                started_at: new Date(date.getTime() - 25 * 60000).toISOString(),
+                ended_at: date.toISOString()
+              };
+              state.focus.push(session);
+            }
+
+            // Achievements
+            state.achievements = ['first_focus', 'perfect_day'];
+
+            // Persist locally
+            localStorage.setItem('lifeflow_demo_habits', JSON.stringify(state.habits));
+            localStorage.setItem('lifeflow_demo_tasks', JSON.stringify(state.tasks));
+            localStorage.setItem('lifeflow_demo_journal', JSON.stringify(state.journal));
+            localStorage.setItem('lifeflow_demo_focus', JSON.stringify(state.focus));
+            localStorage.setItem('lifeflow_demo_goals', JSON.stringify(state.goals));
+            localStorage.setItem('lifeflow_demo_achievements', JSON.stringify(state.achievements));
+          }
+        } catch(e) { console.warn('loadAllData guest error', e); }
+
+        recalcDerived();
+        await checkAchievements();
+        setSync('local');
+        return;
+      }
+
+      setSync('syncing');
+      try {
+        const [h,c,t,j,f,g,a] = await Promise.all([
+          supa.from('habits').select('*').eq('user_id',state.user.id).order('created_at',{ascending:true}),
+          supa.from('completions').select('*').eq('user_id',state.user.id),
+          supa.from('tasks').select('*').eq('user_id',state.user.id).order('created_at',{ascending:false}),
+          supa.from('journal_entries').select('*').eq('user_id',state.user.id).order('date',{ascending:false}),
+          supa.from('focus_sessions').select('*').eq('user_id',state.user.id).order('started_at',{ascending:false}),
+          supa.from('goals').select('*').eq('user_id',state.user.id).order('created_at',{ascending:false}),
+          supa.from('achievements').select('*').eq('user_id',state.user.id)
+        ]);
+        if (h.error) throw h.error;
+        state.habits = (h.data||[]).map(r=>({...r,completions:[]}));
+        const comps = c.data||[];
+        state.habits.forEach(habit=>{
+          habit.completions = comps.filter(x=>x.habit_id===habit.id).map(x=>x.completed_date);
+        });
+        state.tasks       = t.data||[];
+        state.journal     = j.data||[];
+        state.focus       = f.data||[];
+        state.goals       = g.data||[];
+        state.achievements= (a.data||[]).map(x=>x.key);
+        recalcDerived();
+        await checkAchievements();
+        setSync('synced');
+      } catch(e){
+        console.error('loadAllData:', e);
+        setSync('error');
+        toast('Sync error — working offline');
+      }
+    }
+
+    function recalcDerived(){
+      const completedDays = new Set();
+      state.habits.forEach(h=>h.completions.forEach(d=>completedDays.add(d)));
+      let streak = 0, cur = new Date();
+      while(completedDays.has(toDay(cur))){ streak++; cur.setDate(cur.getDate()-1); }
+      state.profile.current_streak = streak;
+      state.profile.total_focus_minutes = Math.round(
+        state.focus.filter(s=>s.completed).reduce((sum,s)=>sum+(s.duration_seconds||0),0)/60
+      );
+    }
+
+    /* ── ACHIEVEMENT CHECKS ───────────────────────────────────── */
+    function checkPerfectDay(s){ const d=today(); return s.habits.length>0&&s.habits.every(h=>h.completions.includes(d)); }
+    function checkEarlyBird(s){ return s.focus.some(f=>f.started_at&&new Date(f.started_at).getHours()<7); }
+    function checkNightOwl(s){ return s.focus.some(f=>f.started_at&&new Date(f.started_at).getHours()>=21); }
+
+    async function checkAchievements(){
+      if (!state.user) return;
+      const unlocked = new Set(state.achievements);
+      for (const ach of ACHIEVEMENTS){
+        if (unlocked.has(ach.key)) continue;
+        let ok = false;
+        try { ok = !!ach.check(state); } catch(e){}
+        if (ok){
+          unlocked.add(ach.key);
+          state.achievements.push(ach.key);
+          try {
+            await supa.from('achievements').upsert({
+              user_id:ach.user_id||state.user.id,
+              key:ach.key, unlocked_at:new Date().toISOString()
+            }, {onConflict:'user_id,key'});
+            toast(`🏅 Unlocked: ${ach.title}`);
+          } catch(e){ console.warn('achievement',e); }
+        }
+      }
+      await saveProfile();
+    }
+
+    /* ── PRO GATING ───────────────────────────────────────────── */
+    const FREE_HABIT_LIMIT   = 3;
+    const FREE_JOURNAL_LIMIT = Infinity;
+
+    function isPro(){ return true; }
+
+    async function refreshProStatus({ attempts = 1, delayMs = 0 } = {}){
+      if (!state.user) return false;
+      for (let i = 0; i < attempts; i++) {
+        if (delayMs && i > 0) await new Promise(resolve => setTimeout(resolve, delayMs));
+        try {
+          const { data, error } = await supa
+            .from('profiles')
+            .select('is_pro')
+            .eq('id', state.user.id)
+            .maybeSingle();
+          if (error && error.code !== 'PGRST116') throw error;
+          state.profile.is_pro = !!data?.is_pro;
+          renderAll();
+          if (state.profile.is_pro) return true;
+        } catch(e) {
+          console.warn('refreshProStatus', e);
+        }
+      }
+      return !!state.profile.is_pro;
+    }
+
+    /* ── UPGRADE MODAL ────────────────────────────────────────── */
+    function showUpgradeModal(){
+      toast("👑 Master License Active: Lifetime access to all features, audio presets, and analytics!");
+    }
+
+    /* ── NAV ──────────────────────────────────────────────────── */
+    function nav(name){
+      state.activeNav = name;
+      document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.nav===name));
+      document.querySelectorAll('.drawer-item[data-nav]').forEach(t=>t.classList.toggle('active', t.dataset.nav===name));
+      const map = {
+        home:'homeScreen', journal:'journalScreen', focus:'focusScreen',
+        analytics:'analyticsScreen', goals:'goalsScreen',
+        achievements:'achievementsScreen', settings:'settingsScreen'
+      };
+      const el = $('#'+map[name]);
+      if (el) el.classList.add('active');
+      const titles = {
+        home:['LifeFlow OS','Build unbreakable momentum.'],
+        journal:['Journal','Reflect, reset, repeat.'],
+        focus:['Focus','Go deep for a while.'],
+        analytics:['Analytics','See the pattern.'],
+        goals:['Goals','Design the future.'],
+        achievements:['Achievements','Collect the wins.'],
+        settings:['Settings','Tune your flow.']
+      };
+      const t = titles[name] || ['Rewrite Minds OS',''];
+      $('#topTitle').textContent    = t[0];
+      $('#topSubtitle').textContent = t[1];
+      closeDrawer();
+      if (name === 'settings') {
+        toggleSettingsTab('profile');
+      }
+      renderAll();
+    }
+
+    function openDrawer(){ $('#drawer').classList.add('open'); $('#drawerBackdrop').classList.add('open'); }
+    function closeDrawer(){ $('#drawer').classList.remove('open'); $('#drawerBackdrop').classList.remove('open'); }
+
+    /* ── SHEETS ───────────────────────────────────────────────── */
+    function openSheet(type, payload=null){
+      state.sheet = {type, payload};
+      const titleMap = {habit:'Add habit',task:'Add task',journal:'Write journal',goal:'Add goal'};
+      $('#sheetTitle').textContent = titleMap[type]||'Add';
+      $('#sheetBody').innerHTML = sheetMarkup(type, payload);
+      $('#sheet').classList.add('open');
+      $('#sheetBackdrop').classList.add('open');
+      bindSheetEvents(type, payload);
+    }
+    function closeSheet(){ $('#sheet').classList.remove('open'); $('#sheetBackdrop').classList.remove('open'); state.sheet=null; }
+
+    function sheetMarkup(type, payload){
+      const CATEGORIES = ['Work', 'Study', 'Fitness', 'Health', 'Finance', 'Life', 'Business', 'Hobby'];
+      const ICONS = ['🎯','📚','🏋️','🏃','💰','🧘','🚀','🎨','🍎','💧','🛌','💻','🔥','🎧'];
+      
+      if (type==='habit') return `
+        <form class="form" id="habitForm">
+          <div><label class="auth-lbl">Habit name</label><input id="habitName" placeholder="Read 20 pages" value="${escapeHtml(payload?.name||'')}"></div>
+          <div class="two">
+            <div><label class="auth-lbl">Category</label><select id="habitCategory">${CATEGORIES.map(c=>`<option ${payload?.category===c?'selected':''}>${c}</option>`).join('')}</select></div>
+            <div><label class="auth-lbl">Icon</label><select id="habitIcon">${ICONS.map(i=>`<option ${payload?.icon===i?'selected':''}>${i}</option>`).join('')}</select></div>
+          </div>
+          <div class="two">
+            <div><label class="auth-lbl">Goal</label><input id="habitGoal" type="number" min="1" placeholder="1" value="${payload?.goal||1}"></div>
+            <div><label class="auth-lbl">Frequency</label><select id="habitFrequency"><option ${payload?.frequency==='daily'?'selected':''}>daily</option><option ${payload?.frequency==='weekly'?'selected':''}>weekly</option></select></div>
+          </div>
+          <div class="save-row"><button class="secondary" type="button" onclick="closeSheet()">Cancel</button><button class="primary" type="submit">Save habit</button></div>
+        </form>`;
+      if (type==='task') return `
+        <form class="form" id="taskForm">
+          <div><label class="auth-lbl">Title</label><input id="taskTitle" placeholder="Finish assignment" value="${escapeHtml(payload?.title||'')}"></div>
+          <div class="two">
+            <div><label class="auth-lbl">Category</label><select id="taskCategory">${CATEGORIES.map(c=>`<option ${payload?.category===c?'selected':''}>${c}</option>`).join('')}</select></div>
+            <div><label class="auth-lbl">Priority</label><select id="taskPriority"><option>low</option><option selected>medium</option><option>high</option></select></div>
+          </div>
+          <div><label class="auth-lbl">Due date</label><input id="taskDue" type="date" value="${payload?.due_date||today()}"></div>
+          <div class="save-row"><button class="secondary" type="button" onclick="closeSheet()">Cancel</button><button class="primary" type="submit">Save task</button></div>
+        </form>`;
+      if (type==='journal') return `
+        <form class="form" id="journalForm">
+          <div><label class="auth-lbl">Mood</label><select id="journalMood">${MOODS.map(m=>`<option${payload?.mood===m?' selected':''}>${m}</option>`).join('')}</select></div>
+          <div><label class="auth-lbl">Title</label><input id="journalTitle" placeholder="Today's reflection" value="${escapeHtml(payload?.title||'')}"></div>
+          <div><label class="auth-lbl">Entry</label><textarea id="journalBody" placeholder="What happened today?">${escapeHtml(payload?.body||'')}</textarea></div>
+          <div class="save-row"><button class="secondary" type="button" onclick="closeSheet()">Cancel</button><button class="primary" type="submit">Save entry</button></div>
+        </form>`;
+      if (type==='goal') return `
+        <form class="form" id="goalForm">
+          <div><label class="auth-lbl">Goal title</label><input id="goalTitle" placeholder="Launch my first product" value="${escapeHtml(payload?.title||'')}"></div>
+          <div><label class="auth-lbl">Description</label><textarea id="goalDesc" placeholder="What does success look like?">${escapeHtml(payload?.description||'')}</textarea></div>
+          <div class="two">
+            <div><label class="auth-lbl">Target date</label><input id="goalTarget" type="date" value="${payload?.target_date||today()}"></div>
+            <div><label class="auth-lbl">Category</label><select id="goalCategory">${CATEGORIES.map(c=>`<option ${payload?.category===c?'selected':''}>${c}</option>`).join('')}</select></div>
+          </div>
+          <div class="save-row"><button class="secondary" type="button" onclick="closeSheet()">Cancel</button><button class="primary" type="submit">Save goal</button></div>
+        </form>`;
+      return '';
+    }
+
+    function bindSheetEvents(type){
+      const forms = {habit:'#habitForm',task:'#taskForm',journal:'#journalForm',goal:'#goalForm'};
+      const form = $(forms[type]);
+      if (!form) return;
+      form.addEventListener('submit', async e=>{
+        e.preventDefault();
+        if (type==='habit')   await addHabit();
+        if (type==='task')    await addTask();
+        if (type==='journal') await addJournal();
+        if (type==='goal')    await addGoal();
+        closeSheet();
+        renderAll();
+      }, {once:true});
+    }
+
+    function saveDemoData(key, data) {
+      try {
+        localStorage.setItem('rewrite_life_os_' + key, JSON.stringify(data));
+        localStorage.setItem('lifeflow_demo_' + key, JSON.stringify(data));
+      } catch(e) { console.warn('saveDemoData error', e); }
+    }
+
+    /* ── CRUD OPERATIONS ──────────────────────────────────────── */
+    async function addHabit(){
+      if (state.user?.is_demo) {
+        const habit = {
+          id:uid(), user_id:state.user.id,
+          name:$('#habitName').value.trim(),
+          category:$('#habitCategory').value.trim()||'Life',
+          icon:$('#habitIcon').value.trim()||'🎯',
+          frequency:$('#habitFrequency').value,
+          goal:Number($('#habitGoal').value||1),
+          created_at:new Date().toISOString(),
+          completions:[]
+        };
+        if (!habit.name) return toast('Add a habit name.');
+        state.habits.unshift(habit);
+        saveDemoData('habits', state.habits);
+        renderAll();
+        toast("✨ Habit saved to local vault.");
+        return;
+      }
+
+      
+      const habit = {
+        id:uid(), user_id:state.user.id,
+        name:$('#habitName').value.trim(),
+        category:$('#habitCategory').value.trim()||'Life',
+        icon:$('#habitIcon').value.trim()||'🎯',
+        frequency:$('#habitFrequency').value,
+        goal:Number($('#habitGoal').value||1),
+        created_at:new Date().toISOString(),
+        completions:[]
+      };
+      if (!habit.name) return toast('Add a habit name.');
+      state.habits.unshift(habit);
+      renderAll();
+      try {
+        await supa.from('habits').insert({
+          id:habit.id, user_id:habit.user_id, name:habit.name, icon:habit.icon,
+          category:habit.category, category_color:'#7B5EA7',
+          frequency:habit.frequency, goal:habit.goal, created_at:habit.created_at
+        });
+        await checkAchievements();
+        setSync('synced');
+      } catch(e){ console.warn(e); setSync('error'); }
+    }
+
+    async function toggleHabit(habitId){
+      if (state.user?.is_demo) {
+        const habit = state.habits.find(h=>h.id===habitId);
+        if (!habit) return;
+        const d = today();
+        const has = habit.completions.includes(d);
+        habit.completions = has ? habit.completions.filter(x=>x!==d) : [...habit.completions, d];
+        if (navigator.vibrate) navigator.vibrate(8);
+        saveDemoData('habits', state.habits);
+        recalcDerived();
+        await checkAchievements();
+        await saveProfile();
+        renderAll();
+        toast(has ? "Habit marked incomplete." : "🎉 Habit completed!");
+        return;
+      }
+
+      const habit = state.habits.find(h=>h.id===habitId);
+      if (!habit) return;
+      const d = today();
+      const has = habit.completions.includes(d);
+      habit.completions = has ? habit.completions.filter(x=>x!==d) : [...habit.completions, d];
+      if (navigator.vibrate) navigator.vibrate(8);
+      renderAll();
+      try {
+        if (has){
+          await supa.from('completions').delete().eq('habit_id',habitId).eq('user_id',state.user.id).eq('completed_date',d);
+        } else {
+          await supa.from('completions').upsert({habit_id:habitId,user_id:state.user.id,completed_date:d},{onConflict:'habit_id,completed_date'});
+        }
+        recalcDerived();
+        await checkAchievements();
+        await saveProfile();
+        setSync('synced');
+      } catch(e){ console.warn(e); setSync('error'); }
+    }
+
+    async function deleteHabit(habitId){
+      if (state.user?.is_demo) {
+        if (!confirm('Delete this habit?')) return;
+        state.habits = state.habits.filter(h=>h.id!==habitId);
+        saveDemoData('habits', state.habits);
+        renderAll();
+        toast("Habit deleted.");
+        return;
+      }
+
+      if (!confirm('Delete this habit?')) return;
+      state.habits = state.habits.filter(h=>h.id!==habitId);
+      renderAll();
+      try {
+        await supa.from('completions').delete().eq('habit_id',habitId).eq('user_id',state.user.id);
+        await supa.from('habits').delete().eq('id',habitId).eq('user_id',state.user.id);
+        setSync('synced');
+      } catch(e){ console.warn(e); setSync('error'); }
+    }
+
+    async function addTask(){
+      if (state.user?.is_demo) {
+        const task = {
+          id:uid(), user_id:state.user.id,
+          title:$('#taskTitle').value.trim(),
+          category:$('#taskCategory').value.trim()||'Life',
+          priority:$('#taskPriority').value,
+          due_date:$('#taskDue').value ? new Date($('#taskDue').value).toISOString() : null,
+          recurring:false, completed:false,
+          created_at:new Date().toISOString()
+        };
+        if (!task.title) return toast('Add a task title.');
+        state.tasks.unshift(task);
+        saveDemoData('tasks', state.tasks);
+        renderAll();
+        toast("Task saved to local vault.");
+        return;
+      }
+
+      const task = {
+        id:uid(), user_id:state.user.id,
+        title:$('#taskTitle').value.trim(),
+        category:$('#taskCategory').value.trim()||'Life',
+        priority:$('#taskPriority').value,
+        due_date:$('#taskDue').value ? new Date($('#taskDue').value).toISOString() : null,
+        recurring:false, completed:false,
+        created_at:new Date().toISOString()
+      };
+      if (!task.title) return toast('Add a task title.');
+      state.tasks.unshift(task);
+      renderAll();
+      try {
+        await supa.from('tasks').insert(task);
+        await checkAchievements();
+        setSync('synced');
+      } catch(e){ console.warn(e); setSync('error'); }
+    }
+
+    async function toggleTask(taskId){
+      if (state.user?.is_demo) {
+        const task = state.tasks.find(t=>t.id===taskId);
+        if (!task) return;
+        task.completed = !task.completed;
+        task.completed_at = task.completed ? new Date().toISOString() : null;
+        saveDemoData('tasks', state.tasks);
+        await checkAchievements();
+        renderAll();
+        toast(task.completed ? "Task completed! ⚡" : "Task reopened.");
+        return;
+      }
+
+      const task = state.tasks.find(t=>t.id===taskId);
+      if (!task) return;
+      task.completed = !task.completed;
+      task.completed_at = task.completed ? new Date().toISOString() : null;
+      renderAll();
+      try {
+        await supa.from('tasks').update({completed:task.completed,completed_at:task.completed_at}).eq('id',task.id).eq('user_id',state.user.id);
+        await checkAchievements();
+        setSync('synced');
+      } catch(e){ console.warn(e); setSync('error'); }
+    }
+
+    async function addJournal(){
+      if (state.user?.is_demo) {
+        const entry = {
+          id:uid(), user_id:state.user.id,
+          title:$('#journalTitle').value.trim(),
+          body:$('#journalBody').value.trim(),
+          mood:$('#journalMood').value,
+          date:today(), created_at:new Date().toISOString()
+        };
+        if (!entry.body) return toast('Write something first.');
+        state.journal.unshift(entry);
+        saveDemoData('journal', state.journal);
+        renderAll();
+        toast("Journal reflection saved to local vault.");
+        return;
+      }
+
+      
+      const entry = {
+        id:uid(), user_id:state.user.id,
+        title:$('#journalTitle').value.trim(),
+        body:$('#journalBody').value.trim(),
+        mood:$('#journalMood').value,
+        date:today(), created_at:new Date().toISOString()
+      };
+      if (!entry.body) return toast('Write something first.');
+      state.journal.unshift(entry);
+      renderAll();
+      try {
+        await supa.from('journal_entries').insert(entry);
+        await checkAchievements();
+        setSync('synced');
+      } catch(e){ console.warn(e); setSync('error'); }
+    }
+
+    async function addGoal(){
+      if (state.user?.is_demo) {
+        const goal = {
+          id:uid(), user_id:state.user.id,
+          title:$('#goalTitle').value.trim(),
+          description:$('#goalDesc').value.trim(),
+          target_date:$('#goalTarget').value||null,
+          category:$('#goalCategory').value.trim()||'Business',
+          progress:0, completed:false,
+          created_at:new Date().toISOString()
+        };
+        if (!goal.title) return toast('Add a goal title.');
+        state.goals.unshift(goal);
+        saveDemoData('goals', state.goals);
+        renderAll();
+        toast("Goal added to local vault.");
+        return;
+      }
+
+      const goal = {
+        id:uid(), user_id:state.user.id,
+        title:$('#goalTitle').value.trim(),
+        description:$('#goalDesc').value.trim(),
+        target_date:$('#goalTarget').value||null,
+        category:$('#goalCategory').value.trim()||'Business',
+        progress:0, completed:false,
+        created_at:new Date().toISOString()
+      };
+      if (!goal.title) return toast('Add a goal title.');
+      state.goals.unshift(goal);
+      renderAll();
+      try {
+        await supa.from('goals').insert(goal);
+        await checkAchievements();
+        setSync('synced');
+      } catch(e){ console.warn(e); setSync('error'); }
+    }
+
+    async function bumpGoal(id, delta){
+      if (state.user?.is_demo) {
+        const goal = state.goals.find(g=>g.id===id);
+        if (!goal) return;
+        goal.progress = clamp((goal.progress||0)+delta, 0, 100);
+        goal.completed = goal.progress >= 100;
+        saveDemoData('goals', state.goals);
+        await checkAchievements();
+        renderAll();
+        toast("Goal progress updated! 🎯");
+        return;
+      }
+
+      const goal = state.goals.find(g=>g.id===id);
+      if (!goal) return;
+      goal.progress = clamp((goal.progress||0)+delta, 0, 100);
+      goal.completed = goal.progress >= 100;
+      renderAll();
+      try {
+        await supa.from('goals').update({progress:goal.progress,completed:goal.completed}).eq('id',id).eq('user_id',state.user.id);
+        await checkAchievements();
+        setSync('synced');
+      } catch(e){ console.warn(e); }
+    }
+
+    /* ── SETTINGS ACTIONS ─────────────────────────────────────── */
+    async function setTheme(mode){
+      state.profile.theme_mode = mode;
+      applyTheme(mode);
+      await saveProfile();
+      renderAll();
+      toast(`Theme: ${mode}`);
+    }
+
+    function exportJSON(){
+      const data = {
+        app: 'Rewrite Life OS',
+        version: '2.0.0',
+        edition: 'Master Lifetime',
+        exported_at: new Date().toISOString(),
+        profile: state.profile,
+        habits: state.habits,
+        tasks: state.tasks,
+        journal: state.journal,
+        goals: state.goals,
+        focus: state.focus,
+        achievements: state.achievements
+      };
+      const jsonStr = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonStr], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `rewrite-life-os-backup-${today()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast('📦 Full local JSON backup exported successfully!');
+    }
+
+    function triggerImportJSON(){
+      const fileInput = document.getElementById('jsonFileInput');
+      if (fileInput) {
+        fileInput.value = '';
+        fileInput.click();
+      }
+    }
+
+    function handleImportFile(event){
+      const file = event.target?.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async (e)=>{
+        try {
+          const data = JSON.parse(e.target.result);
+          if (!data || typeof data !== 'object'){
+            throw new Error('Invalid JSON file format.');
+          }
+          if (Array.isArray(data.habits)){
+            state.habits = data.habits;
+            saveDemoData('habits', state.habits);
+          }
+          if (Array.isArray(data.tasks)){
+            state.tasks = data.tasks;
+            saveDemoData('tasks', state.tasks);
+          }
+          if (Array.isArray(data.journal)){
+            state.journal = data.journal;
+            saveDemoData('journal', state.journal);
+          }
+          if (Array.isArray(data.goals)){
+            state.goals = data.goals;
+            saveDemoData('goals', state.goals);
+          }
+          if (Array.isArray(data.focus)){
+            state.focus = data.focus;
+            saveDemoData('focus', state.focus);
+          }
+          if (Array.isArray(data.achievements)){
+            state.achievements = data.achievements;
+            saveDemoData('achievements', state.achievements);
+          }
+          if (data.profile && typeof data.profile === 'object'){
+            state.profile = Object.assign(state.profile || {}, data.profile, { is_pro: true });
+            await saveProfile();
+          }
+          recalcDerived();
+          await checkAchievements();
+          renderAll();
+          toast('🎉 Backup successfully restored! All data loaded.');
+        } catch(err){
+          console.error('Import error:', err);
+          toast('❌ Restore failed: ' + (err.message || 'Invalid JSON file'));
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function importJSONPrompt(){
+      triggerImportJSON();
+    }
+
+    function exportCSV(){
+      const rows = [['Date','Habit','Done']];
+      state.habits.forEach(h=>{
+        (h.completions||[]).forEach(d=>rows.push([d, h.name, 'Yes']));
+      });
+      const csv = rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join(String.fromCharCode(10));
+      const blob = new Blob([csv], {type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `rewrite-life-os-habits-${today()}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast('📊 CSV report exported successfully!');
+    }
+
+    function clearAllData(){
+      if (!confirm('⚠️ Are you sure you want to reset your local Life OS database? All current habits, tasks, and journals will be reset. We recommend exporting a JSON backup first!')) return;
+      state.habits=[]; state.tasks=[]; state.journal=[]; state.focus=[]; state.goals=[]; state.achievements=[];
+      saveDemoData('habits', []);
+      saveDemoData('tasks', []);
+      saveDemoData('journal', []);
+      saveDemoData('focus', []);
+      saveDemoData('goals', []);
+      saveDemoData('achievements', []);
+      recalcDerived();
+      renderAll();
+      toast('Database reset to clean slate.');
+    }
+
+    /* ── RENDER FUNCTIONS ─────────────────────────────────────── */
+    function renderHabits(){
+      const el = $('#habitsList');
+      if (!state.habits.length){
+        el.innerHTML = `<div class="section-card"><div class="small">No habits yet</div><div class="gap"></div><button class="primary" style="width:100%" onclick="openSheet('habit')">Create your first habit</button></div>`;
+        return;
+      }
+      const d = today();
+      el.innerHTML = state.habits.map(h=>{
+        const done = h.completions.includes(d);
+        return `
+          <div class="item">
+            <button class="check ${done?'done':''}" onclick="toggleHabit('${h.id}')">${done?'<i class="fa-solid fa-check"></i>':''}</button>
+            <div>
+              <div class="item-title ${done?'done-text':''}">${escapeHtml(h.icon||'🎯')} ${escapeHtml(h.name)}</div>
+              <div class="meta">
+                <span class="pill">${escapeHtml(h.category||'Life')}</span>
+                <span class="pill">${escapeHtml(h.frequency||'daily')}</span>
+                <span class="pill">${h.goal||1} goal</span>
+              </div>
+            </div>
+            <button class="icon-btn" onclick="deleteHabit('${h.id}')"><i class="fa-solid fa-trash"></i></button>
+          </div>`;
+      }).join('');
+    }
+
+    function renderTasks(){
+      const el = $('#tasksList');
+      const items = state.tasks.slice(0,5);
+      if (!items.length){ el.innerHTML=`<div class="section-card"><div class="small">No tasks yet</div></div>`; return; }
+      el.innerHTML = items.map(t=>`
+        <div class="item">
+          <button class="check ${t.completed?'done':''}" onclick="toggleTask('${t.id}')">${t.completed?'<i class="fa-solid fa-check"></i>':''}</button>
+          <div>
+            <div class="item-title ${t.completed?'done-text':''}">${escapeHtml(t.title)}</div>
+            <div class="meta">
+              <span class="pill">${escapeHtml(t.category||'Life')}</span>
+              <span class="pill">${escapeHtml(t.priority||'medium')}</span>
+              ${t.due_date?`<span class="pill">${fmtDate(t.due_date)}</span>`:''}
+            </div>
+          </div>
+          <span class="small">${t.completed?'Done':'Open'}</span>
+        </div>`).join('');
+    }
+
+    function renderCategories(){
+      const row = $('#categoryRow');
+      row.innerHTML = state.categories.map(c=>`<div class="chip"><span class="dot" style="background:${c.color}"></span>${escapeHtml(c.name)}</div>`).join('');
+    }
+
+    function renderMoodRow(){
+      const mr = $('#moodRow');
+      if (!mr) return;
+      mr.innerHTML = MOODS.map(m=>`<button class="mood ${m===state._mood?'active':''}" onclick="state._mood='${m.replace(/'/g,"\\'")}'"; renderMoodRow();">${m}</button>`).join('');
+    }
+
+    function renderJournal(){
+      const el = $('#journalList');
+      if (!state.journal.length){ el.innerHTML=`<div class="section-card"><div class="small">No journal entries yet</div></div>`; return; }
+      el.innerHTML = state.journal.slice(0,12).map(j=>`
+        <div class="item">
+          <div class="check done"><i class="fa-solid fa-pen-nib"></i></div>
+          <div>
+            <div class="item-title">${escapeHtml(j.title||j.mood||'Journal')}</div>
+            <div class="meta"><span class="pill">${escapeHtml(j.mood||'Mood')}</span><span class="pill">${fmtDate(j.date||j.created_at)}</span></div>
+            <div class="micro" style="margin-top:8px">${escapeHtml((j.body||'').slice(0,140))}</div>
+          </div>
+          <button class="icon-btn" title="Copy" onclick="navigator.clipboard.writeText(decodeURIComponent('${encodeURIComponent(j.body||'')}')).then(()=>toast('Copied'))"><i class="fa-solid fa-copy"></i></button>
+        </div>`).join('');
+    }
+
+    function renderGoals(){
+      const el = $('#goalsList');
+      if (!state.goals.length){
+        el.innerHTML=`<div class="section-card"><div class="small">No goals yet</div><div class="gap"></div><button class="primary" style="width:100%" onclick="openSheet('goal')">Add goal</button></div>`;
+        return;
+      }
+      el.innerHTML = state.goals.map(g=>{
+        const daysLeft = g.target_date ? Math.ceil((new Date(g.target_date)-new Date())/(1000*60*60*24)) : null;
+        const daysLabel = daysLeft===null?'':(daysLeft<0?'Overdue':`${daysLeft}d left`);
+        return `
+          <div class="item" style="grid-template-columns:1fr auto">
+            <div>
+              <div class="item-title">${escapeHtml(g.title)}</div>
+              <div class="meta">
+                <span class="pill">${escapeHtml(g.category||'Business')}</span>
+                ${daysLabel?`<span class="pill" style="${daysLeft<0?'color:var(--coral)':''}">${daysLabel}</span>`:''}
+              </div>
+              <div class="gap" style="height:8px"></div>
+              <div style="height:8px;background:rgba(255,255,255,.06);border-radius:999px;overflow:hidden">
+                <div style="width:${clamp(g.progress||0,0,100)}%;height:100%;background:linear-gradient(90deg,var(--primary-bright),var(--emerald));transition:width .3s ease"></div>
+              </div>
+              <div class="row small" style="margin-top:6px"><span>${g.progress||0}%</span><span style="color:${g.completed?'var(--emerald)':'var(--muted)'}">${g.completed?'✅ Completed':'In progress'}</span></div>
+            </div>
+            <div style="display:grid;gap:6px;margin-left:8px">
+              <button class="secondary" style="min-height:34px;padding:0 10px" onclick="bumpGoal('${g.id}',10)">+10%</button>
+              <button class="secondary" style="min-height:34px;padding:0 10px" onclick="bumpGoal('${g.id}',-10)">−10%</button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function renderAchievements(){
+      const grid = $('#achievementsGrid');
+      const unlocked = new Set(state.achievements);
+      grid.innerHTML = ACHIEVEMENTS.map(a=>{
+        const is = unlocked.has(a.key);
+        return `
+          <div class="section-card" style="text-align:left;opacity:${is?1:.5};${is?'box-shadow:0 0 22px var(--primary-glow)':''}">
+            <div style="font-size:28px;${!is?'filter:grayscale(1)':''}">${a.icon}</div>
+            <div class="gap" style="height:8px"></div>
+            <div style="font-weight:900">${is?escapeHtml(a.title):'???'}</div>
+            <div class="small">${is?escapeHtml(a.desc):'Keep going...'}</div>
+            <div class="gap" style="height:8px"></div>
+            <div class="pill" style="background:${is?'rgba(45,212,160,.12)':'rgba(255,255,255,.04)'};color:${is?'var(--emerald)':'var(--muted)'}">${is?'✅ Unlocked':'Locked'}</div>
+          </div>`;
+      }).join('');
+    }
+
+    function renderFocus(){
+      const sl = $('#soundLabel'); if (sl) sl.textContent = AUDIO_PRESETS.find(x=>x.key===state.sound)?.label||'Rain';
+      const td = $('#timerDisplay'); if (td) td.textContent = formatTimer(state.timer.seconds, state.timer.mode);
+      const tp = $('#timerPlay'); if (tp) tp.innerHTML = state.timer.running?'<i class="fa-solid fa-pause"></i> Pause':'<i class="fa-solid fa-play"></i> Start';
+      const tmr = $('#timerModeRow');
+      if (tmr) tmr.innerHTML = TIMER_MODES.map(m=>`<button class="mode-pill ${m.key===state.timer.mode?'active':''}" onclick="setTimerMode('${m.key}')">${m.label}</button>`).join('');
+      const audioBtns = AUDIO_PRESETS.map(a=>`<button class="audio-btn ${a.key===state.sound?'active':''}" onclick="setSound('${a.key}')"><div style="font-size:22px">${a.emoji}</div><div style="font-weight:900;margin-top:8px">${a.label}</div></button>`).join('');
+      const ag = $('#audioGrid'); if (ag) ag.innerHTML = audioBtns;
+      const ss = $('#soundSettings'); if (ss) ss.innerHTML = audioBtns;
+      const list = $('#focusList');
+      if (list) {
+        if (!state.focus.length){
+          list.innerHTML = `<div class="section-card"><div class="small">No focus sessions yet</div></div>`;
+        } else {
+          list.innerHTML = state.focus.slice(0,6).map(f=>`
+            <div class="item">
+              <div class="check done"><i class="fa-solid fa-bolt"></i></div>
+              <div>
+                <div class="item-title">${escapeHtml(f.mode||'focus')} · ${Math.round((f.duration_seconds||0)/60)}m</div>
+                <div class="meta"><span class="pill">${f.completed?'Completed':'Saved'}</span><span class="pill">${fmtDate(f.started_at||f.created_at)}</span></div>
+              </div>
+              <span class="small">${f.ended_at?fmtTime(f.ended_at):''}</span>
+            </div>`).join('');
+        }
+      }
+      const fh = $('#focusHistory');
+      if (fh) fh.innerHTML = (list?.innerHTML || '');
+    }
+
+    function renderAnalytics(){
+      const an = s => { const el=document.getElementById(s); if (el) return el; return {textContent:''}; };
+      an('anaHabits').textContent = String(state.habits.length);
+      an('anaJournal').textContent= String(state.journal.length);
+      an('anaFocus').textContent  = String(state.focus.length);
+      an('anaGoals').textContent  = String(state.goals.length);
+      const hm = $('#heatmap');
+      if (hm) {
+        const days = [];
+        for (let i=41;i>=0;i--){
+          const d = new Date(); d.setDate(d.getDate()-i);
+          const iso = toDay(d);
+          const count = state.habits.reduce((s,h)=>s+(h.completions.includes(iso)?1:0),0)
+            + state.focus.filter(f=>f.completed&&f.started_at&&toDay(f.started_at)===iso).length;
+          const level = count===0?0:count===1?1:count===2?2:count===3?3:4;
+          days.push(`<div class="heat level-${level}" title="${iso} · ${count} actions"></div>`);
+        }
+        hm.innerHTML = days.join('');
+      }
+    }
+
+    function renderHome(){
+      const done = state.habits.filter(h=>h.completions.includes(today())).length;
+      const ts = $('#todayStat');   if(ts) ts.textContent = String(done);
+      const pt = $('#progressText'); if(pt) pt.textContent = state.habits.length?`${Math.round((done/state.habits.length)*100)}%`:'0%';
+      const pr = $('#progressRing'); if(pr) pr.style.setProperty('--pct',`${state.habits.length?(done/state.habits.length)*100:0}%`);
+      const str = $('#streakStat'); if(str) str.textContent = String(state.profile.current_streak||0);
+      const foc = $('#focusStat');
+      if(foc) foc.textContent = String(Math.round(
+        state.focus.filter(f=>f.completed&&f.started_at&&toDay(f.started_at)===today()).reduce((a,b)=>a+(b.duration_seconds||0),0)/60
+      ));
+      const gs = $('#goalStat'); if(gs) gs.textContent = String(state.goals.filter(g=>!g.completed).length);
+      renderHabits();
+      renderTasks();
+      renderCategories();
+    }
+
+    function renderProStatus(){
+      const card = $('#proStatusCard');
+      if (!card) return;
+      card.innerHTML = `
+        <div class="row" style="align-items:flex-start">
+          <div>
+            <div style="font-weight:900;color:var(--gold);margin-bottom:4px">👑 Rewrite Life OS — Master License</div>
+            <div class="small">Lifetime Master Edition · All features, audio environments & offline vault 100% unlocked.</div>
+          </div>
+          <span class="badge" style="color:var(--gold);background:var(--gold-glow);border:1px solid rgba(240,192,64,.3);padding:6px 12px;border-radius:99px;font-size:11px;font-weight:800">LIFETIME</span>
+        </div>`;
+      const csvBadge = $('#csvProBadge');
+      if (csvBadge) csvBadge.style.display = pro ? 'none' : '';
+    }
+
+    function toggleSettingsTab(tab) {
+      if (tab === 'profile') {
+        const btnProfile = $('#btnSettingsProfile'); if (btnProfile) btnProfile.classList.add('active');
+        const btnPro = $('#btnSettingsPro'); if (btnPro) btnPro.classList.remove('active');
+        const profSec = $('#settingsProfileSection'); if (profSec) profSec.classList.remove('hidden');
+        const proSec = $('#settingsProSection'); if (proSec) proSec.classList.add('hidden');
+      } else {
+        const btnProfile = $('#btnSettingsProfile'); if (btnProfile) btnProfile.classList.remove('active');
+        const btnPro = $('#btnSettingsPro'); if (btnPro) btnPro.classList.add('active');
+        const profSec = $('#settingsProfileSection'); if (profSec) profSec.classList.add('hidden');
+        const proSec = $('#settingsProSection'); if (proSec) proSec.classList.remove('hidden');
+        renderSettingsProTab();
+      }
+    }
+
+    function renderSettingsProTab() {
+      const section = $('#settingsProSection');
+      if (!section) return;
+      
+      let iframe = section.querySelector('iframe');
+      if (!iframe) {
+        // Render the actual pro.html page embedded natively in a seamless iframe
+        section.innerHTML = `
+          <iframe id="proIframe" src="pro.html?embed=1" scrolling="no" style="width: 100%; height: 500px; border: none; border-radius: 20px; box-shadow: var(--shadow); background: transparent; overflow: hidden; display: block;"></iframe>
+        `;
+      }
+    }
+
+    function renderAll(){
+      if (!state.user) return;
+      renderHome();
+      renderMoodRow();
+      renderJournal();
+      renderFocus();
+      renderAnalytics();
+      renderGoals();
+      renderAchievements();
+      renderProStatus();
+      renderSettingsProTab();
+      _syncProfileUI();
+      const titles = {
+        home:'LifeFlow OS',journal:'Journal',focus:'Focus',analytics:'Analytics',
+        goals:'Goals',achievements:'Achievements',settings:'Settings'
+      };
+      const subs = {
+        home:'Build unbreakable momentum.',journal:'Reflect, reset, repeat.',focus:'Go deep for a while.',
+        analytics:'See the pattern.',goals:'Design the future.',achievements:'Collect the wins.',settings:'Tune your flow.'
+      };
+      const tEl = $('#topTitle'); if(tEl) tEl.textContent = titles[state.activeNav]||'Rewrite Minds OS';
+      const sEl = $('#topSubtitle'); if(sEl) sEl.textContent = subs[state.activeNav]||'';
+      document.querySelectorAll('.mode-pill').forEach(btn=>{
+        const txt = btn.textContent.trim().replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}⚙️☀️🌙]\s*/u,'').toLowerCase();
+        btn.classList.toggle('active', txt === (state.profile.theme_mode||'dark'));
+      });
+    }
+
+    /* ── TIMER ────────────────────────────────────────────────── */
+    function formatTimer(sec, mode){
+      if (mode==='stopwatch'){ const m=Math.floor(sec/60),s=sec%60; return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
+      const m=Math.floor(sec/60),s=sec%60;
+      return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+
+    function setTimerMode(mode){
+      state.timer.mode = mode;
+      if (mode!=='stopwatch' && !state.timer.running) state.timer.seconds = TIMER_MODES.find(m=>m.key===mode).seconds;
+      if (mode==='stopwatch' && !state.timer.running) state.timer.seconds = 0;
+      renderFocus();
+    }
+
+    function toggleTimer(){ state.timer.running ? pauseTimer() : startTimer(); }
+
+    function startTimer(){
+      if (state.timer.handle) clearInterval(state.timer.handle);
+      if (!state.timer.running && state.timer.mode!=='stopwatch' && state.timer.seconds<=0){
+        state.timer.seconds = TIMER_MODES.find(m=>m.key===state.timer.mode).seconds;
+      }
+      state.timer.running = true;
+      updateAudioSource();
+      if (audioPlayer.src && audioPlayer.src !== window.location.href) audioPlayer.play().catch(e=>console.warn('Audio play failed:', e));
+      state.timer.handle = setInterval(()=>{
+        if (state.timer.mode==='stopwatch'){
+          state.timer.seconds += 1;
+        } else {
+          state.timer.seconds -= 1;
+          if (state.timer.seconds <= 0) { finishTimer(); return; }
+        }
+        renderFocus();
+      }, 1000);
+      renderFocus();
+    }
+
+    function pauseTimer(){
+      state.timer.running = false;
+      if (state.timer.handle) clearInterval(state.timer.handle);
+      state.timer.handle = null;
+      audioPlayer.pause();
+      renderFocus();
+    }
+
+    function resetTimer(){
+      pauseTimer();
+      const preset = TIMER_MODES.find(m=>m.key===state.timer.mode);
+      state.timer.seconds = preset ? preset.seconds : 0;
+      renderFocus();
+    }
+
+    async function finishTimer(){
+      pauseTimer();
+      const mode = state.timer.mode;
+      const preset = TIMER_MODES.find(m=>m.key===mode);
+      let minutes = mode==='stopwatch' ? Math.max(1, Math.round(state.timer.seconds/60)) : Math.round(preset.seconds/60);
+      const now = new Date();
+      const session = {
+        id:uid(), user_id:state.user.id, mode,
+        duration_seconds:minutes*60, completed:true,
+        started_at:new Date(now-minutes*60000).toISOString(),
+        ended_at:now.toISOString()
+      };
+      state.focus.unshift(session);
+      state.profile.total_focus_minutes = (state.profile.total_focus_minutes||0)+minutes;
+      await saveProfile();
+      
+      if (state.user?.is_demo) {
+        saveDemoData('focus', state.focus);
+        await checkAchievements();
+        renderAll();
+        toast(`✅ Focus session saved: ${minutes} min`);
+        if (mode!=='stopwatch' && preset) state.timer.seconds = preset.seconds;
+        return;
+      }
+
+      try { await supa.from('focus_sessions').insert(session); } catch(e){ console.warn(e); }
+      await checkAchievements();
+      renderAll();
+      toast(`✅ Focus session saved: ${minutes} min`);
+      if (mode!=='stopwatch' && preset) state.timer.seconds = preset.seconds;
+    }
+
+    function setSound(key){
+      if (key === 'custom') {
+        const fileInput = document.getElementById('customAudioInput');
+        if (fileInput) fileInput.click();
+        return;
+      }
+      state.sound = key;
+      state.profile.focus_sound = key;
+      saveProfile();
+      renderFocus();
+      toast(`${AUDIO_PRESETS.find(x=>x.key===key)?.label||key} selected`);
+      updateAudioSource();
+    }
+
+    function handleCustomAudio(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (customAudioUrl) URL.revokeObjectURL(customAudioUrl);
+      customAudioUrl = URL.createObjectURL(file);
+      const customPreset = AUDIO_PRESETS.find(p => p.key === 'custom');
+      if (customPreset) customPreset.url = customAudioUrl;
+      state.sound = 'custom';
+      state.profile.focus_sound = 'custom';
+      saveProfile();
+      renderFocus();
+      toast(`Custom sound loaded: ${file.name}`);
+      updateAudioSource();
+    }
+
+    let _isMuted = false;
+    function toggleMute() {
+      _isMuted = !_isMuted;
+      audioPlayer.muted = _isMuted;
+      const b = document.getElementById('muteBtn');
+      if (b) b.innerHTML = _isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+    }
+
+    function updateAudioSource() {
+      const preset = AUDIO_PRESETS.find(p => p.key === state.sound);
+      if (preset && preset.url) {
+        audioPlayer.src = preset.url;
+        if (state.timer.running) audioPlayer.play().catch(e => console.warn('Audio play failed:', e));
+      } else {
+        audioPlayer.pause();
+      }
+    }
+
+    /* ── ONBOARDING ───────────────────────────────────────────── */
+    function initOnboarding(){
+      const slides = [
+        {title:'Welcome to LifeFlow OS', text:'A calm command center for habits, focus, and reflection.', emoji:'✨'},
+        {title:'Build Unbreakable Habits', text:'Track streaks, complete habits, and keep the momentum moving.', emoji:'🌱'},
+        {title:'Stay Focused & Reflect', text:'Pomodoro, ambient audio, journaling, and analytics in one place.', emoji:'🧠'},
+        {title:'Deep Work, On Demand', text:'Switch into flow with a timer, sound, and a clean screen.', emoji:'🎧'},
+        {title:'Start My Journey →', text:'You are ready. Jump in and build the next version of you.', emoji:'🚀', cta:true}
+      ];
+      state.onboardingIndex = 0;
+      const track = $('#onbTrack');
+      const slidesEl = $('#onbSlides');
+      if (!track||!slidesEl) return;
+      track.innerHTML = slides.map((_,i)=>`<div class="onb-dot ${i===0?'active':''}"></div>`).join('');
+      slidesEl.innerHTML = slides.map((s,i)=>`
+        <div class="onb-slide ${i===0?'active':''}" data-slide="${i}">
+          <div class="onb-art"><div style="font-size:64px">${s.emoji}</div></div>
+          <div class="eyebrow">Step ${i+1}/5</div>
+          <h2 class="onb-title">${s.title}</h2>
+          <p class="onb-text">${s.text}</p>
+        </div>`).join('');
+      updateOnboardingUI();
+    }
+
+    function updateOnboardingUI(){
+      const slides = Array.from(document.querySelectorAll('.onb-slide'));
+      if (!slides.length) return;
+      slides.forEach((s,i)=>s.classList.toggle('active', i===state.onboardingIndex));
+      document.querySelectorAll('#onbTrack .onb-dot').forEach((d,i)=>d.classList.toggle('active', i===state.onboardingIndex));
+      const cta = $('#onbCta');
+      if (cta) cta.textContent = state.onboardingIndex===4 ? 'Start My Journey →' : 'Next';
+    }
+
+    async function nextSlide(){
+      if (state.onboardingIndex < 4){ state.onboardingIndex++; updateOnboardingUI(); return; }
+      state.profile.onboarding_done = true;
+      await saveProfile();
+      $('#onboardingScreen').classList.remove('open');
+      toast('Welcome aboard 🎉');
+    }
+
+    async function skipOnboarding(){
+      state.profile.onboarding_done = true;
+      await saveProfile();
+      $('#onboardingScreen').classList.remove('open');
+    }
+
+    function maybeShowOnboarding(){
+      const os = $('#onboardingScreen');
+      if (!state.profile.onboarding_done) os.classList.add('open');
+      else os.classList.remove('open');
+    }
+
+    /* ── INIT ─────────────────────────────────────────────────── */
+    function showAuthModal(tab) {
+      setAuthTab(tab);
+      $('#authScreen').classList.add('open');
+    }
+
+    /* ── GOOGLE CLIENT-SIDE SIGN-IN ───────────────────────────── */
+    const GOOGLE_CLIENT_ID = '645590427702-38pv1bmep2ddeguutd2p3kqfgvq9n5uf.apps.googleusercontent.com';
+
+    async function handleGoogleCredentialResponse(response) {
+      setSync('syncing');
+      try {
+        const { data, error } = await supa.auth.signInWithIdToken({
+          provider: 'google',
+          token: response.credential,
+        });
+        if (error) throw error;
+      } catch (err) {
+        console.error('Google Sign-In Error:', err);
+        toast(err.message || 'Google Sign-In failed.');
+        setSync('local');
+      }
+    }
+
+    function initGoogleSignIn() {
+      if (!window.google) {
+        setTimeout(initGoogleSignIn, 100);
+        return;
+      }
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleCredentialResponse,
+        ux_mode: 'popup'
+      });
+      google.accounts.id.renderButton(
+        document.getElementById('hiddenGoogleButton'),
+        { theme: 'outline', size: 'large' }
+      );
+    }
+
+    function signInWithGoogle() {
+      const nativeBtn = document.querySelector('#hiddenGoogleButton div[role="button"]');
+      if (nativeBtn) {
+        nativeBtn.click();
+      } else {
+        google.accounts.id.prompt();
+      }
+    }
+
+    function initLemonSqueezy() {
+      if (window.createLemonSqueezy) {
+        window.createLemonSqueezy();
+      }
+      if (window.LemonSqueezy) {
+        window.LemonSqueezy.Setup({
+          eventHandler: async (event) => {
+            if (event.event === 'Checkout.Success') {
+              closeUpgradeModal();
+              toast('⚡ Payment successful! Confirming Pro access...');
+              const upgraded = await refreshProStatus({ attempts: 12, delayMs: 2500 });
+              toast(upgraded ? 'Pro is active ✅' : 'Payment received. Pro will unlock after webhook sync.');
+            }
+          }
+        });
+      } else {
+        setTimeout(initLemonSqueezy, 300);
+      }
+    }
+
+    async function init(){
+      setSync('local');
+      
+      // Standalone High-Ticket Digital Product: Instant boot into Master Local Mode
+      const masterUser = {
+        id: 'local_master_user',
+        email: 'master@rewrite-os.internal',
+        name: 'Sovereign Master',
+        is_demo: true,
+        is_master: true
+      };
+
+      await bootUser(masterUser);
+    }
+
+    init();
+
+    // Intersection Observer for scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    // Slight delay to ensure DOM is ready
+    setTimeout(() => {
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      initBgAnimation();
+    }, 100);
+
+  </script>
+  <!-- Hidden container for Google's native secure button -->
+  <div id="hiddenGoogleButton" style="display: none;"></div>
+</body>
+</html>
